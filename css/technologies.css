@@ -1,0 +1,198 @@
+/* Estilos para el header */
+header {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Ajusta esta altura según tus necesidades */
+    overflow: hidden;
+}
+
+header .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según tus necesidades */
+    z-index: 1;
+}
+
+header video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+/* Estilos para los botones */
+.btn.projects {
+    margin-top: 0px;
+}
+
+/* Estilos para los íconos */
+.feature {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    width: 3rem;
+    font-size: 1.5rem;
+}
+
+/* Estilos para las tarjetas de habilidad */
+.skill-card {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para la fila de tarjetas */
+.row-cols-1.row-cols-md-3 {
+    row-gap: 1.5rem; 
+}
+
+/* Estilos para los títulos */
+.fw-bolder.mb-0 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 1.5rem; 
+    font-weight: bolder;
+}
+
+/* Estilos para el espaciado de la sección */
+.mb-5 {
+    border: none;
+    box-shadow: none;
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+/* Media Queries para adaptar el diseño a diferentes tamaños de pantalla */
+@media (max-width: 1200px) {
+    .mb-5 {
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+}
+
+@media (max-width: 992px) {
+    .mb-5 {
+        padding-left: 75px;
+        padding-right: 75px;
+    }
+    
+    .feature {
+        height: 2.5rem;
+        width: 2.5rem;
+        font-size: 1.25rem;
+    }
+
+    .fw-bolder.mb-0 {
+        font-size: 1.25rem;
+    }
+    
+    .skill-card {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .mb-5 {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .feature {
+        height: 2rem;
+        width: 2rem;
+        font-size: 1rem;
+    }
+
+    .fw-bolder.mb-0 {
+        font-size: 1rem;
+    }
+    
+    .skill-card {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    header {
+        height: 300px;
+    }
+    
+    .mb-5 {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .feature {
+        height: 1.5rem;
+        width: 1.5rem;
+        font-size: 0.75rem;
+    }
+
+    .fw-bolder.mb-0 {
+        font-size: 0.875rem;
+    }
+    
+    .skill-card {
+        padding: 0.25rem;
+    }
+}
+
+.display-5.fw-bolder.mb-0 {
+    font-size: 1.8rem; 
+    font-family: "IBM Plex Mono", monospace;
+    color: #737373;
+    text-align: center; 
+    margin: 50px;
+}
+
+.card.overflow-hidden.shadow.rounded-4.border-0{
+    margin-top: 40px;
+    margin-bottom: 20px;
+    width: 1000px;
+    justify-content: center;
+    width: 1000px;
+    margin-top: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .card.overflow-hidden.shadow.rounded-4.border-0 {
+        width: 100%;
+    }
+
+    .mb-5 {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+.linkedin-button img {
+    width: 50px;
+    height: 50px;
+    filter: none;
+    transition: none;
+    opacity: 1;
+    border-radius: 50%; 
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .linkedin-button img:hover {
+    transform: scale(1.1);
+    background-image: url('/assets/img/174857.png');
+    width: 70px; 
+    height: auto;
+    border-radius: 50%; 
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s ease, background-color 0.5s ease;
+  }

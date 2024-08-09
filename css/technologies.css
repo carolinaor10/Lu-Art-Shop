@@ -189,7 +189,6 @@ header video {
   
   .linkedin-button img:hover {
     transform: scale(1.1);
-    background-image: url('/assets/img/174857.png');
     width: 70px; 
     height: auto;
     border-radius: 50%; 

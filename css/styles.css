@@ -488,8 +488,9 @@ progress {
 }
 
 .lead {
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: 300;
+  font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .display-1 {
@@ -518,6 +519,7 @@ progress {
   font-size: calc(1.525rem + 3.3vw);
   font-weight: 300;
   line-height: 1.2;
+  font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 @media (min-width: 1200px) {
   .display-3 {
@@ -7993,6 +7995,9 @@ textarea.form-control-lg {
 
 .text-center {
   text-align: center !important;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .text-decoration-none {
@@ -10839,6 +10844,9 @@ p {
 
 .page-section {
   padding: 6rem 0;
+  margin-top: 10px;
+  margin-bottom: 90px;
+  padding-bottom: 0px;
 }
 .page-section h2.section-heading, .page-section .section-heading.h2 {
   font-size: 2.5rem;
@@ -10863,6 +10871,7 @@ p {
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1.125rem;
   font-weight: 700;
+  margin-top: 20px;
 }
 
 .btn-social {
@@ -11001,7 +11010,7 @@ header.masthead .masthead-heading {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(255, 200, 0, 0.9);
+  background: rgba(42, 86, 52, 0.9);
   align-items: center;
   justify-content: center;
   opacity: 0;
@@ -11336,14 +11345,23 @@ header .overlay {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: black;
-  opacity: 0.5;
+
+  opacity: 0.5; 
+  z-index: 1;
+  background-image: url(/assets/img/pottery-8026823_1280.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+  filter: blur(10px) grayscale(30%); /* Aplica desenfoque */
+  opacity: 8;
   z-index: 1;
 }
 
+
 @media (pointer: coarse) and (hover: none) {
   header {
-    background: url(/assets/img/fondo_header.mp4) black no-repeat center center scroll;
     opacity: 3;
   }
 
@@ -11358,14 +11376,14 @@ h1, h2, h4{
 }
 
 /* Estilos para el botón de LinkedIn */
-.linkedin-button {
+.floating-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 1000;
 }
 
-.linkedin-button img {
+.floating-button img {
   width: 50px;
   height: 50px;
   filter: none;
@@ -11375,7 +11393,7 @@ h1, h2, h4{
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
-.linkedin-button img:hover {
+.floating-button img:hover {
   transform: scale(1.1);
   width: 70px; 
   height: auto;
@@ -11385,13 +11403,13 @@ h1, h2, h4{
 }
 
 button, .btn, .btn-primary {
-  background-color: #F66740; 
-  border-color: #F66740;
+  background-color: #e2a844; 
+  border-color: #e2a844;
 }
 
 button:hover, .btn:hover, .btn-primary:hover {
-  background-color: darkred; 
-  border-color: darkred;
+  background-color: #2a5634; 
+  border-color: #2a5634;
 }
 
 .timeline-download
@@ -11511,7 +11529,6 @@ h3{
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
 }
 
 #div-serv h2 {
@@ -11534,6 +11551,7 @@ h3{
 
   #div-serv h2 {
     font-size: 1.3rem;
+    text-decoration: none;
   }
 }
 
@@ -11571,12 +11589,272 @@ h3{
   padding-bottom: 1rem; 
 }
 
-/* Estilos para la sección de llamada a la acción */
+/* Call to action section */
 .py-5.bg-gradient-primary-to-secondary {
-  background: linear-gradient(to right, #F66740, #FFB12C);
+  /* background: linear-gradient(to right, #e2a844, #e2a86a, #2a5634); */
+  background-color: #e2a844;
   font-family: "IBM Plex Mono", monospace;
 }
 
 .email{
   font-size: 1.5rem;
+}
+
+/* Galería */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  background-color: #ffdb58;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+}
+
+/* comments carousel */
+.carousel {
+  width: 600px;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  margin: 50px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease;
+  text-align: center;
+}
+
+.comment.active {
+  opacity: 1;
+}
+
+/* instagram page container */
+.instagram-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 600px; 
+}
+
+.instagram-container {
+  width: 100%; 
+  max-width: 600px; 
+}
+
+.instagram-media {
+  width: 100%; 
+  max-width: 600px; 
+  min-width: 320px; 
+  min-height: 320px; 
+}
+
+@media screen and (max-width: 576px) {
+  .carousel {
+    height: 100px; 
+    width: 400px;
+  }
+  .instagram-container {
+    height: 100%; 
+    width: 400px;
+  }
+  
+}
+
+.btn.btn-primary.carrito{
+  margin-top: 0px;
+}
+
+/* Carousel */
+.carousel{
+  height: 400px;
+  width: 700px;
+}
+
+.custom-carousel-height {
+  height: 700px;
+}
+
+.custom-carousel-height .carousel-item,
+.custom-carousel-height img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: transparent !important;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover,
+.carousel-control-prev:focus,
+.carousel-control-next:focus {
+  background-color: transparent !important;
+}
+
+#searchInput {
+  border: 2px solid rgba(128, 128, 128, 0.1); 
+  width: 500px;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  background-color: transparent;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+#searchInput::placeholder {
+  color: rgba(128, 128, 128, 0.9);
+}
+
+#searchInput:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: rgba(128, 128, 128, 0.3);
+}
+
+
+.s-header{
+  background-image: url('/assets/img/pottery-8026823_1280.jpg');
+  background-size: cover;       
+  background-position: center;  
+  background-repeat: no-repeat; 
+  height: 40vh;                
+  position: relative;           
+  color: white;                 
+}
+
+.s-header .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  background-color: none;
+  opacity: 0.5; 
+  z-index: 1;
+  background-image: url(/assets/img/pottery-8026823_1280.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+  filter: blur(10px) grayscale(30%); /* Aplica desenfoque */
+  opacity: 8;
+  z-index: 1;
+}
+
+/* carrito */
+#carrito { 
+  margin-top: 20px; 
+  border-top: 2px solid #333; 
+  padding-top: 10px; 
+}
+
+table {
+   width: 100%; 
+   border-collapse: collapse; 
+  }
+
+th, td {
+  border: 1px solid #ddd; 
+  padding: 8px; 
+  text-align: center; 
+}
+
+.paym-btn{
+  display: flex;
+  flex-direction: column;  /* Elementos en columna */
+  justify-content: center; /* Centra verticalmente */
+  align-items: center;       
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+#total{
+  color: #e2a86a;
+}
+
+.carrito-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none; /* Oculto por defecto */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Encima de todo */
+}
+
+.carrito-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 700px;
+  max-height: 90%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#abrir-carrito {
+  margin-top: -30px;
+  margin-bottom: 70px;
+  background-color: #2a5634;
+  border-color: #2a5634;
+}
+#abrir-carrito:hover{
+  border-color: #e2a844;
+  background-color: #e2a844;
+}
+
+.btn-whatsapp {
+  background-color: #25D366;
+  border-color: #25D366;
+  color: white;
+  padding: 1.9rem 1.9rem; /* más grande */
+  font-size: 1.5rem;  /* texto o icono más grande */
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe5d;
+  border-color: #1ebe5d;
 }

@@ -87,3 +87,44 @@ function cambiarCantidad(id, nuevaCantidad) {
     }
   });
 
+// Mostrar productos en el modal de pago
+function actualizarModalPago() {
+  const modalTotal = document.getElementById("monto-total");
+
+  if (carrito.length === 0) {
+    modalTotal.textContent = "No hay productos en su carrito";
+    return;
+  }
+
+  // Crear listado de productos con cantidad
+  const listaProductos = carrito.map(item => `${item.nombre} (x${item.cantidad})`).join(', ');
+
+  // Calcular total
+  const total = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+
+  modalTotal.textContent = `${listaProductos} - ₡${total}`;
+}
+
+// Abrir modal de pago
+// Botón de abrir carrito (solo muestra el overlay del carrito)
+document.getElementById("abrir-carrito").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Solo mostrar overlay del carrito, no abrir modal de pago
+  const carritoOverlay = document.getElementById('carrito-container');
+  carritoOverlay.style.display = 'flex';
+});
+
+// Botón de confirmar compra (abre modal de pago)
+document.getElementById("confirmar-compra-btn").addEventListener("click", function () {
+  // Actualizar monto total antes de abrir el modal
+  const totalCompra = calcularTotalCarrito(); // función que ya tienes
+  actualizarMontoTotal(totalCompra);
+
+  // Opcional: si quieres mostrar los nombres de los productos en el modal
+  const productosLista = carrito.map(item => `${item.cantidad} x ${item.nombre}`).join(', ');
+  document.getElementById("productos-carrito").textContent = productosLista;
+
+  // Bootstrap se encargará de abrir el modal porque ya tienes data-bs-toggle y data-bs-target
+});
+

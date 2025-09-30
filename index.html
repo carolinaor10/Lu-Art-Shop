@@ -10,12 +10,7 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Nunito:wght@300&family=Poppins:wght@300;400&family=Ysabeau:wght@600&display=swap" rel="stylesheet">
+        <!-- Google fonts removed - using sans-serif only -->
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
@@ -32,10 +27,15 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                         <!-- <li class="nav-item"><a class="nav-link" href="indexSpanish.html">Spanish</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#about">Lu-Art</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#gallery">Galería</a></li>
-                        <li class="nav-item"><a class="nav-link" href="shop.html">Tienda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html" data-translate="nav.home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about" data-translate="nav.about">Lu-Art</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#gallery" data-translate="nav.gallery">Galería</a></li>
+                        <li class="nav-item"><a class="nav-link" href="shop.html" data-translate="nav.shop">Tienda</a></li>
+                        <li class="nav-item">
+                            <button id="lang-toggle" class="btn btn-outline-light btn-sm ms-2" type="button">
+                                <i class="fas fa-language"></i> <span data-translate="nav.language">ES</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
         </nav>
@@ -48,9 +48,9 @@
                             <img src="assets/img/logo/LU ART COLOR.png" alt="..." />
                         </a>
                         <!-- <h1 class="display-3">Lu Art</h1> -->
-                        <p class="lead mb-0">Arte con alma</p>
-                        <p class="lead mb-0">Cerámica Artesanal</p>
-                        <a href="shop.html" class="btn btn-primary btn-lg">
+                        <p class="lead mb-0" data-translate="header.tagline1">Arte con alma</p>
+                        <p class="lead mb-0" data-translate="header.tagline2">Cerámica Artesanal</p>
+                        <a href="shop.html" class="btn btn-primary btn-lg" data-translate="header.shop_button">
                             Tienda
                         </a>
                     </div>
@@ -62,34 +62,34 @@
         <section class="page-section" id="about">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Sobre Lu Art</h2>
+                    <h2 class="section-heading text-uppercase" data-translate="about.title">Sobre Lu Art</h2>
                     <!-- <h3 class="section-subheading text-muted">Cerámica Artesanal</h3> -->
-                    <p >Lu Art es una tienda virtual de cerámica artesanal, que nace de la fusión de técnicas ancestrales con expresión artística contemporánea. </p>
-                    <p>Cada pieza de cerámica creada por Lu Art está diseñada para que, quién la adquiera, tenga una obra emocional, funcional y/o decorativa en sus espacios.</p>
-                    <p><i class="fa-solid fa-hand-holding-heart"></i> Hecho a mano <i class="fa-solid fa-hand-holding-heart"></i></p>
+                    <p data-translate="about.description1">Lu Art es una tienda virtual de cerámica artesanal, que nace de la fusión de técnicas ancestrales con expresión artística contemporánea. </p>
+                    <p data-translate="about.description2">Cada pieza de cerámica creada por Lu Art está diseñada para que, quién la adquiera, tenga una obra emocional, funcional y/o decorativa en sus espacios.</p>
+                    <p><i class="fa-solid fa-hand-holding-heart"></i> <span data-translate="about.tagline">Arte con alma</span> <i class="fa-solid fa-hand-holding-heart"></i></p>
                 </div>
 
                 <!--Mision/Vision/Values-->
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" data-translate="about.mission">
                         Misión
                         </button>
                     </h2>
 
                     <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body d-flex h-100 text-center align-items-center">Creamos piezas únicas de barro que trascienden lo visual, fusionando técnicas ancestrales con expresión artística contemporánea.  Nos dedicamos a explorar diversos caminos creativos, desde piezas funcionales hasta obras que complementan el arte en movimiento, estableciendo una conexión genuina entre el artista y quien adquiere cada obra. Nos dedicamos a materializar emociones a través del barro, garantizando la más alta calidad en cada creación.</div>
+                        <div class="accordion-body d-flex h-100 text-center align-items-center" data-translate="about.mission_text">Creamos piezas únicas de barro que trascienden lo visual, fusionando técnicas ancestrales con expresión artística contemporánea.  Nos dedicamos a explorar diversos caminos creativos, desde piezas funcionales hasta obras que complementan el arte en movimiento, estableciendo una conexión genuina entre el artista y quien adquiere cada obra. Nos dedicamos a materializar emociones a través del barro, garantizando la más alta calidad en cada creación.</div>
                     </div>
                     </div>
                     <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo" data-translate="about.vision">
                         Visión
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body d-flex h-100 text-center align-items-center">Ser un referente artístico versátil e innovador en el trabajo del barro, explorando diversos mercados y necesidades creativas, desde el hogar hasta espacios artísticos. Buscamos construir una comunidad diversa donde nuestras creaciones inspiren y conecten con diferentes públicos, mientras mantenemos la excelencia en cada pieza y la autenticidad de nuestra expresión artística.</div>
+                        <div class="accordion-body d-flex h-100 text-center align-items-center" data-translate="about.vision_text">Ser un referente artístico versátil e innovador en el trabajo del barro, explorando diversos mercados y necesidades creativas, desde el hogar hasta espacios artísticos. Buscamos construir una comunidad diversa donde nuestras creaciones inspiren y conecten con diferentes públicos, mientras mantenemos la excelencia en cada pieza y la autenticidad de nuestra expresión artística.</div>
                     </div>
                     </div>
                 </div>
@@ -100,69 +100,64 @@
         <section class="page-section" id="gallery">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Galería</h2>
-                    <h3 class="section-subheading text-muted">Lu Art</h3>
+                    <h2 class="section-heading text-uppercase" data-translate="gallery.title">Galería</h2>
+                    <h3 class="section-subheading text-muted" data-translate="gallery.subtitle">Lu Art</h3>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Boat on Calm Water"
-                    />
-                
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Wintry Mountain Landscape"
-                    />
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0920.jpg" class="w-100 shadow-1-strong rounded" alt="Boat on Calm Water" />
                     </div>
-                
-                    <div class="col-lg-4 mb-4 mb-lg-0">
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Mountains in the Clouds"
-                    />
-                
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Boat on Calm Water"
-                    />
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0926.jpg" class="w-100 shadow-1-strong rounded" alt="Wintry Mountain Landscape" />
                     </div>
-                
-                    <div class="col-lg-4 mb-4 mb-lg-0">
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Waves at Sea"
-                    />
-                
-                    <img
-                        src="/assets/img/pottery-8026823_1280.jpg"
-                        class="w-100 shadow-1-strong rounded mb-4"
-                        alt="Yosemite National Park"
-                    />
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0927.jpg" class="w-100 shadow-1-strong rounded" alt="Mountains in the Clouds" />
                     </div>
-                </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0930.jpg" class="w-100 shadow-1-strong rounded" alt="Boat on Calm Water" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0932.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0937.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0939.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0948.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0951.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0952.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0953.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 mb-4">
+                        <img src="/assets/img/Lu Art Photos/IMG_0954.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
+                    </div>
+                </div>                
         </section>
 
         <!-- Instagram Profile and comments -->
         <section>
             <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Instagram</h2>
-                    <h3 class="section-subheading text-muted">Seguínos</h3>
-                </div>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase" data-translate="instagram.title">Instagram</h2>
+                <h3 class="section-subheading text-muted" data-translate="instagram.subtitle">Seguínos</h3>
+            </div>
                 <div class="content-container">
                     <div class="instagram-container">
                         <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/lu.artcr/" data-instgrm-version="13"></blockquote>
                     </div>
                     <div class="carousel">
-                        <div class="comment">"Simplemente hermoso"</div>
-                        <div class="comment">"Amo mi taza, es una obra de arte"</div>
-                        <div class="comment">"Excelente atención, volveré a comprar 👏👏"</div>
+                        <div class="comment" data-translate="instagram.comment1">"Simplemente hermoso"</div>
+                        <div class="comment" data-translate="instagram.comment2">"Amo mi taza, es una obra de arte"</div>
+                        <div class="comment" data-translate="instagram.comment3">"Excelente atención, volveré a comprar 👏👏"</div>
                     </div>
                 </div>
             </div>
@@ -171,8 +166,8 @@
         <section class="page-section" id="shop-ref">
             
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">Tienda</h2>
-                <h3 class="section-subheading text-muted">Seguínos</h3>
+                <h2 class="section-heading text-uppercase" data-translate="shop.title">Tienda</h2>
+                <h3 class="section-subheading text-muted" data-translate="shop.subtitle">Seguínos</h3>
             </div>                
             
 
@@ -180,7 +175,7 @@
                 <div id="div-serv">   
                     <a href="shop.html">
                         <img src="./assets/img/pottery-8026823_1280.jpg" alt="Pottery Image">
-                        <h2>Comprar</h2>
+                        <h2 data-translate="shop.buy_button">Comprar</h2>
                     </a>
                 </div>
             </div>
@@ -190,7 +185,7 @@
             <section class="py-5 bg-gradient-primary-to-secondary text-white">
                 <div class="container px-5 my-5">
                     <div class="text-center">
-                        <h2 class="display-4 fw-bolder mb-4">Contacto</h2>
+                        <h2 class="display-4 fw-bolder mb-4" data-translate="contact.title">Contacto</h2>
                         <p class="email">lu.artcr@gmail.com</p>
                         <p class="mNumber"><i class="fa-brands fa-whatsapp"></i> (+506)7060-5427</p>
                         <!-- <a class="btn btn-outline-light btn-lg px-5 py-3 fs-6 fw-bolder" href="contact.html">Contact me</a>-->
@@ -222,5 +217,103 @@
             <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
             <script async src="//www.instagram.com/embed.js"></script>
+
+            <!-- Translation Script -->
+            <script>
+            // Translation data
+            const translations = {
+                es: {
+                    'nav.home': 'Home',
+                    'nav.about': 'Lu-Art',
+                    'nav.gallery': 'Galería',
+                    'nav.shop': 'Tienda',
+                    'nav.language': 'ES',
+                    'header.tagline1': 'Arte con alma',
+                    'header.tagline2': 'Cerámica Artesanal',
+                    'header.shop_button': 'Tienda',
+                    'about.title': 'Sobre Lu Art',
+                    'about.description1': 'Lu Art es una tienda virtual de cerámica artesanal, que nace de la fusión de técnicas ancestrales con expresión artística contemporánea.',
+                    'about.description2': 'Cada pieza de cerámica creada por Lu Art está diseñada para que, quién la adquiera, tenga una obra emocional, funcional y/o decorativa en sus espacios.',
+                    'about.tagline': 'Arte con alma',
+                    'about.mission': 'Misión',
+                    'about.mission_text': 'Creamos piezas únicas de barro que trascienden lo visual, fusionando técnicas ancestrales con expresión artística contemporánea. Nos dedicamos a explorar diversos caminos creativos, desde piezas funcionales hasta obras que complementan el arte en movimiento, estableciendo una conexión genuina entre el artista y quien adquiere cada obra. Nos dedicamos a materializar emociones a través del barro, garantizando la más alta calidad en cada creación.',
+                    'about.vision': 'Visión',
+                    'about.vision_text': 'Ser un referente artístico versátil e innovador en el trabajo del barro, explorando diversos mercados y necesidades creativas, desde el hogar hasta espacios artísticos. Buscamos construir una comunidad diversa donde nuestras creaciones inspiren y conecten con diferentes públicos, mientras mantenemos la excelencia en cada pieza y la autenticidad de nuestra expresión artística.',
+                    'gallery.title': 'Galería',
+                    'gallery.subtitle': 'Lu Art',
+                    'instagram.title': 'Instagram',
+                    'instagram.subtitle': 'Seguínos',
+                    'instagram.comment1': '"Simplemente hermoso"',
+                    'instagram.comment2': '"Amo mi taza, es una obra de arte"',
+                    'instagram.comment3': '"Excelente atención, volveré a comprar 👏👏"',
+                    'shop.title': 'Tienda',
+                    'shop.subtitle': 'Seguínos',
+                    'shop.buy_button': 'Comprar',
+                    'contact.title': 'Contacto'
+                },
+                en: {
+                    'nav.home': 'Home',
+                    'nav.about': 'Lu-Art',
+                    'nav.gallery': 'Gallery',
+                    'nav.shop': 'Shop',
+                    'nav.language': 'EN',
+                    'header.tagline1': 'Art with soul',
+                    'header.tagline2': 'Handmade Ceramics',
+                    'header.shop_button': 'Shop',
+                    'about.title': 'About Lu Art',
+                    'about.description1': 'Lu Art is a virtual store of handmade ceramics, born from the fusion of ancestral techniques with contemporary artistic expression.',
+                    'about.description2': 'Each ceramic piece created by Lu Art is designed so that whoever acquires it has an emotional, functional and/or decorative work in their spaces.',
+                    'about.tagline': 'Art with soul',
+                    'about.mission': 'Mission',
+                    'about.mission_text': 'We create unique clay pieces that transcend the visual, fusing ancestral techniques with contemporary artistic expression. We are dedicated to exploring various creative paths, from functional pieces to works that complement art in motion, establishing a genuine connection between the artist and whoever acquires each work. We are dedicated to materializing emotions through clay, guaranteeing the highest quality in each creation.',
+                    'about.vision': 'Vision',
+                    'about.vision_text': 'To be a versatile and innovative artistic reference in clay work, exploring various markets and creative needs, from home to artistic spaces. We seek to build a diverse community where our creations inspire and connect with different audiences, while maintaining excellence in each piece and the authenticity of our artistic expression.',
+                    'gallery.title': 'Gallery',
+                    'gallery.subtitle': 'Lu Art',
+                    'instagram.title': 'Instagram',
+                    'instagram.subtitle': 'Follow us',
+                    'instagram.comment1': '"Simply beautiful"',
+                    'instagram.comment2': '"I love my cup, it\'s a work of art"',
+                    'instagram.comment3': '"Excellent service, I\'ll buy again 👏👏"',
+                    'shop.title': 'Shop',
+                    'shop.subtitle': 'Follow us',
+                    'shop.buy_button': 'Buy',
+                    'contact.title': 'Contact'
+                }
+            };
+
+            let currentLanguage = 'es';
+
+            function translatePage(language) {
+                const elements = document.querySelectorAll('[data-translate]');
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translations[language] && translations[language][key]) {
+                        element.textContent = translations[language][key];
+                    }
+                });
+                currentLanguage = language;
+                
+                // Update language toggle button
+                const langToggle = document.getElementById('lang-toggle');
+                if (langToggle) {
+                    const span = langToggle.querySelector('span');
+                    if (span) {
+                        span.textContent = language.toUpperCase();
+                    }
+                }
+            }
+
+            // Initialize language toggle
+            document.addEventListener('DOMContentLoaded', function() {
+                const langToggle = document.getElementById('lang-toggle');
+                if (langToggle) {
+                    langToggle.addEventListener('click', function() {
+                        const newLanguage = currentLanguage === 'es' ? 'en' : 'es';
+                        translatePage(newLanguage);
+                    });
+                }
+            });
+            </script>
         </body>
     </html>

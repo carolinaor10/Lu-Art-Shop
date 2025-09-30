@@ -60,7 +60,7 @@ header video {
 
 /* Estilos para los títulos */
 .fw-bolder.mb-0 {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: sans-serif;
     font-size: 1.5rem; 
     font-weight: bolder;
 }
@@ -150,7 +150,7 @@ header video {
 
 .display-5.fw-bolder.mb-0 {
     font-size: 1.8rem; 
-    font-family: "IBM Plex Mono", monospace;
+    font-family: sans-serif;
     color: #737373;
     text-align: center; 
     margin: 50px;
@@ -159,10 +159,9 @@ header video {
 .card.overflow-hidden.shadow.rounded-4.border-0{
     margin-top: 40px;
     margin-bottom: 20px;
-    width: 1000px;
+    width: 100%;
+    max-width: 1000px;
     justify-content: center;
-    width: 1000px;
-    margin-top: 40px;
 }
 
 /* Responsive Design */

@@ -62,7 +62,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase" data-translate="shop.title">Tienda</h2>
-                <h3 class="section-subheading text-muted" data-translate="shop.subtitle">Lu Art</h3>
+                <h3 class="section-subheading text-muted" data-translate="shop.subtitle">Tazas Lu Art</h3>
             </div>
             
             <!-- Search -->
@@ -117,7 +117,8 @@
                             data-id="2" 
                             data-nombre="Taza Bruma" 
                             data-precio="20000"
-                            data-stock="5">
+                            data-stock="5"
+                            data-translate="shop.add_to_cart">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -142,7 +143,8 @@
                             data-id="3" 
                             data-nombre="Producto 3" 
                             data-precio="60000"
-                            data-stock="5">
+                            data-stock="5"
+                            data-translate="shop.add_to_cart">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -166,7 +168,8 @@
                                 data-id="4" 
                                 data-nombre="Taza Aurora" 
                                 data-precio="000"
-                                data-stock="3">
+                                data-stock="3"
+                                data-translate="shop.add_to_cart">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -192,7 +195,8 @@
                                 data-id="5" 
                                 data-nombre="Taza Minimal" 
                                 data-precio="12000"
-                                data-stock="2">
+                                data-stock="2"
+                                data-translate="shop.add_to_cart">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -216,7 +220,8 @@
                                 data-id="6" 
                                 data-nombre="Cuenco Tierra" 
                                 data-precio="22000"
-                                data-stock="4">
+                                data-stock="4"
+                                data-translate="shop.add_to_cart">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -237,11 +242,12 @@
                 <del>₡20.000</del> <span class="text-danger fw-bold">₡17.900</span>
             </div>
             <button class="btn btn-primary btn-xl text-uppercase add-to-cart" 
-                type="button"
-                data-id="7" 
-                data-nombre="Taza Amanecer" 
-                data-precio="16000"
-                data-stock="3">
+            type="button"
+            data-id="7" 
+            data-nombre="Taza Amanecer" 
+            data-precio="16000"
+            data-stock="3"
+            data-translate="shop.add_to_cart">
                 Agregar al carrito
             </button>
         </div>
@@ -261,11 +267,12 @@
             <div class="portfolio-caption-heading">Taza Green Waves</div>
             <del>₡24.000</del> <span class="text-danger fw-bold">Vendida</span>
             <button class="btn btn-primary btn-xl text-uppercase add-to-cart" 
-                type="button"
-                data-id="8" 
-                data-nombre="Taza Eclipse" 
-                data-precio="20000"
-                data-stock="5">
+            type="button"
+            data-id="8" 
+            data-nombre="Taza Eclipse" 
+            data-precio="20000"
+            data-stock="5"
+            data-translate="shop.add_to_cart">
                 Agregar al carrito
             </button>
         </div>
@@ -287,11 +294,12 @@
                 <del>₡24.000</del> <span class="text-danger fw-bold">Vendida</span>
             </div>
             <button class="btn btn-primary btn-xl text-uppercase add-to-cart" 
-                type="button"
-                data-id="9" 
-                data-nombre="Taza Cosmos" 
-                data-precio="18500"
-                data-stock="2">
+            type="button"
+            data-id="9" 
+            data-nombre="Taza Cosmos" 
+            data-precio="18500"
+            data-stock="2"
+            data-translate="shop.add_to_cart">
                 Agregar al carrito
             </button>
         </div>
@@ -303,6 +311,168 @@
                 
             </div>
         </div>
+    </section>
+
+    <!-- Botón para abrir carrito -->
+    <div class="text-center py-5">
+        <button id="abrir-carrito" class="btn btn-primary btn-xl text-uppercase" type="button" data-translate="cart.view_cart">
+            Ver Carrito
+        </button>
+    </div>
+
+    <!-- Carrito -->
+    <div id="carrito-container" class="carrito-overlay">
+        <div id="carrito" class="carrito-box">
+            <button class="close-btn">&times;</button>
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase" data-translate="cart.title">Carrito</h2>
+                <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+            </div>
+        
+            <div class="table-responsive-wrapper">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th data-translate="cart.product">Producto</th>
+                            <th data-translate="cart.price">Precio</th>
+                            <th data-translate="cart.quantity">Cantidad</th>
+                            <th data-translate="cart.total">Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="carrito-body"></tbody>
+                </table>
+            </div>
+            
+            <div class="paym-btn">
+                <h3 id="total" data-translate="cart.total_label">Total: ₡0</h3>
+                <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                    Confirmar compra
+                </button>                    
+            </div>
+            
+            <!-- Modal de Pago -->
+            <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                    <div class="modal-content text-center p-3 position-relative">
+                        <!-- Botón cerrar -->
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
+                        <!-- Logo -->
+                        <img src="assets/img/logo/LU ART COLOR.png" alt="Lu Art" style="max-width:150px; margin: 0 auto 20px; display:block;">
+
+                        <!-- Cuerpo del modal -->
+                        <div class="modal-body">
+                            <h4><strong data-translate="payment.title">CONFIRMAR COMPRA</strong></h4>
+                            <p data-translate="payment.instructions">Por favor, realizar el pago por <strong>Sinpe Móvil</strong> al (+506)70605427 o por<strong> transferencia bancaria</strong> a la cuenta CR10016111001167350925 a nombre de NANCY FABIOLA GONZALEZ GUTIERREZ</p>
+                            <p data-translate="payment.selected_products">Productos seleccionados:</p>
+                            <ul id="productos-en-pago"></ul>
+                            <p><strong data-translate="payment.total_amount">Monto total a pagar: ₡</strong> <strong id="monto-total">0</strong></p>
+                            
+                            <!-- Formulario de dirección -->
+                            <div class="address-form mt-4">
+                                <p><strong data-translate="address.title">DIRECCIÓN DE ENVÍO</strong></p>
+                                <form id="addressForm">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="provincia" class="form-label" data-translate="address.province">Provincia</label>
+                                            <select class="form-select" id="provincia">
+                                                <option value="" data-translate="address.select_province">Seleccionar provincia</option>
+                                                <option value="san-jose">San José</option>
+                                                <option value="alajuela">Alajuela</option>
+                                                <option value="cartago">Cartago</option>
+                                                <option value="heredia">Heredia</option>
+                                                <option value="guanacaste">Guanacaste</option>
+                                                <option value="puntarenas">Puntarenas</option>
+                                                <option value="limon">Limón</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="canton" class="form-label" data-translate="address.canton">Cantón</label>
+                                            <select class="form-select" id="canton">
+                                                <option value="" data-translate="address.select_canton">Seleccionar cantón</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="distrito" class="form-label" data-translate="address.district">Distrito</label>
+                                            <select class="form-select" id="distrito">
+                                                <option value="" data-translate="address.select_district">Seleccionar distrito</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label" data-translate="address.exact_address">Dirección exacta</label>
+                                        <input type="text" class="form-control" id="direccion" placeholder="Ej: Casa 123, Barrio Los Ángeles" data-translate-placeholder="address.address_placeholder">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="indicaciones" class="form-label" data-translate="address.additional_instructions">Indicaciones adicionales</label>
+                                        <textarea class="form-control" id="indicaciones" rows="3" placeholder="Referencias, instrucciones especiales, etc." data-translate-placeholder="address.instructions_placeholder"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Checkbox para factura electrónica -->
+                            <div class="factura-section mt-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="facturaElectronica" value="si">
+                                    <label class="form-check-label" for="facturaElectronica">
+                                        <strong data-translate="invoice.checkbox_text"> MARCAR SI REQUIERE FACTURA ELECTRÓNICA</strong>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <p data-translate="payment.whatsapp_instructions">Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.</p>
+                        </div>
+
+                        <!-- Botón de WhatsApp -->
+                        <div class="text-center my-3">
+                            <a id="whatsapp-btn" class="btn btn-whatsapp btn-social btn-lg" 
+                               href="#" 
+                               target="_blank"
+                               aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp fa-2x"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to action section-->
+    <section class="py-5 bg-gradient-primary-to-secondary text-white">
+        <div class="container px-5 my-5">
+            <div class="text-center">
+                <h2 class="display-4 fw-bolder mb-4" data-translate="contact.title">Contacto</h2>
+                <p class="email">lu.artcr@gmail.com</p>
+                <p class="mNumber"><i class="fa-brands fa-whatsapp"></i> (+506)7060-5427</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer-->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start"> &copy; Lu Art 2025</div>
+                <div class="col-lg-4 my-3 my-lg-0">
+                    <a class="btn btn-dark btn-social mx-2" href="https://www.instagram.com/lu.artcr/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a id="footer-whatsapp-btn" class="btn btn-dark btn-social mx-2" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Whatsapp Button-->
+    <div class="floating-button">
+        <a id="floating-whatsapp-btn" href="#" target="_blank">
+        <img src="./assets/img/Icons/whatsapp-logo-png-whatsapp-logo-png-transparent-amp-svg-vector-pluspng-2400x2400-1032059621.png" alt="WhatsApp">
+        </a>
+    </div>
 
                 <!-- Portfolio Modals-->
         <!-- Portfolio item 1 modal popup-->
@@ -363,7 +533,7 @@
                                         </li>
                                     </ul>                                        
                                      -->
-                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;">
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;" data-translate="modal.close">
                                         <i class="fas fa-xmark me-1" ></i>
                                         Cerrar
                                     </button>
@@ -439,7 +609,7 @@
                                         </li>
                                     </ul>                                        
                                      -->
-                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;">
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;" data-translate="modal.close">
                                         <i class="fas fa-xmark me-1" ></i>
                                         Cerrar
                                     </button>
@@ -515,7 +685,7 @@
                                         </li>
                                     </ul>                                        
                                      -->
-                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;">
+                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button" style="background-color: gray; border: 1px solid gray;" data-translate="modal.close">
                                         <i class="fas fa-xmark me-1" ></i>
                                         Cerrar
                                     </button>
@@ -541,10 +711,11 @@
             <!-- Carrito -->
             <div id="carrito-container" class="carrito-overlay">
                 <div id="carrito" class="carrito-box">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase" data-translate="cart.title">Carrito</h2>
-                    <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
-                </div>
+                    <button class="close-btn">&times;</button>
+                    <div class="text-center">
+                        <h2 class="section-heading text-uppercase" data-translate="cart.title">Carrito</h2>
+                        <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+                    </div>
                 
                 <div class="table-responsive-wrapper">
                 <table class="table table-bordered">
@@ -585,7 +756,7 @@
                                     <p>
                                         <h4><strong data-translate="payment.title">CONFIRMAR COMPRA</strong></h4>
                                     </p>
-                                    <p data-translate="payment.instructions">Por favor, realizar el pago por <strong>Sinpe Móvil</strong> al (+506)70605427 o por<strong> transferencia bancaria</strong> a la cuenta CR...</p>
+                                    <p data-translate="payment.instructions">Por favor, realizar el pago por <strong>Sinpe Móvil</strong> al (+506)70605427 o por<strong> transferencia bancaria</strong> a la cuenta CR10016111001167350925 a nombre de NANCY FABIOLA GONZALEZ GUTIERREZ</p>
                                     <p data-translate="payment.selected_products">Productos seleccionados:</p>
                                     <ul id="productos-en-pago"></ul>
                                     <p><strong data-translate="payment.total_amount">Monto total a pagar: ₡</strong> <strong id="monto-total">0</strong></p>
@@ -666,11 +837,6 @@
                 </div>
                 </div>
             </div>
-  
-                
-                <button class="close-btn">&times;</button>
-                </div>
-            </div>
             
             <!-- Botón para abrir carrito -->
             <div class="text-center">
@@ -718,9 +884,35 @@
 
             <script async src="//www.instagram.com/embed.js"></script>
 
-            <script src="/js/carrito.js"></script>
+            <script src="js/carrito.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+            <!-- Search functionality -->
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function () {
+                        const searchText = this.value.toLowerCase();
+                        const items = document.querySelectorAll('#productList .portfolio-item');
+
+                        items.forEach(item => {
+                            const titleElement = item.querySelector('.portfolio-caption-heading');
+                            if (titleElement) {
+                                const title = titleElement.textContent.toLowerCase();
+                                const col = item.closest('.col-lg-4');
+
+                                if (title.includes(searchText)) {
+                                    col.style.display = '';
+                                } else {
+                                    col.style.display = 'none';
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+            </script>
 
             <script>
             // Costa Rican provinces, cantons and districts data
@@ -801,63 +993,11 @@
                 populateDistricts(provincia, this.value);
             });
 
-            // Función para actualizar el mensaje de WhatsApp
-            function actualizarMensajeWhatsApp() {
-                // Leer el total del carrito (removiendo texto innecesario)
-                const totalTexto = document.getElementById("total").textContent.replace("Total: ₡", "").trim();
-
-                let mensajeWhatsApp = "Hola, quiero confirmar mi compra:\n";
-
-                carrito.forEach(item => {
-                    // Agregar al mensaje de WhatsApp
-                    mensajeWhatsApp += `- ${item.nombre} (${item.cantidad}) = ₡${(item.precio * item.cantidad).toLocaleString()}\n`;
-                });
-
-                mensajeWhatsApp += `Total: ₡${totalTexto}\n\n`;
-                mensajeWhatsApp += `Dirección de envío:\n`;
-                mensajeWhatsApp += `Provincia: ${document.getElementById('provincia').selectedOptions[0]?.text || 'No seleccionada'}\n`;
-                mensajeWhatsApp += `Cantón: ${document.getElementById('canton').selectedOptions[0]?.text || 'No seleccionado'}\n`;
-                mensajeWhatsApp += `Distrito: ${document.getElementById('distrito').selectedOptions[0]?.text || 'No seleccionado'}\n`;
-                mensajeWhatsApp += `Dirección: ${document.getElementById('direccion').value || 'No especificada'}\n`;
-                if (document.getElementById('indicaciones').value) {
-                    mensajeWhatsApp += `Indicaciones: ${document.getElementById('indicaciones').value}\n`;
-                }
-                mensajeWhatsApp += `\nFactura electrónica: ${document.getElementById('facturaElectronica').checked ? 'SÍ REQUIERE' : 'NO REQUIERE'}\n`;
-
-                // Actualizar el link de WhatsApp con lista + total + dirección
-                const numero = "50670605427";
-                const enlaceWhatsApp = `https://wa.me/${numero}?text=${encodeURIComponent(mensajeWhatsApp)}`;
-                document.querySelector("#modalPago a.btn-whatsapp").setAttribute("href", enlaceWhatsApp);
+            // Función para obtener traducción
+            function getTranslation(key) {
+                return translations[currentLanguage] && translations[currentLanguage][key] ? translations[currentLanguage][key] : key;
             }
 
-            document.getElementById("confirmar-compra-btn").addEventListener("click", function () {
-                // Leer el total del carrito (removiendo texto innecesario)
-                const totalTexto = document.getElementById("total").textContent.replace("Total: ₡", "").trim();
-
-                // Colocar el total en el modal
-                document.getElementById("monto-total").textContent = totalTexto;
-
-                // Obtener lista de productos del carrito
-                const listaProductosPago = document.getElementById("productos-en-pago");
-                listaProductosPago.innerHTML = ''; // Limpiar lista previa
-
-                carrito.forEach(item => {
-                    const li = document.createElement("li");
-                    li.textContent = `${item.nombre} - ${item.cantidad} x ₡${item.precio.toLocaleString()} = ₡${(item.precio * item.cantidad).toLocaleString()}`;
-                    listaProductosPago.appendChild(li);
-                });
-
-                // Actualizar mensaje de WhatsApp inicial
-                actualizarMensajeWhatsApp();
-            });
-
-            // Actualizar mensaje cuando cambien los campos de dirección
-            document.getElementById('provincia').addEventListener('change', actualizarMensajeWhatsApp);
-            document.getElementById('canton').addEventListener('change', actualizarMensajeWhatsApp);
-            document.getElementById('distrito').addEventListener('change', actualizarMensajeWhatsApp);
-            document.getElementById('direccion').addEventListener('input', actualizarMensajeWhatsApp);
-            document.getElementById('indicaciones').addEventListener('input', actualizarMensajeWhatsApp);
-            document.getElementById('facturaElectronica').addEventListener('change', actualizarMensajeWhatsApp);
 
             // Translation functionality
             const translations = {
@@ -899,7 +1039,38 @@
                     'address.additional_instructions': 'Indicaciones adicionales',
                     'address.instructions_placeholder': 'Referencias, instrucciones especiales, etc.',
                     'invoice.checkbox_text': 'MARCAR SI REQUIERE FACTURA ELECTRÓNICA',
-                    'contact.title': 'Contacto'
+                    'cart.no_products': 'No hay productos en el carrito',
+                    'modal.close': 'Cerrar',
+                    'alert.stock_max': 'Stock máximo alcanzado',
+                    'alert.stock_message': 'Solo {stock} unidades disponibles de {nombre}.',
+                    'alert.quantity_unavailable': 'Cantidad no disponible',
+                    'alert.quantity_message': 'Solo {stock} unidades de {nombre}.',
+                    'alert.product_added': '¡Producto agregado!',
+                    'alert.cart_empty': 'Carrito vacío',
+                    'alert.cart_empty_message': 'No hay productos en el carrito.',
+                    'contact.title': 'Contacto',
+                    'whatsapp.greeting': 'Hola, quiero confirmar mi compra:',
+                    'whatsapp.total': 'Total:',
+                    'whatsapp.shipping_address': 'Dirección de envío:',
+                    'whatsapp.province': 'Provincia:',
+                    'whatsapp.canton': 'Cantón:',
+                    'whatsapp.district': 'Distrito:',
+                    'whatsapp.address': 'Dirección:',
+                    'whatsapp.instructions': 'Indicaciones:',
+                    'whatsapp.invoice_required': 'Factura electrónica: SÍ REQUIERE',
+                    'whatsapp.invoice_not_required': 'Factura electrónica: NO REQUIERE',
+                    'whatsapp.not_selected': 'No seleccionado',
+                    'whatsapp.not_specified': 'No especificada',
+                    'whatsapp.floating_message': 'Hola, quiero más información',
+                    'alert.stock_max': 'Stock máximo alcanzado',
+                    'alert.stock_message': 'Solo hay {stock} unidades disponibles de {nombre}.',
+                    'alert.quantity_unavailable': 'Cantidad no disponible',
+                    'alert.quantity_message': 'Solo hay {stock} unidades de {nombre}.',
+                    'alert.product_added': '¡Producto agregado!',
+                    'alert.cart_empty': 'Carrito vacío',
+                    'alert.cart_empty_message': 'No hay productos en el carrito.',
+                    'cart.no_products': 'No hay productos en el carrito',
+                    'modal.close': 'Cerrar'
                 },
                 en: {
                     'nav.home': 'Home',
@@ -939,11 +1110,58 @@
                     'address.additional_instructions': 'Additional instructions',
                     'address.instructions_placeholder': 'References, special instructions, etc.',
                     'invoice.checkbox_text': 'MARK IF ELECTRONIC INVOICE REQUIRED',
-                    'contact.title': 'Contact'
+                    'contact.title': 'Contact',
+                    'whatsapp.greeting': 'Hello, I want to confirm my purchase:',
+                    'whatsapp.total': 'Total:',
+                    'whatsapp.shipping_address': 'Shipping address:',
+                    'whatsapp.province': 'Province:',
+                    'whatsapp.canton': 'Canton:',
+                    'whatsapp.district': 'District:',
+                    'whatsapp.address': 'Address:',
+                    'whatsapp.instructions': 'Instructions:',
+                    'whatsapp.invoice_required': 'Electronic invoice: REQUIRED',
+                    'whatsapp.invoice_not_required': 'Electronic invoice: NOT REQUIRED',
+                    'whatsapp.not_selected': 'Not selected',
+                    'whatsapp.not_specified': 'Not specified',
+                    'whatsapp.floating_message': 'Hello, I want more information',
+                    'alert.stock_max': 'Maximum stock reached',
+                    'alert.stock_message': 'Only {stock} units available of {nombre}.',
+                    'alert.quantity_unavailable': 'Quantity not available',
+                    'alert.quantity_message': 'Only {stock} units of {nombre}.',
+                    'alert.product_added': 'Product added!',
+                    'alert.cart_empty': 'Empty cart',
+                    'alert.cart_empty_message': 'No products in cart.',
+                    'cart.no_products': 'No products in cart',
+                    'modal.close': 'Close'
                 }
             };
 
             let currentLanguage = 'es';
+
+            // Hacer las traducciones disponibles globalmente
+            window.translations = translations;
+            window.currentLanguage = currentLanguage;
+
+            // Función para actualizar los botones de WhatsApp
+            function actualizarBotonesWhatsApp() {
+                // Esperar un poco para asegurar que los elementos estén disponibles
+                setTimeout(() => {
+                    const floatingBtn = document.getElementById('floating-whatsapp-btn');
+                    const footerBtn = document.getElementById('footer-whatsapp-btn');
+                    
+                    if (translations[currentLanguage] && translations[currentLanguage]['whatsapp.floating_message']) {
+                        const message = encodeURIComponent(translations[currentLanguage]['whatsapp.floating_message']);
+                        const whatsappUrl = `https://wa.me/50670605427?text=${message}`;
+                        
+                        if (floatingBtn) {
+                            floatingBtn.href = whatsappUrl;
+                        }
+                        if (footerBtn) {
+                            footerBtn.href = whatsappUrl;
+                        }
+                    }
+                }, 100);
+            }
 
             function translatePage(language) {
                 const elements = document.querySelectorAll('[data-translate]');
@@ -965,6 +1183,12 @@
 
                 currentLanguage = language;
                 
+                // Actualizar variable global
+                window.currentLanguage = currentLanguage;
+                
+                // Update WhatsApp buttons
+                actualizarBotonesWhatsApp();
+                
                 // Update language toggle button
                 const langToggle = document.getElementById('lang-toggle');
                 if (langToggle) {
@@ -972,6 +1196,11 @@
                     if (span) {
                         span.textContent = language.toUpperCase();
                     }
+                }
+
+                // Actualizar mensaje de WhatsApp si el modal está abierto
+                if (typeof actualizarMensajeWhatsApp === 'function') {
+                    actualizarMensajeWhatsApp();
                 }
             }
 
@@ -984,8 +1213,15 @@
                         translatePage(newLanguage);
                     });
                 }
+                
+                // Initialize WhatsApp buttons
+                actualizarBotonesWhatsApp();
             });
             </script>
+
+            <!-- Scripts -->
+            <script src="js/carrito.js"></script>
+            <script src="js/scripts.js"></script>
 
         </body>
     </html>

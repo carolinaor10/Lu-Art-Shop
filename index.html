@@ -198,7 +198,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-4 text-lg-start"> &copy; Lu Art 2025</div>
                         <div class="col-lg-4 my-3 my-lg-0">
-                            <a class="btn btn-dark btn-social mx-2" href="https://wa.me/50670605427?text=Hola%2C%20quiero%20más%20información" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                            <a id="footer-whatsapp-btn" class="btn btn-dark btn-social mx-2" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                             <a class="btn btn-dark btn-social mx-2" href="https://www.instagram.com/lu.artcr/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
@@ -207,8 +207,8 @@
 
             <!-- Whatsapp Button-->
             <div class="floating-button">
-                <a href="https://wa.me/50670605427?text=Hola%2C%20quiero%20más%20información" target="_blank">
-                <img src="./assets/img/Icons/whatsapp-logo-png-whatsapp-logo-png-transparent-amp-svg-vector-pluspng-2400x2400-1032059621.png" alt="Linked-In">
+                <a id="floating-whatsapp-btn" href="#" target="_blank">
+                <img src="./assets/img/Icons/whatsapp-logo-png-whatsapp-logo-png-transparent-amp-svg-vector-pluspng-2400x2400-1032059621.png" alt="WhatsApp">
                 </a>
             </div>
 
@@ -249,6 +249,7 @@
                     'shop.title': 'Tienda',
                     'shop.subtitle': 'Seguínos',
                     'shop.buy_button': 'Comprar',
+                    'whatsapp.floating_message': 'Hola, quiero más información',
                     'contact.title': 'Contacto'
                 },
                 en: {
@@ -278,11 +279,33 @@
                     'shop.title': 'Shop',
                     'shop.subtitle': 'Follow us',
                     'shop.buy_button': 'Buy',
+                    'whatsapp.floating_message': 'Hello, I want more information',
                     'contact.title': 'Contact'
                 }
             };
 
             let currentLanguage = 'es';
+
+            // Función para actualizar los botones de WhatsApp
+            function actualizarBotonesWhatsApp() {
+                // Esperar un poco para asegurar que los elementos estén disponibles
+                setTimeout(() => {
+                    const floatingBtn = document.getElementById('floating-whatsapp-btn');
+                    const footerBtn = document.getElementById('footer-whatsapp-btn');
+                    
+                    if (translations[currentLanguage] && translations[currentLanguage]['whatsapp.floating_message']) {
+                        const message = encodeURIComponent(translations[currentLanguage]['whatsapp.floating_message']);
+                        const whatsappUrl = `https://wa.me/50670605427?text=${message}`;
+                        
+                        if (floatingBtn) {
+                            floatingBtn.href = whatsappUrl;
+                        }
+                        if (footerBtn) {
+                            footerBtn.href = whatsappUrl;
+                        }
+                    }
+                }, 100);
+            }
 
             function translatePage(language) {
                 const elements = document.querySelectorAll('[data-translate]');
@@ -293,6 +316,9 @@
                     }
                 });
                 currentLanguage = language;
+                
+                // Update WhatsApp buttons
+                actualizarBotonesWhatsApp();
                 
                 // Update language toggle button
                 const langToggle = document.getElementById('lang-toggle');
@@ -313,6 +339,9 @@
                         translatePage(newLanguage);
                     });
                 }
+                
+                // Initialize WhatsApp buttons
+                actualizarBotonesWhatsApp();
             });
             </script>
         </body>

@@ -130,20 +130,28 @@ document.getElementById("confirmar-compra-btn").addEventListener("click", functi
 
 
 //search input
-document.getElementById('searchInput').addEventListener('input', function () {
-    const searchText = this.value.toLowerCase();
-    const items = document.querySelectorAll('#productList .portfolio-item');
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const searchText = this.value.toLowerCase();
+            const items = document.querySelectorAll('#productList .portfolio-item');
 
-    items.forEach(item => {
-        const title = item.querySelector('.portfolio-caption-heading').textContent.toLowerCase();
-        const col = item.closest('.col-lg-4'); // para ocultar el contenedor correctamente
+            items.forEach(item => {
+                const titleElement = item.querySelector('.portfolio-caption-heading');
+                if (titleElement) {
+                    const title = titleElement.textContent.toLowerCase();
+                    const col = item.closest('.col-lg-4'); // para ocultar el contenedor correctamente
 
-        if (title.includes(searchText)) {
-            col.style.display = '';
-        } else {
-            col.style.display = 'none';
-        }
-    });
+                    if (title.includes(searchText)) {
+                        col.style.display = '';
+                    } else {
+                        col.style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
 });
 
 document.getElementById("abrir-carrito").addEventListener("click", function () {

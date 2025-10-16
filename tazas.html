@@ -35,6 +35,12 @@
                     <li class="nav-item"><a class="nav-link" href="index.html#gallery" data-translate="nav.gallery">Galería</a></li>
                     <li class="nav-item"><a class="nav-link" href="tienda.html" data-translate="nav.shop">Tienda</a></li>
                     <li class="nav-item">
+                        <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="navbar-contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button id="lang-toggle" class="btn btn-outline-light btn-sm ms-2" type="button">
                             <i class="fas fa-language"></i> <span data-translate="nav.language">ES</span>
                         </button>
@@ -319,7 +325,7 @@
     <!-- Botón para abrir carrito -->
     <div class="text-center py-5">
         <button id="abrir-carrito" class="btn btn-primary btn-xl text-uppercase" type="button" data-translate="cart.view_cart">
-            Ver Carrito
+            Ver Carrito <span id="contador-carrito" class="badge badge-light ml-2" style="display: none;">0</span>
         </button>
     </div>
 
@@ -1052,12 +1058,15 @@
                     'address.instructions_placeholder': 'Referencias, instrucciones especiales, etc.',
                     'invoice.checkbox_text': 'MARCAR SI REQUIERE FACTURA ELECTRÓNICA',
                     'cart.no_products': 'No hay productos en el carrito',
+                    'cart.no_cart_available': 'Carrito no disponible',
+                    'cart.go_to_products': 'Ve a una página de productos para ver tu carrito.',
                     'modal.close': 'Cerrar',
                     'alert.stock_max': 'Stock máximo alcanzado',
                     'alert.stock_message': 'Solo {stock} unidades disponibles de {nombre}.',
                     'alert.quantity_unavailable': 'Cantidad no disponible',
                     'alert.quantity_message': 'Solo {stock} unidades de {nombre}.',
                     'alert.product_added': '¡Producto agregado!',
+                    'alert.product_added_message': '{nombre} ha sido agregado al carrito.',
                     'alert.cart_empty': 'Carrito vacío',
                     'alert.cart_empty_message': 'No hay productos en el carrito.',
                     'contact.title': 'Contacto',
@@ -1079,6 +1088,7 @@
                     'alert.quantity_unavailable': 'Cantidad no disponible',
                     'alert.quantity_message': 'Solo hay {stock} unidades de {nombre}.',
                     'alert.product_added': '¡Producto agregado!',
+                    'alert.product_added_message': '{nombre} ha sido agregado al carrito.',
                     'alert.cart_empty': 'Carrito vacío',
                     'alert.cart_empty_message': 'No hay productos en el carrito.',
                     'cart.no_products': 'No hay productos en el carrito',
@@ -1145,9 +1155,12 @@
                     'alert.quantity_unavailable': 'Quantity not available',
                     'alert.quantity_message': 'Only {stock} units of {nombre}.',
                     'alert.product_added': 'Product added!',
+                    'alert.product_added_message': '{nombre} has been added to cart.',
                     'alert.cart_empty': 'Empty cart',
                     'alert.cart_empty_message': 'No products in cart.',
                     'cart.no_products': 'No products in cart',
+                    'cart.no_cart_available': 'Cart not available',
+                    'cart.go_to_products': 'Go to a product page to view your cart.',
                     'modal.close': 'Close'
                 }
             };

@@ -33,6 +33,12 @@
                         <li class="nav-item"><a class="nav-link" href="#gallery" data-translate="nav.gallery">Galería</a></li>
                         <li class="nav-item"><a class="nav-link" href="tienda.html" data-translate="nav.shop">Tienda</a></li>
                         <li class="nav-item">
+                            <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span id="navbar-contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
                             <button id="lang-toggle" class="btn btn-outline-light btn-sm ms-2" type="button">
                                 <i class="fas fa-language"></i> <span data-translate="nav.language">ES</span>
                             </button>
@@ -373,5 +379,9 @@
                 actualizarBotonesWhatsApp();
             });
             </script>
+            
+            <!-- Carrito JavaScript -->
+            <script src="js/carrito.js"></script>
+            
         </body>
     </html>

@@ -391,7 +391,58 @@ function actualizarMensajeWhatsApp() {
     document.querySelector("#modalPago a.btn-whatsapp").setAttribute("href", enlaceWhatsApp);
 }
 
+// Inicializar carrito desde localStorage
 let carrito = [];
+
+// Función para cargar carrito desde localStorage
+function cargarCarritoDesdeStorage() {
+    const carritoGuardado = localStorage.getItem('luArtCarrito');
+    console.log('Intentando cargar carrito desde localStorage:', carritoGuardado);
+    
+    if (carritoGuardado) {
+        try {
+            carrito = JSON.parse(carritoGuardado);
+            console.log('Carrito cargado exitosamente desde localStorage:', carrito);
+            console.log('Total de productos en carrito:', carrito.length);
+        } catch (e) {
+            console.error('Error cargando carrito desde localStorage:', e);
+            carrito = [];
+        }
+    } else {
+        console.log('No hay carrito guardado en localStorage, inicializando vacío');
+        carrito = [];
+    }
+}
+
+// Función para actualizar contador de carrito en todas las páginas
+function actualizarContadorCarrito() {
+    // Actualizar contador del botón "Ver Carrito" (si existe)
+    const contadorCarrito = document.getElementById('contador-carrito');
+    if (contadorCarrito) {
+        const totalProductos = carrito.reduce((total, item) => total + item.cantidad, 0);
+        contadorCarrito.textContent = totalProductos;
+        contadorCarrito.style.display = totalProductos > 0 ? 'inline' : 'none';
+    }
+    
+    // Actualizar contador del navbar (si existe)
+    const navbarContador = document.getElementById('navbar-contador-carrito');
+    if (navbarContador) {
+        const totalProductos = carrito.reduce((total, item) => total + item.cantidad, 0);
+        navbarContador.textContent = totalProductos;
+        navbarContador.style.display = totalProductos > 0 ? 'inline' : 'none';
+    }
+}
+
+// Función para guardar carrito en localStorage
+function guardarCarritoEnStorage() {
+    try {
+        localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+        console.log('Carrito guardado exitosamente en localStorage:', carrito);
+        console.log('Total de productos guardados:', carrito.length);
+    } catch (e) {
+        console.error('Error guardando carrito en localStorage:', e);
+    }
+}
 
 // Agregar producto al carrito
 function agregarAlCarrito(id, nombre, precio, stock) {
@@ -428,6 +479,8 @@ function agregarAlCarrito(id, nombre, precio, stock) {
     }
 
     renderCarrito();
+    guardarCarritoEnStorage(); // Guardar carrito en localStorage
+    actualizarContadorCarrito(); // Actualizar contador
     
     // Mostrar SweetAlert de éxito
     if (typeof Swal !== 'undefined') {
@@ -454,6 +507,8 @@ function eliminarDelCarrito(id) {
     
     console.log('Carrito después:', carrito.map(item => ({ id: item.id, tipo: typeof item.id, nombre: item.nombre })));
     renderCarrito();
+    guardarCarritoEnStorage(); // Guardar carrito en localStorage
+    actualizarContadorCarrito(); // Actualizar contador
 }
 
 // Cambiar cantidad
@@ -481,6 +536,8 @@ function cambiarCantidad(id, nuevaCantidad) {
         }
         console.log('Nueva cantidad:', producto.cantidad);
         renderCarrito();
+        guardarCarritoEnStorage(); // Guardar carrito en localStorage
+        actualizarContadorCarrito(); // Actualizar contador
     } else {
         console.log('Producto no encontrado en el carrito');
     }
@@ -540,6 +597,13 @@ function renderCarrito() {
 
 // Event listener para botones "Agregar al carrito"
 document.addEventListener('DOMContentLoaded', function() {
+    // Cargar carrito desde localStorage al inicializar
+    cargarCarritoDesdeStorage();
+    
+    // Renderizar carrito inicial
+    renderCarrito();
+    actualizarContadorCarrito(); // Actualizar contador inicial
+    
     document.querySelectorAll(".add-to-cart").forEach(boton => {
         boton.addEventListener("click", function () {
             const id = parseInt(this.dataset.id);
@@ -674,4 +738,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Actualizar estado de botones según stock disponible
     actualizarEstadoBotones();
+    
+    // Event listener para el botón del carrito en el navbar
+    const navbarCarritoBtn = document.getElementById('navbar-carrito-btn');
+    if (navbarCarritoBtn) {
+        navbarCarritoBtn.addEventListener('click', function() {
+            // Buscar el botón "Ver Carrito" en la página actual y hacer clic
+            const verCarritoBtn = document.getElementById('abrir-carrito');
+            if (verCarritoBtn) {
+                verCarritoBtn.click();
+            } else {
+                // Si no hay botón "Ver Carrito" en la página actual, mostrar un mensaje
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'info',
+                        title: getTranslation('cart.no_cart_available'),
+                        text: getTranslation('cart.go_to_products'),
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            }
+        });
+    }
+    
+    // Sincronizar carrito entre pestañas del navegador
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'luArtCarrito') {
+            console.log('Carrito actualizado desde otra pestaña');
+            cargarCarritoDesdeStorage();
+            renderCarrito();
+            actualizarContadorCarrito(); // Actualizar contador
+        }
+    });
 });

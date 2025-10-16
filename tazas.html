@@ -77,7 +77,7 @@
             <div class="row" id="productList">
                 <div class="col-lg-4 col-sm-6 mb-4">
                     <!-- Portfolio item 1-->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="1">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-4">
                     <!-- Portfolio item 2-->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="2">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-4">
                     <!-- Portfolio item 3-->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="3">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -154,7 +154,7 @@
                 </div>
                 <!-- Producto 4 -->
                 <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="4">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -179,7 +179,7 @@
 
                 <!-- Producto 5 -->
                 <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="5">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -204,7 +204,7 @@
 
                 <!-- Producto 6 -->
                 <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="6">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -230,7 +230,7 @@
                 </div>
                 <!-- Producto 7 -->
                 <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-id="3">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -289,18 +289,18 @@
             <div class="portfolio-hover">
                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
             </div>
-            <img class="img-fluid" src="assets/img/Lu Art Photos/IMG_0951.jpg" alt="Taza Cosmos" />
+            <img class="img-fluid" src="assets/img/Lu Art Photos/IMG_0951.jpg" alt="Taza Marito" />
         </a>
         <div class="portfolio-caption">
-            <div class="portfolio-caption-heading">Taza Cosmos</div>
+            <div class="portfolio-caption-heading">Taza Marito</div>
             <div class="portfolio-caption-subheading text-muted">
                 <span>₡24.000</span>
             </div>
             <button class="btn btn-primary btn-xl text-uppercase add-to-cart" 
             type="button"
             data-id="9" 
-            data-nombre="Taza Cosmos" 
-            data-precio="18500"
+            data-nombre="Taza Marito" 
+            data-precio="24000"
             data-stock="0"
             data-translate="shop.add_to_cart">
                 Agregar al carrito
@@ -457,7 +457,12 @@
     <footer class="footer py-4">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-4 text-lg-start"> &copy; Lu Art 2025</div>
+                <div class="col-lg-4 text-lg-start"> 
+                    &copy; Lu Art 2025
+                    <a href="admin-login.html" class="text-muted ms-3" style="font-size: 0.8em; text-decoration: none;">
+                        <i class="fas fa-cog"></i> Admin
+                    </a>
+                </div>
                 <div class="col-lg-4 my-3 my-lg-0">
                     <a class="btn btn-dark btn-social mx-2" href="https://www.instagram.com/lu.artcr/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     <a id="footer-whatsapp-btn" class="btn btn-dark btn-social mx-2" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
@@ -1243,6 +1248,9 @@
                 setTimeout(() => {
                     if (typeof actualizarEstadoBotones === 'function') {
                         actualizarEstadoBotones();
+                    }
+                    if (typeof updateProductImages === 'function') {
+                        updateProductImages();
                     }
                 }, 100);
             });

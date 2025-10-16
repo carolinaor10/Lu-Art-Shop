@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Admin Simple - Lu Art</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold;
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 16px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover { 
+            background: #0056b3; 
+        }
+        .products-list { 
+            margin-top: 30px; 
+        }
+        .product-item { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border-radius: 5px; 
+            background: #f9f9f9;
+        }
+        .product-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .stats {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛍️ Panel de Administración - Lu Art</h1>
+        
+        <div class="stats">
+            <h3>📊 Estadísticas</h3>
+            <p><strong>Total de productos:</strong> <span id="totalProducts">0</span></p>
+            <p><strong>Último producto agregado:</strong> <span id="lastProduct">Ninguno</span></p>
+        </div>
+        
+        <form id="addProductForm">
+            <h2>➕ Agregar Nuevo Producto</h2>
+            
+            <div class="form-group">
+                <label for="productName">Nombre del Producto *</label>
+                <input type="text" id="productName" required placeholder="Ej: Taza Personalizada">
+            </div>
+            
+            <div class="form-group">
+                <label for="productCategory">Categoría *</label>
+                <select id="productCategory" required>
+                    <option value="">Seleccionar categoría</option>
+                    <option value="tazas">Tazas</option>
+                    <option value="paletas">Paletas</option>
+                    <option value="snackbowls">Snack Bowls</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="productPrice">Precio (₡) *</label>
+                <input type="number" id="productPrice" min="0" step="100" required placeholder="Ej: 15000">
+            </div>
+            
+            <div class="form-group">
+                <label for="productStock">Stock Inicial *</label>
+                <input type="number" id="productStock" min="0" required placeholder="Ej: 5">
+            </div>
+            
+            <div class="form-group">
+                <label for="productDescription">Descripción</label>
+                <textarea id="productDescription" rows="3" placeholder="Descripción del producto (opcional)"></textarea>
+            </div>
+            
+            <button type="submit">💾 Guardar Producto</button>
+            <button type="button" onclick="clearAllProducts()">🗑️ Limpiar Todo</button>
+            <button type="button" onclick="exportProducts()">📤 Exportar</button>
+        </form>
+        
+        <div class="products-list">
+            <h2>📦 Productos Actuales</h2>
+            <div id="productsList">Cargando...</div>
+        </div>
+    </div>
+    
+    <script>
+        let products = [];
+        
+        // Cargar productos desde localStorage
+        function loadProducts() {
+            try {
+                const savedProducts = localStorage.getItem('luArtProducts');
+                if (savedProducts) {
+                    products = JSON.parse(savedProducts);
+                    console.log('Productos cargados:', products.length);
+                } else {
+                    products = [];
+                    console.log('No hay productos guardados');
+                }
+                updateStats();
+                renderProducts();
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+                showError('Error al cargar productos: ' + error.message);
+            }
+        }
+        
+        // Guardar productos en localStorage
+        function saveProducts() {
+            try {
+                localStorage.setItem('luArtProducts', JSON.stringify(products));
+                console.log('Productos guardados exitosamente:', products.length);
+                showSuccess(`Productos guardados: ${products.length} productos`);
+                return true;
+            } catch (error) {
+                console.error('Error guardando productos:', error);
+                showError('Error al guardar productos: ' + error.message);
+                return false;
+            }
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('totalProducts').textContent = products.length;
+            if (products.length > 0) {
+                const lastProduct = products[products.length - 1];
+                document.getElementById('lastProduct').textContent = lastProduct.name;
+            } else {
+                document.getElementById('lastProduct').textContent = 'Ninguno';
+            }
+        }
+        
+        // Renderizar productos
+        function renderProducts() {
+            const productsList = document.getElementById('productsList');
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p>No hay productos agregados aún.</p>';
+                return;
+            }
+            
+            productsList.innerHTML = products.map((product, index) => `
+                <div class="product-item">
+                    <h3>${product.name}</h3>
+                    <p><strong>Categoría:</strong> ${product.category}</p>
+                    <p><strong>Precio:</strong> ₡${product.price.toLocaleString()}</p>
+                    <p><strong>Stock:</strong> ${product.stock}</p>
+                    <p><strong>Descripción:</strong> ${product.description || 'Sin descripción'}</p>
+                    <p><strong>ID:</strong> ${product.id}</p>
+                    <button onclick="deleteProduct(${index})" style="background: #dc3545;">🗑️ Eliminar</button>
+                </div>
+            `).join('');
+        }
+        
+        // Eliminar producto
+        function deleteProduct(index) {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                const deletedProduct = products[index];
+                products.splice(index, 1);
+                saveProducts();
+                updateStats();
+                renderProducts();
+                showSuccess(`Producto "${deletedProduct.name}" eliminado`);
+            }
+        }
+        
+        // Limpiar todos los productos
+        function clearAllProducts() {
+            if (confirm('¿Estás seguro de que quieres eliminar TODOS los productos?')) {
+                products = [];
+                saveProducts();
+                updateStats();
+                renderProducts();
+                showSuccess('Todos los productos han sido eliminados');
+            }
+        }
+        
+        // Exportar productos
+        function exportProducts() {
+            const dataStr = JSON.stringify(products, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'luart-products.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showSuccess('Productos exportados correctamente');
+        }
+        
+        // Mostrar mensaje de error
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.stats'));
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+        
+        // Mostrar mensaje de éxito
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = message;
+            document.querySelector('.container').insertBefore(successDiv, document.querySelector('.stats'));
+            setTimeout(() => successDiv.remove(), 3000);
+        }
+        
+        // Configurar formulario
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            console.log('Formulario enviado');
+            
+            // Validar campos requeridos
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const price = document.getElementById('productPrice').value;
+            const stock = document.getElementById('productStock').value;
+            
+            if (!name || !category || !price || !stock) {
+                showError('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            const newProduct = {
+                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+                name: name,
+                category: category,
+                price: parseInt(price),
+                stock: parseInt(stock),
+                image: 'assets/img/logo/LU ART COLOR.png',
+                description: document.getElementById('productDescription').value.trim()
+            };
+            
+            console.log('Nuevo producto:', newProduct);
+            
+            products.push(newProduct);
+            console.log('Productos después de agregar:', products.length);
+            
+            if (saveProducts()) {
+                updateStats();
+                renderProducts();
+                
+                // Limpiar formulario
+                document.getElementById('addProductForm').reset();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Producto agregado!',
+                    text: `${newProduct.name} se agregó correctamente`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página cargada, inicializando...');
+            loadProducts();
+        });
+    </script>
+</body>
+</html>

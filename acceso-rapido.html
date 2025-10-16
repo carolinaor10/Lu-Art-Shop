@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Lu Art - Acceso Rápido</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+        }
+        .status {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .status h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .status p {
+            color: #666;
+            margin: 0;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .instructions h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            color: #856404;
+            margin: 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Lu Art - Panel de Acceso Rápido</h1>
+            <p>Sistema completo de administración y gestión de productos</p>
+        </div>
+        
+        <div class="status">
+            <h3>✅ Servidor Activo</h3>
+            <p>Puerto 8081 - Todas las funcionalidades disponibles</p>
+        </div>
+        
+        <div class="instructions">
+            <h4>📋 Instrucciones de Uso:</h4>
+            <ol>
+                <li><strong>Admin Simple:</strong> Crea y gestiona productos fácilmente</li>
+                <li><strong>Páginas Públicas:</strong> Ve cómo se ven los productos en el sitio</li>
+                <li><strong>Test Sync:</strong> Verifica la sincronización entre admin y sitio</li>
+                <li><strong>Debug:</strong> Monitorea todos los atributos de los productos</li>
+            </ol>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>⚙️ Panel de Administración</h3>
+                <p>Gestiona productos, stock, precios e imágenes desde el panel de administración completo.</p>
+                <a href="admin-login.html" class="btn">🔐 Admin Completo</a>
+                <a href="admin-simple.html" class="btn btn-success">⚡ Admin Simple</a>
+            </div>
+            
+            <div class="card">
+                <h3>🛍️ Páginas Públicas</h3>
+                <p>Visita las páginas donde los clientes ven y compran los productos.</p>
+                <a href="index.html" class="btn">🏠 Inicio</a>
+                <a href="tienda.html" class="btn">🏪 Tienda</a>
+            </div>
+            
+            <div class="card">
+                <h3>☕ Productos por Categoría</h3>
+                <p>Explora los productos organizados por categorías.</p>
+                <a href="tazas.html" class="btn">☕ Tazas</a>
+                <a href="paletas.html" class="btn">🎨 Paletas</a>
+                <a href="snackbowls.html" class="btn">🥣 Snack Bowls</a>
+            </div>
+            
+            <div class="card">
+                <h3>🧪 Herramientas de Prueba</h3>
+                <p>Prueba y verifica que todo funcione correctamente.</p>
+                <a href="test-admin.html" class="btn btn-warning">🧪 Test Básico</a>
+                <a href="test-sync.html" class="btn btn-info">🔄 Test Sync</a>
+                <a href="test-categoria.html" class="btn btn-warning">🏷️ Test Categorías</a>
+                <a href="test-atributos.html" class="btn btn-warning">🔍 Test Atributos</a>
+                <a href="test-sweetalert.html" class="btn btn-info">🍭 Test SweetAlert</a>
+                <a href="test-carrito-edicion.html" class="btn btn-warning">🛒 Test Carrito</a>
+                <a href="test-carrito-completo.html" class="btn btn-danger">🛒 Test Completo</a>
+                <a href="test-debug.html" class="btn btn-danger">🐛 Debug</a>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h4>🚀 Flujo de Trabajo Recomendado:</h4>
+            <ol>
+                <li>Ve a <strong>"Admin Simple"</strong> para crear productos</li>
+                <li>Usa <strong>"Test Sync"</strong> para verificar que aparezcan</li>
+                <li>Visita las <strong>"Páginas Públicas"</strong> para ver el resultado</li>
+                <li>Usa <strong>"Debug"</strong> si hay algún problema</li>
+            </ol>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <p style="color: #666;">
+                <strong>URL Base:</strong> http://localhost:8081<br>
+                <strong>Estado:</strong> ✅ Funcionando correctamente
+            </p>
+        </div>
+    </div>
+</body>
+</html>

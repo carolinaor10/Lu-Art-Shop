@@ -13,6 +13,7 @@
         <!-- Google fonts removed - using sans-serif only -->
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/index.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -30,7 +31,7 @@
                         <li class="nav-item"><a class="nav-link" href="index.html" data-translate="nav.home">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#about" data-translate="nav.about">Lu-Art</a></li>
                         <li class="nav-item"><a class="nav-link" href="#gallery" data-translate="nav.gallery">Galería</a></li>
-                        <li class="nav-item"><a class="nav-link" href="shop.html" data-translate="nav.shop">Tienda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="tienda.html" data-translate="nav.shop">Tienda</a></li>
                         <li class="nav-item">
                             <button id="lang-toggle" class="btn btn-outline-light btn-sm ms-2" type="button">
                                 <i class="fas fa-language"></i> <span data-translate="nav.language">ES</span>
@@ -111,19 +112,19 @@
                         <img src="/assets/img/Lu Art Photos/IMG_0926.jpg" class="w-100 shadow-1-strong rounded" alt="Wintry Mountain Landscape" />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
-                        <img src="/assets/img/Lu Art Photos/IMG_0927.jpg" class="w-100 shadow-1-strong rounded" alt="Mountains in the Clouds" />
+                        <img src="/assets/img/Lu Art Photos/IMG_0927.jpg" class="w-100 shadow-1-strong rounded" alt="..." />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
-                        <img src="/assets/img/Lu Art Photos/IMG_0930.jpg" class="w-100 shadow-1-strong rounded" alt="Boat on Calm Water" />
+                        <img src="/assets/img/Lu Art Photos/IMG_0930.jpg" class="w-100 shadow-1-strong rounded" alt="..." />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
-                        <img src="/assets/img/Lu Art Photos/IMG_0932.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                        <img src="/assets/img/Lu Art Photos/IMG_0932.jpg" class="w-100 shadow-1-strong rounded" alt="..." />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
-                        <img src="/assets/img/Lu Art Photos/IMG_0937.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
+                        <img src="/assets/img/Lu Art Photos/IMG_0937.jpg" class="w-100 shadow-1-strong rounded" alt="..." />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
-                        <img src="/assets/img/Lu Art Photos/IMG_0939.jpg" class="w-100 shadow-1-strong rounded" alt="Waves at Sea" />
+                        <img src="/assets/img/Lu Art Photos/IMG_0939.jpg" class="w-100 shadow-1-strong rounded" alt="..." />
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 mb-4">
                         <img src="/assets/img/Lu Art Photos/IMG_0948.jpg" class="w-100 shadow-1-strong rounded" alt="Yosemite National Park" />
@@ -164,19 +165,24 @@
         </section>
         <!-- Shop-->
         <section class="page-section" id="shop-ref">
-            
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase" data-translate="shop.title">Tienda</h2>
-                <h3 class="section-subheading text-muted" data-translate="shop.subtitle">Seguínos</h3>
-            </div>                
-            
-
-            <div class="container protech">
-                <div id="div-serv">   
-                    <a href="shop.html">
-                        <img src="./assets/img/pottery-8026823_1280.jpg" alt="Pottery Image">
-                        <h2 data-translate="shop.buy_button">Comprar</h2>
-                    </a>
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase" data-translate="shop.title">Tienda</h2>
+                    <h3 class="section-subheading text-muted" data-translate="shop.subtitle">Lu Art</h3>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <!-- Tienda Category -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="text-center">
+                            <a href="tienda.html" class="category-link">
+                                <div class="category-image mb-4" id="shop-category-image">
+                                    <img src="./assets/img/pottery-8026823_1280.jpg" alt="Tienda" class="img-fluid">
+                                </div>
+                            </a>
+                            <a href="tienda.html" class="btn btn-primary btn-xl text-uppercase" data-translate="shop.buy_button">Comprar</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

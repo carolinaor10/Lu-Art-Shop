@@ -1,0 +1,49 @@
+/* Estilos para productos agotados */
+.btn-sold-out {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #fff !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+.btn-sold-out:hover {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #fff !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-sold-out:focus {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+/* Indicador visual adicional para productos agotados */
+.portfolio-item .btn-sold-out::after {
+    content: "";
+    font-size: 0.8em;
+}
+
+/* Estilo para el contenedor del producto agotado */
+.portfolio-item:has(.btn-sold-out) {
+    opacity: 0.7;
+    position: relative;
+}
+
+.portfolio-item:has(.btn-sold-out)::before {
+    content: "AGOTADO";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: bold;
+    z-index: 10;
+}

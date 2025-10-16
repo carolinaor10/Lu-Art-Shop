@@ -1,3 +1,67 @@
+// Función para verificar y actualizar el estado de los botones según el stock
+function actualizarEstadoBotones() {
+    document.querySelectorAll(".add-to-cart").forEach(boton => {
+        const stock = parseInt(boton.dataset.stock);
+        const id = boton.dataset.id;
+        const portfolioItem = boton.closest('.portfolio-item');
+        
+        if (stock === 0) {
+            // Producto agotado - deshabilitar botón y cambiar texto
+            boton.disabled = true;
+            boton.classList.add('disabled');
+            boton.innerHTML = getTranslation('shop.sold_out');
+            boton.style.opacity = '0.6';
+            boton.style.cursor = 'not-allowed';
+            
+            // Agregar clase CSS para estilo de agotado
+            boton.classList.add('btn-sold-out');
+            
+            // Agregar etiqueta de agotado traducible
+            if (portfolioItem && !portfolioItem.querySelector('.sold-out-label')) {
+                const soldOutLabel = document.createElement('div');
+                soldOutLabel.className = 'sold-out-label';
+                soldOutLabel.textContent = getTranslation('shop.sold_out_label');
+                soldOutLabel.style.position = 'absolute';
+                soldOutLabel.style.top = '10px';
+                soldOutLabel.style.right = '10px';
+                soldOutLabel.style.backgroundColor = '#dc3545';
+                soldOutLabel.style.color = 'white';
+                soldOutLabel.style.padding = '4px 8px';
+                soldOutLabel.style.borderRadius = '4px';
+                soldOutLabel.style.fontSize = '0.7em';
+                soldOutLabel.style.fontWeight = 'bold';
+                soldOutLabel.style.zIndex = '10';
+                portfolioItem.style.position = 'relative';
+                portfolioItem.style.opacity = '0.7';
+                portfolioItem.appendChild(soldOutLabel);
+            } else if (portfolioItem && portfolioItem.querySelector('.sold-out-label')) {
+                // Actualizar texto de etiqueta existente
+                const existingLabel = portfolioItem.querySelector('.sold-out-label');
+                existingLabel.textContent = getTranslation('shop.sold_out_label');
+            }
+        } else {
+            // Producto disponible - asegurar que esté habilitado
+            boton.disabled = false;
+            boton.classList.remove('disabled', 'btn-sold-out');
+            boton.innerHTML = getTranslation('shop.add_to_cart');
+            boton.style.opacity = '1';
+            boton.style.cursor = 'pointer';
+            
+            // Remover etiqueta de agotado si existe
+            if (portfolioItem) {
+                const soldOutLabel = portfolioItem.querySelector('.sold-out-label');
+                if (soldOutLabel) {
+                    soldOutLabel.remove();
+                }
+                portfolioItem.style.opacity = '1';
+            }
+        }
+    });
+}
+
+// Hacer la función disponible globalmente
+window.actualizarEstadoBotones = actualizarEstadoBotones;
+
 // Función para obtener traducción
 function getTranslation(key, replacements = {}) {
     if (window.translations && window.currentLanguage) {
@@ -48,6 +112,17 @@ let carrito = [];
 
 // Agregar producto al carrito
 function agregarAlCarrito(id, nombre, precio, stock) {
+    // Verificar si el producto está agotado
+    if (stock === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: getTranslation('alert.product_sold_out'),
+            text: getTranslation('alert.sold_out_message', { nombre: nombre }),
+            timer: 3000
+        });
+        return;
+    }
+
     const productoExistente = carrito.find(item => item.id === id);
 
     if (productoExistente) {
@@ -138,6 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombre = this.dataset.nombre;
             const precio = parseFloat(this.dataset.precio);
             const stock = parseInt(this.dataset.stock);
+
+            // Verificar si el botón está deshabilitado (producto agotado)
+            if (this.disabled || stock === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: getTranslation('alert.product_sold_out'),
+                    text: getTranslation('alert.sold_out_message', { nombre: nombre }),
+                    timer: 3000
+                });
+                return;
+            }
 
             agregarAlCarrito(id, nombre, precio, stock);
 
@@ -252,4 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (direccionInput) direccionInput.addEventListener('input', actualizarMensajeWhatsApp);
     if (indicacionesInput) indicacionesInput.addEventListener('input', actualizarMensajeWhatsApp);
     if (facturaCheckbox) facturaCheckbox.addEventListener('change', actualizarMensajeWhatsApp);
+    
+    // Actualizar estado de botones según stock disponible
+    actualizarEstadoBotones();
 });

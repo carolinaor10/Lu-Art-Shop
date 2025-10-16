@@ -13,6 +13,7 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/technologies.css" rel="stylesheet" />
+    <link href="css/sold-out.css" rel="stylesheet" />
 </head>
 <body id="page-top">
     <!-- Navigation-->
@@ -471,6 +472,10 @@
             'shop.subtitle': 'Lu Art',
             'shop.search_placeholder': 'Buscar productos...',
             'shop.add_to_cart': 'Agregar al carrito',
+            'shop.sold_out': 'Agotado',
+            'shop.sold_out_label': 'AGOTADO',
+            'alert.product_sold_out': 'Producto Agotado',
+            'alert.sold_out_message': 'Lo sentimos, {nombre} está agotado.',
             'cart.title': 'Carrito',
             'cart.subtitle': 'Lu Art',
             'cart.product': 'Producto',
@@ -533,6 +538,10 @@
             'shop.subtitle': 'Lu Art',
             'shop.search_placeholder': 'Search products...',
             'shop.add_to_cart': 'Add to cart',
+            'shop.sold_out': 'Sold Out',
+            'shop.sold_out_label': 'SOLD OUT',
+            'alert.product_sold_out': 'Product Sold Out',
+            'alert.sold_out_message': 'Sorry, {nombre} is sold out.',
             'cart.title': 'Cart',
             'cart.subtitle': 'Lu Art',
             'cart.product': 'Product',
@@ -654,6 +663,11 @@
         if (typeof actualizarMensajeWhatsApp === 'function') {
             actualizarMensajeWhatsApp();
         }
+        
+        // Actualizar etiquetas de productos agotados
+        if (typeof actualizarEstadoBotones === 'function') {
+            actualizarEstadoBotones();
+        }
     }
 
     // Initialize language toggle
@@ -671,6 +685,13 @@
         
         // Initialize WhatsApp buttons
         actualizarBotonesWhatsApp();
+        
+        // Actualizar estado de botones según stock disponible
+        setTimeout(() => {
+            if (typeof actualizarEstadoBotones === 'function') {
+                actualizarEstadoBotones();
+            }
+        }, 100);
     });
     </script>
 

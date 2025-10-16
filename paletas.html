@@ -585,7 +585,7 @@
         }
     };
 
-    let currentLanguage = 'es';
+    let currentLanguage = localStorage.getItem('selectedLanguage') || 'es';
 
     // Hacer las traducciones disponibles globalmente
     window.translations = translations;
@@ -632,6 +632,9 @@
 
         currentLanguage = language;
         
+        // Guardar idioma en localStorage
+        localStorage.setItem('selectedLanguage', language);
+        
         // Actualizar variable global
         window.currentLanguage = currentLanguage;
         
@@ -655,6 +658,9 @@
 
     // Initialize language toggle
     document.addEventListener('DOMContentLoaded', function() {
+        // Cargar idioma guardado y aplicar traducción
+        translatePage(currentLanguage);
+        
         const langToggle = document.getElementById('lang-toggle');
         if (langToggle) {
             langToggle.addEventListener('click', function() {

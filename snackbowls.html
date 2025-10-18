@@ -32,7 +32,7 @@
                     <li class="nav-item"><a class="nav-link" href="index.html#gallery" data-translate="nav.gallery">Galería</a></li>
                     <li class="nav-item"><a class="nav-link" href="tienda.html" data-translate="nav.shop">Tienda</a></li>
                     <li class="nav-item">
-                        <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button">
+                        <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button" data-bs-toggle="modal" data-bs-target="#carritoModal">
                             <i class="fas fa-shopping-cart"></i>
                             <span id="navbar-contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
                         </button>
@@ -153,28 +153,55 @@
         </div>
     </section>
 
-    <!-- Ver Carrito Button -->
+    <!-- Botones de navegación -->
     <div class="text-center mb-4">
-        <button class="btn btn-primary btn-xl text-uppercase" id="abrir-carrito" data-translate="cart.view_cart">Ver Carrito <span id="contador-carrito" class="badge badge-light ml-2" style="display: none;">0</span></button>
+        <div class="d-flex justify-content-center align-items-baseline gap-3">
+            <a href="tienda.html" class="btn btn-secondary btn-xl text-uppercase d-flex align-items-center" style="min-height: 48px; background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
+                Volver
+            </a>
+            <button class="btn btn-primary btn-xl text-uppercase d-flex align-items-center" id="abrir-carrito" data-bs-toggle="modal" data-bs-target="#carritoModal" data-translate="cart.view_cart" style="min-height: 48px;">Ver Carrito <span id="contador-carrito" class="badge badge-light ml-2" style="display: none;">0</span></button>
+        </div>
     </div>
 
     <!-- Carrito Modal -->
     <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="carritoModalLabel" data-translate="cart.title">Carrito de Compras</h5>
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
+                <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
+                    <div class="text-center w-100">
+                        <h2 class="section-heading text-uppercase text-dark" data-translate="cart.title">Carrito</h2>
+                        <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div id="productos-carrito"></div>
-                    <div class="text-end mt-3">
-                        <h5 data-translate="cart.total">Total: <span id="total-carrito">₡0</span></h5>
+                <div class="modal-body" style="padding: 1rem 2rem;">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="background: white; border-radius: 10px; overflow: hidden;">
+                            <thead style="background: #f8f9fa;">
+                                <tr>
+                                    <th data-translate="cart.product">Producto</th>
+                                    <th data-translate="cart.price">Precio</th>
+                                    <th data-translate="cart.quantity">Cantidad</th>
+                                    <th data-translate="cart.total">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="carrito-body"></tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="modal.close">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="confirmar-compra-btn" data-translate="cart.confirm_purchase">Confirmar Compra</button>
+                <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
+                    <div class="text-center w-100">
+                        <h3 id="total" class="text-dark mb-3" data-translate="cart.total_label">Total: ₡0</h3>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
+                                <i class="fas fa-trash me-2"></i>Vaciar Carrito
+                            </button>
+                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                                Confirmar compra
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -311,7 +338,29 @@
             'reserve.timer_subtitle': 'Minutos para enviar comprobante',
             'reserve.close_button': 'Cancelar Reserva',
             'contact.title': 'Contacto',
-            'whatsapp.floating_message': 'Hola! Me interesa conocer más sobre sus productos artesanales.'
+            'whatsapp.floating_message': 'Hola! Me interesa conocer más sobre sus productos artesanales.',
+            'cart.title': 'Carrito',
+            'cart.subtitle': 'Lu Art',
+            'cart.product': 'Producto',
+            'cart.price': 'Precio',
+            'cart.quantity': 'Cantidad',
+            'cart.total': 'Total',
+            'cart.total_label': 'Total: ₡0',
+            'cart.empty': 'No hay productos en el carrito',
+            'cart.no_products': 'No hay productos en el carrito',
+            'cart.clear_cart': 'Vaciar Carrito',
+            'cart.confirm_purchase': 'Confirmar compra',
+            'payment.title': 'Confirmar Compra',
+            'payment.subtitle': 'Lu Art',
+            'payment.customer_info': 'Información del Cliente',
+            'payment.delivery_info': 'Información de Entrega',
+            'payment.name': 'Nombre completo',
+            'payment.phone': 'Teléfono',
+            'payment.email': 'Email',
+            'payment.address': 'Dirección completa',
+            'payment.notes': 'Notas adicionales',
+            'payment.total': 'Total: ₡0',
+            'payment.send_order': 'Enviar Pedido'
         },
         en: {
             'nav.home': 'Home',
@@ -360,7 +409,29 @@
             'reserve.timer_subtitle': 'Minutes to send receipt',
             'reserve.close_button': 'Cancel Reservation',
             'contact.title': 'Contact',
-            'whatsapp.floating_message': 'Hello! I\'m interested in learning more about your handmade products.'
+            'whatsapp.floating_message': 'Hello! I\'m interested in learning more about your handmade products.',
+            'cart.title': 'Cart',
+            'cart.subtitle': 'Lu Art',
+            'cart.product': 'Product',
+            'cart.price': 'Price',
+            'cart.quantity': 'Quantity',
+            'cart.total': 'Total',
+            'cart.total_label': 'Total: ₡0',
+            'cart.empty': 'No products in cart',
+            'cart.no_products': 'No products in cart',
+            'cart.clear_cart': 'Clear Cart',
+            'cart.confirm_purchase': 'Confirm Purchase',
+            'payment.title': 'Confirm Purchase',
+            'payment.subtitle': 'Lu Art',
+            'payment.customer_info': 'Customer Information',
+            'payment.delivery_info': 'Delivery Information',
+            'payment.name': 'Full name',
+            'payment.phone': 'Phone',
+            'payment.email': 'Email',
+            'payment.address': 'Full address',
+            'payment.notes': 'Additional notes',
+            'payment.total': 'Total: ₡0',
+            'payment.send_order': 'Send Order'
         }
     };
 
@@ -487,11 +558,58 @@
     });
     </script>
     
+    <!-- Script de prueba básico -->
+    <script>
+    console.log('=== SCRIPT BÁSICO DE SNACKBOWLS FUNCIONANDO ===');
+    </script>
+    
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <!-- Carrito JS-->
     <script src="js/carrito.js"></script>
+    
+    <!-- Script de verificación y función de respaldo -->
+    <script>
+    console.log('=== VERIFICACIÓN DE CARGA DE SCRIPTS SNACKBOWLS ===');
+    console.log('SweetAlert2 disponible:', typeof Swal !== 'undefined');
+    console.log('Función vaciarCarrito disponible:', typeof vaciarCarrito !== 'undefined');
+    console.log('window.vaciarCarrito disponible:', typeof window.vaciarCarrito !== 'undefined');
+    console.log('window.translations disponible:', typeof window.translations !== 'undefined');
+    console.log('window.currentLanguage:', window.currentLanguage);
+    
+    // Función de respaldo simple
+    if (typeof vaciarCarrito === 'undefined') {
+        console.log('Creando función de respaldo vaciarCarrito');
+        window.vaciarCarrito = function() {
+            console.log('Función de respaldo vaciarCarrito llamada');
+            
+            // Intentar obtener el carrito desde localStorage
+            let carrito = [];
+            try {
+                const carritoGuardado = localStorage.getItem('luArtCarrito');
+                if (carritoGuardado) {
+                    carrito = JSON.parse(carritoGuardado);
+                }
+            } catch (e) {
+                console.error('Error cargando carrito desde localStorage:', e);
+            }
+            
+            if (carrito.length === 0) {
+                alert('El carrito ya está vacío');
+                return;
+            }
+            
+            if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                // Vaciar el carrito
+                localStorage.removeItem('luArtCarrito');
+                
+                // Recargar la página para actualizar la interfaz
+                location.reload();
+            }
+        };
+    }
+    </script>
 </body>
 </html>

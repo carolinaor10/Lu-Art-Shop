@@ -1,3 +1,6 @@
+console.log('carrito.js cargado correctamente');
+console.log('=== CARRITO.JS INICIANDO ===');
+
 // Función para obtener productos desde el panel de administración
 function getProductsFromAdmin() {
     const adminProducts = localStorage.getItem('luArtProducts');
@@ -595,14 +598,102 @@ function renderCarrito() {
     }
 }
 
+// Función global para vaciar el carrito
+try {
+    function vaciarCarrito() {
+        console.log('=== FUNCIÓN VACIAR CARRITO GLOBAL LLAMADA ===');
+        console.log('Función vaciarCarrito llamada');
+        console.log('Carrito actual:', carrito);
+        console.log('Longitud del carrito:', carrito.length);
+    
+    if (carrito.length === 0) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Carrito vacío',
+            text: 'No hay productos para vaciar',
+            timer: 1500,
+            showConfirmButton: false
+        });
+        return;
+    }
+    
+    Swal.fire({
+        title: '¿Vaciar carrito?',
+        text: 'Esta acción eliminará todos los productos del carrito',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, vaciar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('Confirmado: vaciando carrito');
+            console.log('Carrito antes de vaciar:', carrito);
+            
+            // Vaciar el carrito
+            carrito = [];
+            console.log('Carrito después de vaciar:', carrito);
+            
+            // Guardar en localStorage
+            guardarCarritoEnStorage();
+            
+            // Renderizar el carrito vacío
+            renderCarrito();
+            
+            // Actualizar contadores
+            actualizarContadorCarrito();
+            
+            console.log('Carrito vaciado exitosamente');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Carrito vaciado',
+                text: 'Todos los productos han sido eliminados',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
+    
+    // Hacer la función globalmente disponible
+    window.vaciarCarrito = vaciarCarrito;
+    
+} catch (error) {
+    console.error('Error definiendo función vaciarCarrito:', error);
+    // Función de respaldo
+    window.vaciarCarrito = function() {
+        console.log('Función de respaldo vaciarCarrito llamada');
+        alert('Error en función principal, usando respaldo');
+    };
+}
+
 // Event listener para botones "Agregar al carrito"
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM cargado, iniciando configuración del carrito');
+    
     // Cargar carrito desde localStorage al inicializar
     cargarCarritoDesdeStorage();
     
     // Renderizar carrito inicial
     renderCarrito();
     actualizarContadorCarrito(); // Actualizar contador inicial
+    
+    // Buscar el botón vaciar carrito inmediatamente
+    const vaciarCarritoBtn = document.getElementById('vaciar-carrito-btn');
+    console.log('Buscando botón vaciar carrito:', vaciarCarritoBtn);
+    
+    if (vaciarCarritoBtn) {
+        console.log('Botón vaciar carrito encontrado en DOMContentLoaded');
+        vaciarCarritoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Event listener directo activado desde DOMContentLoaded');
+            vaciarCarrito();
+        });
+    } else {
+        console.log('Botón vaciar carrito NO encontrado en DOMContentLoaded');
+    }
     
     document.querySelectorAll(".add-to-cart").forEach(boton => {
         boton.addEventListener("click", function () {
@@ -649,8 +740,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (abrirCarritoBtn && carritoOverlay) {
         abrirCarritoBtn.addEventListener('click', () => {
+            console.log('Abriendo carrito overlay');
             renderCarrito();
             carritoOverlay.style.display = 'flex';
+            
+            // Buscar el botón vaciar carrito después de abrir el modal
+            setTimeout(() => {
+                const vaciarCarritoBtn = document.getElementById('vaciar-carrito-btn');
+                console.log('Buscando botón vaciar carrito después de abrir modal:', vaciarCarritoBtn);
+                if (vaciarCarritoBtn) {
+                    console.log('Botón vaciar carrito encontrado después de abrir modal');
+                }
+            }, 100);
         });
     }
 
@@ -743,11 +844,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbarCarritoBtn = document.getElementById('navbar-carrito-btn');
     if (navbarCarritoBtn) {
         navbarCarritoBtn.addEventListener('click', function() {
+            console.log('Botón navbar carrito clickeado');
             // Buscar el botón "Ver Carrito" en la página actual y hacer clic
             const verCarritoBtn = document.getElementById('abrir-carrito');
             if (verCarritoBtn) {
+                console.log('Encontrado botón Ver Carrito, haciendo click');
                 verCarritoBtn.click();
             } else {
+                console.log('No se encontró botón Ver Carrito');
                 // Si no hay botón "Ver Carrito" en la página actual, mostrar un mensaje
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
@@ -762,6 +866,103 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Función para vaciar el carrito
+    function vaciarCarrito() {
+        console.log('Función vaciarCarrito llamada');
+        console.log('Carrito actual:', carrito);
+        console.log('Longitud del carrito:', carrito.length);
+        
+        if (carrito.length === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Carrito vacío',
+                text: 'No hay productos para vaciar',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return;
+        }
+        
+        Swal.fire({
+            title: '¿Vaciar carrito?',
+            text: 'Esta acción eliminará todos los productos del carrito',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, vaciar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('Confirmado: vaciando carrito');
+                console.log('Carrito antes de vaciar:', carrito);
+                
+                // Vaciar el carrito
+                carrito = [];
+                console.log('Carrito después de vaciar:', carrito);
+                
+                // Guardar en localStorage
+                guardarCarritoEnStorage();
+                
+                // Renderizar el carrito vacío
+                renderCarrito();
+                
+                // Actualizar contadores
+                actualizarContadorCarrito();
+                
+                console.log('Carrito vaciado exitosamente');
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Carrito vaciado',
+                    text: 'Todos los productos han sido eliminados',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    }
+
+    // Detectar cuando se abre el modal de Bootstrap
+    const carritoModal = document.getElementById('carritoModal');
+    if (carritoModal) {
+        carritoModal.addEventListener('show.bs.modal', function () {
+            console.log('Modal de Bootstrap carritoModal abriéndose');
+            renderCarrito();
+            
+            // Buscar el botón vaciar carrito después de que el modal esté visible
+            setTimeout(() => {
+                const vaciarCarritoBtn = document.getElementById('vaciar-carrito-btn');
+                console.log('Buscando botón vaciar carrito en modal Bootstrap:', vaciarCarritoBtn);
+                if (vaciarCarritoBtn) {
+                    console.log('Botón vaciar carrito encontrado en modal Bootstrap');
+                }
+            }, 100);
+        });
+    }
+
+    // Botón Vaciar Carrito - múltiples métodos para asegurar que funcione
+    const vaciarCarritoBtn = document.getElementById('vaciar-carrito-btn');
+    if (vaciarCarritoBtn) {
+        console.log('Botón vaciar carrito encontrado, agregando event listener');
+        vaciarCarritoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Event listener directo activado');
+            vaciarCarrito();
+        });
+    }
+
+    // También usar delegación de eventos como respaldo
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'vaciar-carrito-btn') {
+            console.log('Delegación de eventos activada');
+            e.preventDefault();
+            e.stopPropagation();
+            vaciarCarrito();
+        }
+    });
+    
     // Sincronizar carrito entre pestañas del navegador
     window.addEventListener('storage', function(e) {
         if (e.key === 'luArtCarrito') {
@@ -772,3 +973,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Verificar que la función esté disponible globalmente
+console.log('Verificando función vaciarCarrito:', typeof window.vaciarCarrito);
+console.log('Función vaciarCarrito disponible:', window.vaciarCarrito !== undefined);

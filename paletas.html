@@ -199,43 +199,61 @@
         </div>
     </section>
 
-    <!-- Botón para abrir carrito -->
+    <!-- Botones de navegación -->
     <div class="text-center py-5">
-        <button id="abrir-carrito" class="btn btn-primary btn-xl text-uppercase" type="button" data-translate="cart.view_cart">
-            Ver Carrito <span id="contador-carrito" class="badge badge-light ml-2" style="display: none;">0</span>
-        </button>
+        <div class="d-flex justify-content-center align-items-baseline gap-3">
+            <a href="tienda.html" class="btn btn-secondary btn-xl text-uppercase d-flex align-items-center" style="min-height: 48px; background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
+                Volver
+            </a>
+            <button id="abrir-carrito" class="btn btn-primary btn-xl text-uppercase d-flex align-items-center" type="button" data-bs-toggle="modal" data-bs-target="#carritoModal" data-translate="cart.view_cart" style="min-height: 48px;">
+                Ver Carrito <span id="contador-carrito" class="badge badge-light ml-2" style="display: none;">0</span>
+            </button>
+        </div>
     </div>
 
-    <!-- Carrito -->
-    <div id="carrito-container" class="carrito-overlay">
-        <div id="carrito" class="carrito-box">
-            <button class="close-btn">&times;</button>
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase" data-translate="cart.title">Carrito</h2>
-                <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+    <!-- Carrito Modal -->
+    <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
+                <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
+                    <div class="text-center w-100">
+                        <h2 class="section-heading text-uppercase text-dark" data-translate="cart.title">Carrito</h2>
+                        <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 1rem 2rem;">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="background: white; border-radius: 10px; overflow: hidden;">
+                            <thead style="background: #f8f9fa;">
+                                <tr>
+                                    <th data-translate="cart.product">Producto</th>
+                                    <th data-translate="cart.price">Precio</th>
+                                    <th data-translate="cart.quantity">Cantidad</th>
+                                    <th data-translate="cart.total">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="carrito-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
+                    <div class="text-center w-100">
+                        <h3 id="total" class="text-dark mb-3" data-translate="cart.total_label">Total: ₡0</h3>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
+                                <i class="fas fa-trash me-2"></i>Vaciar Carrito
+                            </button>
+                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                                Confirmar compra
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        
-            <div class="table-responsive-wrapper">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th data-translate="cart.product">Producto</th>
-                            <th data-translate="cart.price">Precio</th>
-                            <th data-translate="cart.quantity">Cantidad</th>
-                            <th data-translate="cart.total">Total</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="carrito-body"></tbody>
-                </table>
-            </div>
-            
-            <div class="paym-btn">
-                <h3 id="total" data-translate="cart.total_label">Total: ₡0</h3>
-                <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
-                    Confirmar compra
-                </button>                    
-            </div>
+        </div>
+    </div>
             
             <!-- Modal de Pago -->
             <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
@@ -351,12 +369,58 @@
 
     <!-- Portfolio Modals-->
 
+    <!-- Script de prueba básico -->
+    <script>
+    console.log('=== SCRIPT BÁSICO DE PALETAS FUNCIONANDO ===');
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
     <script async src="//www.instagram.com/embed.js"></script>
-    <script src="js/carrito.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/carrito.js"></script>
+    
+    <!-- Script de verificación y función de respaldo -->
+    <script>
+    console.log('=== SCRIPT DE PALETAS CARGADO ===');
+    console.log('=== VERIFICACIÓN DE CARGA DE SCRIPTS ===');
+    console.log('SweetAlert2 disponible:', typeof Swal !== 'undefined');
+    console.log('Función vaciarCarrito disponible:', typeof vaciarCarrito !== 'undefined');
+    console.log('window.vaciarCarrito disponible:', typeof window.vaciarCarrito !== 'undefined');
+    
+    // Función de respaldo simple
+    if (typeof vaciarCarrito === 'undefined') {
+        console.log('Creando función de respaldo vaciarCarrito');
+        window.vaciarCarrito = function() {
+            console.log('Función de respaldo vaciarCarrito llamada');
+            
+            // Intentar obtener el carrito desde localStorage
+            let carrito = [];
+            try {
+                const carritoGuardado = localStorage.getItem('luArtCarrito');
+                if (carritoGuardado) {
+                    carrito = JSON.parse(carritoGuardado);
+                }
+            } catch (e) {
+                console.error('Error cargando carrito desde localStorage:', e);
+            }
+            
+            if (carrito.length === 0) {
+                alert('El carrito ya está vacío');
+                return;
+            }
+            
+            if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                // Vaciar el carrito
+                localStorage.removeItem('luArtCarrito');
+                
+                // Recargar la página para actualizar la interfaz
+                location.reload();
+            }
+        };
+    }
+    </script>
 
     <!-- Search functionality -->
     <script>

@@ -33,7 +33,7 @@
                         <li class="nav-item"><a class="nav-link" href="#gallery" data-translate="nav.gallery">Galería</a></li>
                         <li class="nav-item"><a class="nav-link" href="tienda.html" data-translate="nav.shop">Tienda</a></li>
                         <li class="nav-item">
-                            <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button">
+                            <button id="navbar-carrito-btn" class="btn btn-outline-light btn-sm ms-2 position-relative" type="button" data-bs-toggle="modal" data-bs-target="#carritoModal">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span id="navbar-contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
                             </button>
@@ -234,6 +234,105 @@
                 </div>
             </footer>
 
+            <!-- Carrito Modal -->
+            <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
+                        <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
+                            <div class="text-center w-100">
+                                <h2 class="section-heading text-uppercase text-dark" data-translate="cart.title">Carrito</h2>
+                                <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="padding: 1rem 2rem;">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="background: white; border-radius: 10px; overflow: hidden;">
+                                    <thead>
+                                        <tr>
+                                            <th data-translate="cart.product">Producto</th>
+                                            <th data-translate="cart.price">Precio</th>
+                                            <th data-translate="cart.quantity">Cantidad</th>
+                                            <th data-translate="cart.total">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="carrito-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
+                            <div class="text-center w-100">
+                                <h3 id="total" class="text-dark mb-3" data-translate="cart.total_label">Total: ₡0</h3>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart">
+                                        <i class="fas fa-trash me-2"></i>Vaciar Carrito
+                                    </button>
+                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                                        Confirmar compra
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Pago -->
+            <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
+                        <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
+                            <div class="text-center w-100">
+                                <h2 class="section-heading text-uppercase text-dark" data-translate="payment.title">Confirmar Compra</h2>
+                                <h3 class="section-subheading text-muted" data-translate="payment.subtitle">Lu Art</h3>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="padding: 1rem 2rem;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 data-translate="payment.customer_info">Información del Cliente</h4>
+                                    <form id="formPago">
+                                        <div class="mb-3">
+                                            <label for="nombre" class="form-label" data-translate="payment.name">Nombre completo</label>
+                                            <input type="text" class="form-control" id="nombre" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="telefono" class="form-label" data-translate="payment.phone">Teléfono</label>
+                                            <input type="tel" class="form-control" id="telefono" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label" data-translate="payment.email">Email</label>
+                                            <input type="email" class="form-control" id="email" required>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 data-translate="payment.delivery_info">Información de Entrega</h4>
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label" data-translate="payment.address">Dirección completa</label>
+                                        <textarea class="form-control" id="direccion" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="notas" class="form-label" data-translate="payment.notes">Notas adicionales</label>
+                                        <textarea class="form-control" id="notas" rows="2" placeholder="Instrucciones especiales para la entrega..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
+                            <div class="text-center w-100">
+                                <h3 id="total-pago" class="text-dark mb-3" data-translate="payment.total">Total: ₡0</h3>
+                                <button id="enviar-pedido-btn" class="btn btn-success btn-xl text-uppercase" type="button" data-translate="payment.send_order">
+                                    Enviar Pedido
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Whatsapp Button-->
             <div class="floating-button">
                 <a id="floating-whatsapp-btn" href="#" target="_blank">
@@ -243,9 +342,9 @@
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
             <script src="js/scripts.js"></script>
-            <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+            <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 
-            <script async src="//www.instagram.com/embed.js"></script>
+            <!-- <script async src="//www.instagram.com/embed.js"></script> -->
 
             <!-- Translation Script -->
             <script>
@@ -279,7 +378,29 @@
                     'shop.subtitle': 'Seguínos',
                     'shop.buy_button': 'Comprar',
                     'whatsapp.floating_message': 'Hola, quiero más información',
-                    'contact.title': 'Contacto'
+                    'contact.title': 'Contacto',
+                    'cart.title': 'Carrito',
+                    'cart.subtitle': 'Lu Art',
+                    'cart.product': 'Producto',
+                    'cart.price': 'Precio',
+                    'cart.quantity': 'Cantidad',
+                    'cart.total': 'Total',
+                    'cart.total_label': 'Total: ₡0',
+                    'cart.empty': 'No hay productos en el carrito',
+                    'cart.no_products': 'No hay productos en el carrito',
+                    'cart.clear_cart': 'Vaciar Carrito',
+                    'cart.confirm_purchase': 'Confirmar compra',
+                    'payment.title': 'Confirmar Compra',
+                    'payment.subtitle': 'Lu Art',
+                    'payment.customer_info': 'Información del Cliente',
+                    'payment.delivery_info': 'Información de Entrega',
+                    'payment.name': 'Nombre completo',
+                    'payment.phone': 'Teléfono',
+                    'payment.email': 'Email',
+                    'payment.address': 'Dirección completa',
+                    'payment.notes': 'Notas adicionales',
+                    'payment.total': 'Total: ₡0',
+                    'payment.send_order': 'Enviar Pedido'
                 },
                 en: {
                     'nav.home': 'Home',
@@ -309,11 +430,37 @@
                     'shop.subtitle': 'Follow us',
                     'shop.buy_button': 'Buy',
                     'whatsapp.floating_message': 'Hello, I want more information',
-                    'contact.title': 'Contact'
+                    'contact.title': 'Contact',
+                    'cart.title': 'Cart',
+                    'cart.subtitle': 'Lu Art',
+                    'cart.product': 'Product',
+                    'cart.price': 'Price',
+                    'cart.quantity': 'Quantity',
+                    'cart.total': 'Total',
+                    'cart.total_label': 'Total: ₡0',
+                    'cart.empty': 'No products in cart',
+                    'cart.no_products': 'No products in cart',
+                    'cart.clear_cart': 'Clear Cart',
+                    'cart.confirm_purchase': 'Confirm Purchase',
+                    'payment.title': 'Confirm Purchase',
+                    'payment.subtitle': 'Lu Art',
+                    'payment.customer_info': 'Customer Information',
+                    'payment.delivery_info': 'Delivery Information',
+                    'payment.name': 'Full name',
+                    'payment.phone': 'Phone',
+                    'payment.email': 'Email',
+                    'payment.address': 'Full address',
+                    'payment.notes': 'Additional notes',
+                    'payment.total': 'Total: ₡0',
+                    'payment.send_order': 'Send Order'
                 }
             };
 
             let currentLanguage = localStorage.getItem('selectedLanguage') || 'es';
+            
+            // Hacer las variables globalmente disponibles
+            window.translations = translations;
+            window.currentLanguage = currentLanguage;
 
             // Función para actualizar los botones de WhatsApp
             function actualizarBotonesWhatsApp() {
@@ -380,8 +527,57 @@
             });
             </script>
             
+            <!-- Script de prueba básico -->
+            <script>
+            console.log('=== SCRIPT BÁSICO DE INDEX FUNCIONANDO ===');
+            </script>
+            
+            <!-- SweetAlert2 -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            
             <!-- Carrito JavaScript -->
             <script src="js/carrito.js"></script>
+            
+            <!-- Script de verificación y función de respaldo -->
+            <script>
+            console.log('=== SCRIPT DE INDEX CARGADO ===');
+            console.log('=== VERIFICACIÓN DE CARGA DE SCRIPTS ===');
+            console.log('SweetAlert2 disponible:', typeof Swal !== 'undefined');
+            console.log('Función vaciarCarrito disponible:', typeof vaciarCarrito !== 'undefined');
+            console.log('window.vaciarCarrito disponible:', typeof window.vaciarCarrito !== 'undefined');
+            
+            // Función de respaldo simple
+            if (typeof vaciarCarrito === 'undefined') {
+                console.log('Creando función de respaldo vaciarCarrito');
+                window.vaciarCarrito = function() {
+                    console.log('Función de respaldo vaciarCarrito llamada');
+                    
+                    // Intentar obtener el carrito desde localStorage
+                    let carrito = [];
+                    try {
+                        const carritoGuardado = localStorage.getItem('luArtCarrito');
+                        if (carritoGuardado) {
+                            carrito = JSON.parse(carritoGuardado);
+                        }
+                    } catch (e) {
+                        console.error('Error cargando carrito desde localStorage:', e);
+                    }
+                    
+                    if (carrito.length === 0) {
+                        alert('El carrito ya está vacío');
+                        return;
+                    }
+                    
+                    if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                        // Vaciar el carrito
+                        localStorage.removeItem('luArtCarrito');
+                        
+                        // Recargar la página para actualizar la interfaz
+                        location.reload();
+                    }
+                };
+            }
+            </script>
             
         </body>
     </html>

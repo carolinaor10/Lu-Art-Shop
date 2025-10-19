@@ -197,7 +197,7 @@
                             <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
                                 <i class="fas fa-trash me-2"></i>Vaciar Carrito
                             </button>
-                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;">
                                 Confirmar compra
                             </button>
                         </div>
@@ -610,6 +610,43 @@
             }
         };
     }
+    </script>
+    
+    <!-- Función de emergencia para limpiar todo - DEFINIDA DIRECTAMENTE -->
+    <script>
+        window.limpiarTodo = function() {
+            console.log('=== LIMPIEZA DE EMERGENCIA ===');
+            
+            // Restaurar scroll del body
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            
+            // Remover clases de modal
+            document.body.classList.remove('modal-open');
+            
+            // Remover cualquier backdrop residual
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            console.log('Backdrops encontrados:', backdrops.length);
+            backdrops.forEach(backdrop => {
+                console.log('Removiendo backdrop:', backdrop);
+                backdrop.remove();
+            });
+            
+            // Cerrar todos los modales de Bootstrap
+            if (typeof bootstrap !== 'undefined') {
+                const modales = document.querySelectorAll('.modal.show');
+                modales.forEach(modal => {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                });
+            }
+            
+            console.log('Limpieza de emergencia completada');
+        };
+        
+        console.log('Función limpiarTodo definida en snackbowls.html:', typeof window.limpiarTodo !== 'undefined');
     </script>
 </body>
 </html>

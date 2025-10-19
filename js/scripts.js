@@ -101,6 +101,18 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     document.getElementById("monto-total").textContent = `₡${totalCompra.toFixed(2)}`;
 }
 
+// Función para calcular el total del carrito
+function calcularTotalCarrito() {
+    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+    let total = 0;
+    
+    carrito.forEach(item => {
+        total += item.precio * item.cantidad;
+    });
+    
+    return total;
+}
+
 const totalCompra = calcularTotalCarrito(); // tu función que obtiene el total
 actualizarMontoTotal(totalCompra);
 // Botón de abrir carrito (solo muestra el overlay del carrito)

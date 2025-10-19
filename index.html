@@ -186,7 +186,7 @@
                                     <img src="./assets/img/pottery-8026823_1280.jpg" alt="Tienda" class="img-fluid">
                                 </div>
                             </a>
-                            <a href="tienda.html" class="btn btn-primary btn-xl text-uppercase" data-translate="shop.buy_button">Comprar</a>
+                            <a href="tienda.html" class="btn btn-primary btn-xl text-uppercase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;" data-translate="shop.buy_button">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
             </footer>
 
             <!-- Carrito Modal -->
-            <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+            <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
                         <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
@@ -243,7 +243,7 @@
                                 <h2 class="section-heading text-uppercase text-dark" data-translate="cart.title">Carrito</h2>
                                 <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
                             </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" onclick="cerrarCarrito()" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="padding: 1rem 2rem;">
                             <div class="table-responsive">
@@ -268,7 +268,7 @@
                                     <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart">
                                         <i class="fas fa-trash me-2"></i>Vaciar Carrito
                                     </button>
-                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
+                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;" type="button" onclick="abrirModalPago()" data-translate="cart.confirm_purchase">
                                         Confirmar compra
                                     </button>
                                 </div>
@@ -279,7 +279,7 @@
             </div>
 
             <!-- Modal de Pago -->
-            <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+            <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
                         <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
@@ -287,45 +287,96 @@
                                 <h2 class="section-heading text-uppercase text-dark" data-translate="payment.title">Confirmar Compra</h2>
                                 <h3 class="section-subheading text-muted" data-translate="payment.subtitle">Lu Art</h3>
                             </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" onclick="cerrarModalPago()" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="padding: 1rem 2rem;">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h4 data-translate="payment.customer_info">Información del Cliente</h4>
-                                    <form id="formPago">
-                                        <div class="mb-3">
-                                            <label for="nombre" class="form-label" data-translate="payment.name">Nombre completo</label>
-                                            <input type="text" class="form-control" id="nombre" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="telefono" class="form-label" data-translate="payment.phone">Teléfono</label>
-                                            <input type="tel" class="form-control" id="telefono" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label" data-translate="payment.email">Email</label>
-                                            <input type="email" class="form-control" id="email" required>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4 data-translate="payment.delivery_info">Información de Entrega</h4>
-                                    <div class="mb-3">
-                                        <label for="direccion" class="form-label" data-translate="payment.address">Dirección completa</label>
-                                        <textarea class="form-control" id="direccion" rows="3" required></textarea>
+                                <div class="col-12">
+                                    <div class="text-center mb-4">
+                                        <h3 class="text-dark mb-3">CONFIRMAR COMPRA</h3>
+                                        <p class="text-muted mb-4">
+                                            Por favor, realizar el pago por Sinpe Móvil al <strong>(+506)70605427</strong> o por transferencia bancaria a la cuenta CR...
+                                        </p>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="notas" class="form-label" data-translate="payment.notes">Notas adicionales</label>
-                                        <textarea class="form-control" id="notas" rows="2" placeholder="Instrucciones especiales para la entrega..."></textarea>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="text-dark mb-3">Productos seleccionados:</h5>
+                                        <div id="productos-seleccionados" class="border p-3 rounded mb-3" style="background-color: #f8f9fa;">
+                                            <!-- Los productos se mostrarán aquí dinámicamente -->
+                                        </div>
+                                        <div class="text-end">
+                                            <h5 class="text-dark">Monto total a pagar: <span id="monto-total-pago">₡0</span></h5>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5 class="text-dark mb-3">DIRECCIÓN DE ENVÍO</h5>
+                                        <form id="formPago">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="provincia" class="form-label">Provincia</label>
+                                                    <select class="form-select" id="provincia" required>
+                                                        <option value="">Seleccionar provincia</option>
+                                                        <option value="san-jose">San José</option>
+                                                        <option value="cartago">Cartago</option>
+                                                        <option value="heredia">Heredia</option>
+                                                        <option value="alajuela">Alajuela</option>
+                                                        <option value="puntarenas">Puntarenas</option>
+                                                        <option value="limon">Limón</option>
+                                                        <option value="guanacaste">Guanacaste</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="canton" class="form-label">Cantón</label>
+                                                    <select class="form-select" id="canton" required>
+                                                        <option value="">Seleccionar cantón</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="distrito" class="form-label">Distrito</label>
+                                                    <select class="form-select" id="distrito" required>
+                                                        <option value="">Seleccionar distrito</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="direccion-exacta" class="form-label">Dirección exacta</label>
+                                                <input type="text" class="form-control" id="direccion-exacta" placeholder="Ej: Casa 123, Barrio Los Ángeles" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="indicaciones" class="form-label">Indicaciones adicionales</label>
+                                                <textarea class="form-control" id="indicaciones" rows="2" placeholder="Referencias, instrucciones especiales, etc."></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="factura-electronica">
+                                            <label class="form-check-label" for="factura-electronica">
+                                                <strong>MARCAR SI REQUIERE FACTURA ELECTRÓNICA</strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <p class="text-muted mb-3">
+                                            Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.
+                                        </p>
+                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="agregarProductosPrueba()">
+                                            🛒 Agregar Productos Prueba
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="debugCarrito()">
+                                            🔍 Debug Carrito
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
                             <div class="text-center w-100">
-                                <h3 id="total-pago" class="text-dark mb-3" data-translate="payment.total">Total: ₡0</h3>
-                                <button id="enviar-pedido-btn" class="btn btn-success btn-xl text-uppercase" type="button" data-translate="payment.send_order">
-                                    Enviar Pedido
+                                <button id="enviar-whatsapp-footer-btn" class="btn btn-success btn-xl text-uppercase" onclick="enviarPedidoWhatsApp()">
+                                    <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
                                 </button>
                             </div>
                         </div>
@@ -536,12 +587,48 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             
             <!-- Carrito JavaScript -->
-            <script src="js/carrito.js"></script>
+            <script src="js/carrito.js?v=20241220"></script>
+            
+            <!-- FUNCIONES GLOBALES INMEDIATAS -->
+            <script>
+            // Definir funciones de cierre inmediatamente para disponibilidad global
+            window.cerrarCarrito = function() {
+                console.log('Cerrando carrito manualmente...');
+                window.carritoClosingIntentionally = true;
+                const modal = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+                if (modal) {
+                    modal.hide();
+                }
+            };
+            
+            window.cerrarModalPago = function() {
+                console.log('Cerrando modal de pago manualmente...');
+                window.pagoClosingIntentionally = true;
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalPago'));
+                if (modal) {
+                    modal.hide();
+                }
+            };
+            
+            console.log('✅ Funciones de cierre definidas inmediatamente:', {
+                cerrarCarrito: typeof window.cerrarCarrito,
+                cerrarModalPago: typeof window.cerrarModalPago
+            });
+            </script>
             
             <!-- Script de verificación y función de respaldo -->
             <script>
             console.log('=== SCRIPT DE INDEX CARGADO ===');
             console.log('=== VERIFICACIÓN DE CARGA DE SCRIPTS ===');
+            
+            // Verificar si hay scripts conflictivos ejecutándose
+            setTimeout(() => {
+                console.log('🔍 VERIFICANDO SCRIPTS CONFLICTIVOS...');
+                const scripts = document.querySelectorAll('script[src*="carrito"]');
+                scripts.forEach((script, index) => {
+                    console.log(`Script ${index + 1}:`, script.src);
+                });
+            }, 1000);
             console.log('SweetAlert2 disponible:', typeof Swal !== 'undefined');
             console.log('Función vaciarCarrito disponible:', typeof vaciarCarrito !== 'undefined');
             console.log('window.vaciarCarrito disponible:', typeof window.vaciarCarrito !== 'undefined');
@@ -579,5 +666,1114 @@
             }
             </script>
             
+            // Función de emergencia para limpiar todo - DEFINIDA DIRECTAMENTE
+            window.limpiarTodo = function() {
+                console.log('=== LIMPIEZA DE EMERGENCIA ===');
+                
+                // Restaurar scroll del body
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
+                // Remover clases de modal
+                document.body.classList.remove('modal-open');
+                
+                // Remover cualquier backdrop residual
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                console.log('Backdrops encontrados:', backdrops.length);
+                backdrops.forEach(backdrop => {
+                    console.log('Removiendo backdrop:', backdrop);
+                    backdrop.remove();
+                });
+                
+                // Cerrar todos los modales de Bootstrap
+                if (typeof bootstrap !== 'undefined') {
+                    const modales = document.querySelectorAll('.modal.show');
+                    modales.forEach(modal => {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
+                    });
+                }
+                
+                console.log('Limpieza de emergencia completada');
+            };
+            
+            console.log('Función limpiarTodo definida en index.html:', typeof window.limpiarTodo !== 'undefined');
+            
+            // Función para vaciar carrito
+            window.vaciarCarrito = function() {
+                console.log('=== VACIANDO CARRITO ===');
+                localStorage.removeItem('luArtCarrito');
+                
+                // Actualizar contador del navbar y renderizar carrito
+                window.actualizarContadorCarrito();
+                window.renderCarrito();
+                
+                console.log('Carrito vaciado exitosamente');
+                alert('Carrito vaciado');
+            };
+            
+            // Función para actualizar contador del carrito
+            window.actualizarContadorCarrito = function() {
+                console.log('=== ACTUALIZANDO CONTADOR CARRITO ===');
+                
+                let carrito = [];
+                try {
+                    const carritoGuardado = localStorage.getItem('luArtCarrito');
+                    if (carritoGuardado) {
+                        carrito = JSON.parse(carritoGuardado);
+                    }
+                } catch (e) {
+                    console.error('Error cargando carrito:', e);
+                }
+                
+                const contadorNavbar = document.getElementById('navbar-contador-carrito');
+                if (contadorNavbar) {
+                    if (carrito.length > 0) {
+                        contadorNavbar.textContent = carrito.length;
+                        contadorNavbar.style.display = 'inline';
+                    } else {
+                        contadorNavbar.style.display = 'none';
+                    }
+                }
+                
+                console.log('Contador actualizado:', carrito.length);
+            };
+            
+            // Función para cambiar cantidad de productos
+            window.cambiarCantidad = function(index, cambio, nuevaCantidad = null) {
+                console.log('=== CAMBIANDO CANTIDAD ===', {index, cambio, nuevaCantidad});
+                
+                let carrito = [];
+                try {
+                    const carritoGuardado = localStorage.getItem('luArtCarrito');
+                    if (carritoGuardado) {
+                        carrito = JSON.parse(carritoGuardado);
+                    }
+                } catch (e) {
+                    console.error('Error cargando carrito:', e);
+                }
+                
+                if (index >= 0 && index < carrito.length) {
+                    if (nuevaCantidad !== null) {
+                        carrito[index].cantidad = parseInt(nuevaCantidad) || 1;
+                    } else {
+                        carrito[index].cantidad += cambio;
+                        if (carrito[index].cantidad < 1) {
+                            carrito[index].cantidad = 1;
+                        }
+                    }
+                    
+                    localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+                    window.renderCarrito();
+                    window.actualizarContadorCarrito();
+                    
+                    console.log('Cantidad actualizada:', carrito[index]);
+                }
+            };
+            
+            // Función para eliminar producto del carrito
+            window.eliminarDelCarrito = function(index) {
+                console.log('=== ELIMINANDO DEL CARRITO ===', index);
+                
+                let carrito = [];
+                try {
+                    const carritoGuardado = localStorage.getItem('luArtCarrito');
+                    if (carritoGuardado) {
+                        carrito = JSON.parse(carritoGuardado);
+                    }
+                } catch (e) {
+                    console.error('Error cargando carrito:', e);
+                }
+                
+                if (index >= 0 && index < carrito.length) {
+                    const productoEliminado = carrito.splice(index, 1)[0];
+                    localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+                    window.renderCarrito();
+                    window.actualizarContadorCarrito();
+                    
+                    console.log('Producto eliminado:', productoEliminado);
+                    alert(`Producto "${productoEliminado.nombre}" eliminado del carrito`);
+                }
+            };
+            
+            // Event listener para actualizar contador cuando cambie el localStorage
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'luArtCarrito') {
+                    console.log('Storage cambió, actualizando contador');
+                    window.actualizarContadorCarrito();
+                }
+            });
+            
+
+            // Función para agregar productos de prueba al carrito
+            window.agregarProductosPrueba = function() {
+                console.log('=== AGREGANDO PRODUCTOS DE PRUEBA ===');
+                
+                const productosPrueba = [
+                    { id: 1, nombre: 'Snack Bowl Grande', precio: 18900, cantidad: 1 },
+                    { id: 2, nombre: 'Paleta pincelada', precio: 17900, cantidad: 1 }
+                ];
+                
+                localStorage.setItem('luArtCarrito', JSON.stringify(productosPrueba));
+                console.log('Productos de prueba agregados:', productosPrueba);
+                
+                // Actualizar contador del navbar y renderizar carrito
+                window.actualizarContadorCarrito();
+                window.renderCarrito();
+                
+                alert('Productos de prueba agregados al carrito!');
+            };
+            
+            // Función para renderizar el carrito en la tabla
+            window.renderCarrito = function() {
+                console.log('=== RENDERIZANDO CARRITO ===');
+                
+                const carritoBody = document.getElementById('carrito-body');
+                const totalElement = document.getElementById('total');
+                
+                if (!carritoBody || !totalElement) {
+                    console.error('Elementos del carrito no encontrados');
+                    return;
+                }
+                
+                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                console.log('Carrito a renderizar:', carrito);
+                
+                if (carrito.length > 0) {
+                    let html = '';
+                    let total = 0;
+                    
+                    carrito.forEach((item, index) => {
+                        const subtotal = item.precio * item.cantidad;
+                        total += subtotal;
+                        html += `
+                            <tr>
+                                <td>${item.nombre}</td>
+                                <td>₡${item.precio.toLocaleString()}</td>
+                                <td>
+                                    <div class="input-group input-group-sm" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
+                                        <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" onchange="cambiarCantidad(${index}, 0, this.value)">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
+                                    </div>
+                                </td>
+                                <td>₡${subtotal.toLocaleString()}</td>
+                                <td>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${index})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    carritoBody.innerHTML = html;
+                    totalElement.textContent = `Total: ₡${total.toLocaleString()}`;
+                    console.log('Carrito renderizado correctamente');
+                } else {
+                    carritoBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay productos en el carrito</td></tr>';
+                    totalElement.textContent = 'Total: ₡0';
+                    console.log('Carrito vacío renderizado');
+                }
+            };
+
+            // Función para cambiar cantidad de productos
+            window.cambiarCantidad = function(index, cambio, nuevaCantidad = null) {
+                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                
+                if (nuevaCantidad !== null) {
+                    carrito[index].cantidad = parseInt(nuevaCantidad) || 1;
+                } else {
+                    carrito[index].cantidad += cambio;
+                    if (carrito[index].cantidad < 1) carrito[index].cantidad = 1;
+                }
+                
+                localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+                window.renderCarrito();
+                window.actualizarContadorCarrito();
+            };
+
+            // Función para eliminar producto del carrito
+            window.eliminarDelCarrito = function(index) {
+                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                carrito.splice(index, 1);
+                localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+                window.renderCarrito();
+                window.actualizarContadorCarrito();
+            };
+
+            // Función para vaciar carrito
+            window.vaciarCarrito = function() {
+                localStorage.removeItem('luArtCarrito');
+                window.renderCarrito();
+                window.actualizarContadorCarrito();
+                alert('Carrito vaciado');
+            };
+            
+            // Funciones de cierre ya definidas arriba - no duplicar
+            
+            // Actualizar contador al cargar la página
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('=== DOMContentLoaded - ACTUALIZANDO CONTADOR ===');
+                console.log('Verificando elementos...');
+                
+                const carritoBody = document.getElementById('carrito-body');
+                const totalElement = document.getElementById('total');
+                const contador = document.getElementById('navbar-contador-carrito');
+                const modal = document.getElementById('carritoModal');
+                
+                console.log('Elementos encontrados:', {
+                    carritoBody: !!carritoBody,
+                    totalElement: !!totalElement,
+                    contador: !!contador,
+                    modal: !!modal
+                });
+                
+                window.actualizarContadorCarrito();
+                window.renderCarrito();
+                
+                // Renderizar carrito cuando se abra el modal
+                const modalCarrito = document.getElementById('carritoModal');
+                if (modalCarrito) {
+                    modalCarrito.addEventListener('show.bs.modal', function() {
+                        console.log('Modal de carrito abierto, renderizando...');
+                        window.renderCarrito();
+                    });
+                } else {
+                    console.error('Modal carritoModal no encontrado');
+                }
+            });
+            
+            // PROTECCIÓN ULTRA AGRESIVA PARA AMBOS MODALES
+            console.log('=== INICIANDO PROTECCIÓN ULTRA AGRESIVA ===');
+            
+            // Variables globales para control de cierre
+            window.carritoClosingIntentionally = false;
+            window.pagoClosingIntentionally = false;
+            
+            // Función para proteger cualquier modal
+            function protegerModal(modalId, closingFlag) {
+                const modal = document.getElementById(modalId);
+                if (!modal) {
+                    console.error(`Modal ${modalId} no encontrado`);
+                    return;
+                }
+                
+                console.log(`Protegiendo modal ${modalId}...`);
+                
+                // Configurar como estático
+                modal.setAttribute('data-bs-backdrop', 'static');
+                modal.setAttribute('data-bs-keyboard', 'false');
+                
+                // Sobrescribir completamente el comportamiento de Bootstrap
+                const originalHide = modal.hide;
+                modal.hide = function() {
+                    console.log(`Modal ${modalId} intentando cerrar...`);
+                    console.log(`${closingFlag}:`, window[closingFlag]);
+                    
+                    if (!window[closingFlag]) {
+                        console.log(`Cierre automático de ${modalId} BLOQUEADO`);
+                        return false;
+                    } else {
+                        console.log(`Cierre intencional de ${modalId} permitido`);
+                        window[closingFlag] = false;
+                        return originalHide.call(this);
+                    }
+                };
+                
+                // Event listeners múltiples
+                modal.addEventListener('hide.bs.modal', function(e) {
+                    console.log(`Event hide.bs.modal para ${modalId}`);
+                    if (!window[closingFlag]) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        console.log(`Evento hide.bs.modal de ${modalId} BLOQUEADO`);
+                        return false;
+                    }
+                }, true);
+                
+                // Monitoreo ultra agresivo
+                let monitoringInterval = setInterval(function() {
+                    if (modal.classList.contains('show') && !window[closingFlag]) {
+                        console.log(`Monitoreando ${modalId} - FORZANDO apertura...`);
+                        
+                        // Forzar que permanezca abierto
+                        if (!modal.classList.contains('show')) {
+                            modal.classList.add('show');
+                        }
+                        if (modal.style.display !== 'block') {
+                            modal.style.display = 'block';
+                        }
+                        if (!document.body.classList.contains('modal-open')) {
+                            document.body.classList.add('modal-open');
+                        }
+                        
+                        // Restaurar atributos
+                        modal.setAttribute('data-bs-backdrop', 'static');
+                        modal.setAttribute('data-bs-keyboard', 'false');
+                        
+                        // Crear backdrop si no existe
+                        const backdrops = document.querySelectorAll('.modal-backdrop');
+                        if (backdrops.length === 0) {
+                            const backdrop = document.createElement('div');
+                            backdrop.className = 'modal-backdrop fade show';
+                            backdrop.style.zIndex = '1040';
+                            document.body.appendChild(backdrop);
+                        }
+                    }
+                }, 100);
+                
+                // Limpiar intervalo cuando se cierre intencionalmente
+                modal.addEventListener('hidden.bs.modal', function() {
+                    if (window[closingFlag]) {
+                        console.log(`Limpiando monitoreo de ${modalId}`);
+                        clearInterval(monitoringInterval);
+                    }
+                });
+            }
+            
+            // Proteger ambos modales
+            protegerModal('carritoModal', 'carritoClosingIntentionally');
+            protegerModal('modalPago', 'pagoClosingIntentionally');
+            
+            // INTERCEPTACIÓN GLOBAL ULTRA AGRESIVA
+            document.addEventListener('hide.bs.modal', function(e) {
+                const modalId = e.target.id;
+                console.log(`INTERCEPTACIÓN GLOBAL: Modal ${modalId} intentando cerrar`);
+                
+                if (modalId === 'carritoModal' && !window.carritoClosingIntentionally) {
+                    console.log('BLOQUEANDO carritoModal globalmente');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+                
+                if (modalId === 'modalPago' && !window.pagoClosingIntentionally) {
+                    console.log('BLOQUEANDO modalPago globalmente');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+            }, true);
+            
+            // Interceptar TODOS los clicks en backdrop
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal-backdrop')) {
+                    const modalAbierto = document.querySelector('.modal.show');
+                    if (modalAbierto) {
+                        const modalId = modalAbierto.id;
+                        console.log(`INTERCEPTACIÓN: Click en backdrop de ${modalId}`);
+                        
+                        if (modalId === 'carritoModal' && !window.carritoClosingIntentionally) {
+                            console.log('BLOQUEANDO click en backdrop del carrito');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                        
+                        if (modalId === 'modalPago' && !window.pagoClosingIntentionally) {
+                            console.log('BLOQUEANDO click en backdrop del pago');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                    }
+                }
+            }, true);
+            
+            // Interceptar TODAS las teclas Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modalAbierto = document.querySelector('.modal.show');
+                    if (modalAbierto) {
+                        const modalId = modalAbierto.id;
+                        console.log(`INTERCEPTACIÓN: Escape en ${modalId}`);
+                        
+                        if (modalId === 'carritoModal' && !window.carritoClosingIntentionally) {
+                            console.log('BLOQUEANDO Escape en carrito');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                        
+                        if (modalId === 'modalPago' && !window.pagoClosingIntentionally) {
+                            console.log('BLOQUEANDO Escape en pago');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                    }
+                }
+            }, true);
+            
+            console.log('=== PROTECCIÓN ULTRA AGRESIVA CONFIGURADA ===');
+            
+            // Función de limpieza de emergencia (reemplaza la de carrito.js)
+            window.limpiarTodo = function() {
+                console.log('=== LIMPIEZA DE EMERGENCIA DESDE INDEX.HTML ===');
+                
+                // Solo limpiar si NO hay modales protegidos abiertos
+                const carritoAbierto = document.getElementById('carritoModal').classList.contains('show');
+                const pagoAbierto = document.getElementById('modalPago').classList.contains('show');
+                
+                if (carritoAbierto || pagoAbierto) {
+                    console.log('Modales protegidos abiertos - NO limpiando');
+                    return;
+                }
+                
+                // Restaurar scroll del body
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
+                // Remover clases de modal
+                document.body.classList.remove('modal-open');
+                
+                // Remover cualquier backdrop residual
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                console.log('Backdrops encontrados:', backdrops.length);
+                backdrops.forEach(backdrop => {
+                    console.log('Removiendo backdrop:', backdrop);
+                    backdrop.remove();
+                });
+                
+                console.log('Limpieza de emergencia completada');
+            };
+            
+            // INTERCEPTAR CUALQUIER LLAMADA A LIMPIARTODO DESDE OTROS SCRIPTS
+            const originalLimpiarTodo = window.limpiarTodo;
+            window.limpiarTodo = function() {
+                console.log('🚫 INTERCEPTANDO llamada a limpiarTodo...');
+                
+                // Verificar si hay modales protegidos abiertos
+                const carritoAbierto = document.getElementById('carritoModal').classList.contains('show');
+                const pagoAbierto = document.getElementById('modalPago').classList.contains('show');
+                
+                if (carritoAbierto || pagoAbierto) {
+                    console.log('🚫 BLOQUEANDO limpiarTodo - modales protegidos abiertos');
+                    console.log('Carrito abierto:', carritoAbierto);
+                    console.log('Pago abierto:', pagoAbierto);
+                    return; // NO ejecutar limpieza
+                }
+                
+                console.log('✅ Ejecutando limpiarTodo - no hay modales protegidos abiertos');
+                return originalLimpiarTodo.call(this);
+            };
+            
+            // Función para abrir el modal de pago desde el carrito
+            window.abrirModalPago = function() {
+                console.log('Abriendo modal de pago desde carrito...');
+                
+                // Cerrar el modal del carrito primero (intencionalmente)
+                window.carritoClosingIntentionally = true;
+                const modalCarrito = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+                if (modalCarrito) {
+                    modalCarrito.hide();
+                }
+                
+                // Esperar un momento y luego abrir el modal de pago
+                setTimeout(function() {
+                    const modalPagoElement = document.getElementById('modalPago');
+                    
+                    // Reforzar configuración antes de abrir
+                    modalPagoElement.setAttribute('data-bs-backdrop', 'static');
+                    modalPagoElement.setAttribute('data-bs-keyboard', 'false');
+                    window.pagoClosingIntentionally = false;
+                    
+                    const modalPago = new bootstrap.Modal(modalPagoElement, {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    modalPago.show();
+                    console.log('Modal de pago abierto con configuración reforzada');
+                }, 300);
+            };
+
+            // FUNCIONES GLOBALES YA DEFINIDAS ARRIBA - NO DUPLICAR
+
+            // Función para debug del carrito - definida al final para asegurar disponibilidad
+            window.debugCarrito = function() {
+                console.log('=== DEBUG CARRITO ===');
+                
+                const carritoBody = document.getElementById('carrito-body');
+                const totalElement = document.getElementById('total');
+                const contador = document.getElementById('navbar-contador-carrito');
+                const modal = document.getElementById('carritoModal');
+                
+                console.log('Elementos encontrados:', {
+                    carritoBody: !!carritoBody,
+                    totalElement: !!totalElement,
+                    contador: !!contador,
+                    modal: !!modal
+                });
+                
+                console.log('Detalles de elementos:', {
+                    carritoBody: carritoBody,
+                    totalElement: totalElement,
+                    contador: contador,
+                    modal: modal
+                });
+                
+                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                console.log('Carrito en localStorage:', carrito);
+                
+                alert('Debug completado - revisa la consola');
+            };
+            
         </body>
+        
+        <!-- Script de verificación simple -->
+        <script>
+            console.log('=== SCRIPT SIMPLE EJECUTÁNDOSE ===');
+            console.log('Página cargada correctamente');
+            
+            // Función de prueba simple
+            window.probarWhatsAppSimple = function() {
+                console.log('=== FUNCIÓN DE PRUEBA SIMPLE ===');
+                const url = 'https://wa.me/50670605427';
+                console.log('Abriendo WhatsApp:', url);
+                window.open(url, '_blank');
+            };
+            
+            // Función de debug como respaldo
+            if (typeof window.debugCarrito === 'undefined') {
+                window.debugCarrito = function() {
+                    console.log('=== DEBUG CARRITO (RESPALDO) ===');
+                    
+                    const carritoBody = document.getElementById('carrito-body');
+                    const totalElement = document.getElementById('total');
+                    const contador = document.getElementById('navbar-contador-carrito');
+                    const modal = document.getElementById('carritoModal');
+                    
+                    console.log('Elementos encontrados:', {
+                        carritoBody: !!carritoBody,
+                        totalElement: !!totalElement,
+                        contador: !!contador,
+                        modal: !!modal
+                    });
+                    
+                    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                    console.log('Carrito en localStorage:', carrito);
+                    
+                    alert('Debug completado - revisa la consola');
+                };
+                console.log('Función debugCarrito creada como respaldo');
+            }
+            
+            // Función para agregar productos de prueba como respaldo
+            if (typeof window.agregarProductosPrueba === 'undefined') {
+                window.agregarProductosPrueba = function() {
+                    console.log('=== AGREGANDO PRODUCTOS DE PRUEBA (RESPALDO) ===');
+                    
+                    const productosPrueba = [
+                        { id: 1, nombre: 'Snack Bowl Grande', precio: 18900, cantidad: 1 },
+                        { id: 2, nombre: 'Paleta pincelada', precio: 17900, cantidad: 1 }
+                    ];
+                    
+                    localStorage.setItem('luArtCarrito', JSON.stringify(productosPrueba));
+                    console.log('Productos de prueba agregados:', productosPrueba);
+                    
+                    // Actualizar contador del navbar y renderizar carrito
+                    if (typeof window.actualizarContadorCarrito === 'function') {
+                        window.actualizarContadorCarrito();
+                    }
+                    if (typeof window.renderCarrito === 'function') {
+                        window.renderCarrito();
+                    }
+                    
+                    alert('Productos de prueba agregados al carrito!');
+                };
+                console.log('Función agregarProductosPrueba creada como respaldo');
+            }
+            
+            // Funciones esenciales del carrito como respaldo
+            if (typeof window.actualizarContadorCarrito === 'undefined') {
+                window.actualizarContadorCarrito = function() {
+                    console.log('=== ACTUALIZANDO CONTADOR (RESPALDO) ===');
+                    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                    const contador = document.getElementById('navbar-contador-carrito');
+                    if (contador) {
+                        contador.textContent = carrito.length;
+                        contador.style.display = carrito.length > 0 ? 'inline' : 'none';
+                    }
+                    console.log('Contador actualizado:', carrito.length);
+                };
+                console.log('Función actualizarContadorCarrito creada como respaldo');
+            }
+            
+            if (typeof window.renderCarrito === 'undefined') {
+                window.renderCarrito = function() {
+                    console.log('=== RENDERIZANDO CARRITO (RESPALDO) ===');
+                    
+                    const carritoBody = document.getElementById('carrito-body');
+                    const totalElement = document.getElementById('total');
+                    
+                    if (!carritoBody || !totalElement) {
+                        console.error('Elementos del carrito no encontrados');
+                        return;
+                    }
+                    
+                    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+                    console.log('Carrito a renderizar:', carrito);
+                    
+                    if (carrito.length > 0) {
+                        let html = '';
+                        let total = 0;
+                        
+                        carrito.forEach((item, index) => {
+                            const subtotal = item.precio * item.cantidad;
+                            total += subtotal;
+                            html += `
+                                <tr>
+                                    <td>${item.nombre}</td>
+                                    <td>₡${item.precio.toLocaleString()}</td>
+                                    <td>
+                                        <div class="input-group input-group-sm" style="width: 100px;">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
+                                            <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" onchange="cambiarCantidad(${index}, 0, this.value)">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
+                                        </div>
+                                    </td>
+                                    <td>₡${subtotal.toLocaleString()}</td>
+                                    <td>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${index})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        
+                        carritoBody.innerHTML = html;
+                        totalElement.textContent = `Total: ₡${total.toLocaleString()}`;
+                        console.log('Carrito renderizado correctamente');
+                    } else {
+                        carritoBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay productos en el carrito</td></tr>';
+                        totalElement.textContent = 'Total: ₡0';
+                        console.log('Carrito vacío renderizado');
+                    }
+                };
+                console.log('Función renderCarrito creada como respaldo');
+            }
+            
+            // Función para cerrar el modal del carrito como respaldo
+            if (typeof window.cerrarCarrito === 'undefined') {
+                window.cerrarCarrito = function() {
+                    console.log('Cerrando carrito manualmente (respaldo)...');
+                    window.carritoClosingIntentionally = true;
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                };
+                console.log('Función cerrarCarrito creada como respaldo');
+            }
+            
+            // Función para abrir modal de pago como respaldo
+            if (typeof window.abrirModalPago === 'undefined') {
+                window.abrirModalPago = function() {
+                    console.log('Abriendo modal de pago desde carrito (respaldo)...');
+                    
+                    // Cerrar el modal del carrito primero
+                    window.carritoClosingIntentionally = true;
+                    const modalCarrito = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+                    if (modalCarrito) {
+                        modalCarrito.hide();
+                    }
+                    
+                    // Esperar un momento y luego abrir el modal de pago
+                    setTimeout(function() {
+                        const modalPago = new bootstrap.Modal(document.getElementById('modalPago'));
+                        modalPago.show();
+                        console.log('Modal de pago abierto');
+                    }, 300);
+                };
+                console.log('Función abrirModalPago creada como respaldo');
+            }
+            
+            // Datos de provincias, cantones y distritos de Costa Rica
+            const datosCostaRica = {
+                'san-jose': {
+                    nombre: 'San José',
+                    cantones: {
+                        'san-jose': { nombre: 'San José', distritos: ['Carmen', 'Merced', 'Hospital', 'Catedral', 'Zapote', 'San Francisco de Dos Ríos', 'Uruca', 'Mata Redonda', 'Pavas', 'Hatillo', 'San Sebastián'] },
+                        'escazu': { nombre: 'Escazú', distritos: ['Escazú', 'San Antonio', 'San Rafael'] },
+                        'desamparados': { nombre: 'Desamparados', distritos: ['Desamparados', 'San Miguel', 'San Juan de Dios', 'San Rafael Arriba', 'San Antonio', 'Frailes', 'Patarrá', 'San Cristóbal', 'Rosario', 'Damas', 'San Rafael Abajo', 'Gravilias', 'Los Guido'] },
+                        'puriscal': { nombre: 'Puriscal', distritos: ['Santiago', 'Mercedes Sur', 'Barbacoas', 'Grifo Alto', 'San Rafael', 'Candelarita', 'Desamparaditos', 'San Antonio', 'Chires'] },
+                        'tarrazu': { nombre: 'Tarrazú', distritos: ['San Marcos', 'San Lorenzo', 'San Carlos'] },
+                        'aserrí': { nombre: 'Aserrí', distritos: ['Aserrí', 'Tarbaca', 'Vuelta de Jorco', 'San Gabriel', 'Legua', 'Monterrey', 'Salitrillos'] },
+                        'mora': { nombre: 'Mora', distritos: ['Colón', 'Guayabo', 'Tabarcia', 'Piedras Negras', 'Picagres', 'Jaris', 'Quitirrisí'] },
+                        'goicoechea': { nombre: 'Goicoechea', distritos: ['Guadalupe', 'San Francisco', 'Calle Blancos', 'Mata de Plátano', 'Ipís', 'Rancho Redondo', 'Purral'] },
+                        'santa-ana': { nombre: 'Santa Ana', distritos: ['Santa Ana', 'Salitral', 'Pozos', 'Uruca', 'Piedades', 'Brasil'] },
+                        'alajuelita': { nombre: 'Alajuelita', distritos: ['Alajuelita', 'San Josecito', 'San Antonio', 'Concepción', 'San Felipe', 'San Isidro'] },
+                        'coronado': { nombre: 'Coronado', distritos: ['San Isidro', 'San Rafael', 'Dulce Nombre de Jesús', 'Patalillo', 'Cascajal'] },
+                        'acosta': { nombre: 'Acosta', distritos: ['San Ignacio', 'Guaitil', 'Palmichal', 'Cangrejal', 'Sabanillas'] },
+                        'tibas': { nombre: 'Tibás', distritos: ['San Juan', 'Cinco Esquinas', 'Anselmo Llorente', 'León XIII', 'Colima'] },
+                        'moravia': { nombre: 'Moravia', distritos: ['San Vicente', 'San Jerónimo', 'La Trinidad'] },
+                        'montes-de-oca': { nombre: 'Montes de Oca', distritos: ['San Pedro', 'Sabanilla', 'Mercedes', 'San Rafael'] },
+                        'turrubares': { nombre: 'Turrubares', distritos: ['San Pablo', 'San Pedro', 'San Juan de Mata', 'San Luis', 'Carara'] },
+                        'dota': { nombre: 'Dota', distritos: ['Santa María', 'Jardín', 'Copey'] },
+                        'curridabat': { nombre: 'Curridabat', distritos: ['Curridabat', 'Granadilla', 'Sánchez', 'Tirrases'] },
+                        'perez-zeledon': { nombre: 'Pérez Zeledón', distritos: ['San Isidro de El General', 'General', 'Daniel Flores', 'Rivas', 'San Pedro', 'Platanares', 'Pejibaye', 'Cajón', 'Barú', 'Río Nuevo', 'Páramo', 'La Amistad'] },
+                        'leon-cortes': { nombre: 'León Cortés', distritos: ['San Pablo', 'San Andrés', 'Llano Bonito', 'San Isidro', 'Santa Cruz', 'San Antonio'] }
+                    }
+                },
+                'cartago': {
+                    nombre: 'Cartago',
+                    cantones: {
+                        'cartago': { nombre: 'Cartago', distritos: ['Oriental', 'Occidental', 'Carmen', 'San Nicolás', 'Aguacaliente', 'Guadalupe', 'Corralillo', 'Tierra Blanca', 'Dulce Nombre', 'Llano Grande', 'Quebradilla'] },
+                        'paraiso': { nombre: 'Paraíso', distritos: ['Paraíso', 'Santiago', 'Orosi', 'Cachí', 'Llanos de Santa Lucía'] },
+                        'la-union': { nombre: 'La Unión', distritos: ['Tres Ríos', 'San Diego', 'San Juan', 'San Rafael', 'Concepción', 'Dulce Nombre', 'San Ramón', 'Río Azul'] },
+                        'jimenez': { nombre: 'Jiménez', distritos: ['Juan Viñas', 'Tucurrique', 'Pejibaye'] },
+                        'turrialba': { nombre: 'Turrialba', distritos: ['Turrialba', 'La Suiza', 'Peralta', 'Santa Cruz', 'Santa Teresita', 'Pavones', 'Tuis', 'Tayutic', 'Santa Rosa', 'Tres Equis', 'La Isabel', 'Chirripó'] },
+                        'alvarado': { nombre: 'Alvarado', distritos: ['Pacayas', 'Cervantes', 'Capellades'] },
+                        'oreamuno': { nombre: 'Oreamuno', distritos: ['San Rafael', 'Cot', 'Potrero Cerrado', 'Cipreses', 'Santa Rosa'] },
+                        'el-guarco': { nombre: 'El Guarco', distritos: ['El Tejar', 'San Isidro', 'Tobosi', 'Patio de Agua'] }
+                    }
+                },
+                'heredia': {
+                    nombre: 'Heredia',
+                    cantones: {
+                        'heredia': { nombre: 'Heredia', distritos: ['Heredia', 'Mercedes', 'San Francisco', 'Ulloa', 'Varablanca'] },
+                        'barva': { nombre: 'Barva', distritos: ['Barva', 'San Pedro', 'San Pablo', 'San Roque', 'Santa Lucía', 'San José de la Montaña'] },
+                        'santo-domingo': { nombre: 'Santo Domingo', distritos: ['Santo Domingo', 'San Vicente', 'San Miguel', 'Paracito', 'Santo Tomás', 'Santa Rosa', 'Tures', 'Pará'] },
+                        'santa-barbara': { nombre: 'Santa Bárbara', distritos: ['Santa Bárbara', 'San Pedro', 'San Juan', 'Jesús', 'Santo Domingo del Roble', 'Purabá'] },
+                        'san-rafael': { nombre: 'San Rafael', distritos: ['San Rafael', 'San Josecito', 'Santiago', 'Ángeles', 'Concepción'] },
+                        'san-isidro': { nombre: 'San Isidro', distritos: ['San Isidro', 'San José', 'Concepción', 'San Francisco'] },
+                        'belen': { nombre: 'Belén', distritos: ['San Antonio', 'La Ribera', 'La Asunción'] },
+                        'flores': { nombre: 'Flores', distritos: ['San Joaquín', 'Barrantes', 'Llorente'] },
+                        'san-pablo': { nombre: 'San Pablo', distritos: ['San Pablo', 'Rincón de Sabanilla'] },
+                        'sarapiqui': { nombre: 'Sarapiquí', distritos: ['Puerto Viejo', 'La Virgen', 'Horquetas', 'Llanuras del Gaspar', 'Cureña'] }
+                    }
+                },
+                'alajuela': {
+                    nombre: 'Alajuela',
+                    cantones: {
+                        'alajuela': { nombre: 'Alajuela', distritos: ['Alajuela', 'San José', 'Carrizal', 'San Antonio', 'Guácima', 'San Isidro', 'Sabanilla', 'San Rafael', 'Río Segundo', 'Desamparados', 'Turrúcares', 'Tambor', 'Garita', 'Sarapiquí'] },
+                        'san-ramon': { nombre: 'San Ramón', distritos: ['San Ramón', 'Santiago', 'San Juan', 'Piedades Norte', 'Piedades Sur', 'San Rafael', 'San Isidro', 'Ángeles', 'Alfaro', 'Volio', 'Concepción', 'Zapotal', 'Peñas Blancas', 'San Lorenzo'] },
+                        'grecia': { nombre: 'Grecia', distritos: ['Grecia', 'San Isidro', 'San José', 'San Roque', 'Tacares', 'Río Cuarto', 'Puente de Piedra', 'Bolívar'] },
+                        'san-mateo': { nombre: 'San Mateo', distritos: ['San Mateo', 'Desmonte', 'Jesús María', 'Labrador'] },
+                        'atenas': { nombre: 'Atenas', distritos: ['Atenas', 'Jesús', 'Mercedes', 'San Isidro', 'Concepción', 'San José', 'Santa Eulalia', 'Escobal'] },
+                        'naranjo': { nombre: 'Naranjo', distritos: ['Naranjo', 'San Miguel', 'San José', 'Cirrí', 'San Jerónimo', 'San Juan', 'El Rosario', 'Palmitos'] },
+                        'palmares': { nombre: 'Palmares', distritos: ['Palmares', 'Zaragoza', 'Buenos Aires', 'Santiago', 'Candelaria', 'Esquipulas', 'La Granja'] },
+                        'poas': { nombre: 'Poás', distritos: ['San Pedro', 'San Juan', 'San Rafael', 'Carrillos', 'Sabana Redonda'] },
+                        'orotina': { nombre: 'Orotina', distritos: ['Orotina', 'El Mastate', 'Hacienda Vieja', 'Coyolar', 'La Ceiba'] },
+                        'san-carlos': { nombre: 'San Carlos', distritos: ['Quesada', 'Florencia', 'Buenavista', 'Peñas Blancas', 'La Fortuna', 'La Tigra', 'La Palmera', 'Venecia', 'Aguas Zarcas', 'Venado', 'Cutris', 'Monterrey', 'Pocosol', 'Pital', 'La Cureña', 'Santa Rosa', 'Buenos Aires', 'San Jerónimo', 'San Luis', 'San Rafael', 'San Isidro', 'San José', 'San Miguel', 'San Pedro', 'San Ramón', 'Santa Clara', 'Santa María', 'Santa Rosa', 'Santo Domingo', 'Sitio Mata'] },
+                        'zarcero': { nombre: 'Zarcero', distritos: ['Zarcero', 'Laguna', 'Tapezco', 'Guadalupe', 'Palmira', 'Zapote', 'Brisas'] },
+                        'valverde-vega': { nombre: 'Valverde Vega', distritos: ['Sarchí Norte', 'Sarchí Sur', 'Toro Amarillo', 'San Pedro', 'Rodriguez', 'San Juan'] },
+                        'upala': { nombre: 'Upala', distritos: ['Upala', 'Aguas Claras', 'San José', 'Bijagua', 'Delicias', 'Dos Ríos', 'Yolillal', 'Canalete'] },
+                        'guatuso': { nombre: 'Guatuso', distritos: ['San Rafael', 'Buenavista', 'Cote', 'Katira'] },
+                        'rio-cuarto': { nombre: 'Río Cuarto', distritos: ['Río Cuarto', 'Santa Isabel', 'Santa Rita'] }
+                    }
+                },
+                'guanacaste': {
+                    nombre: 'Guanacaste',
+                    cantones: {
+                        'liberia': { nombre: 'Liberia', distritos: ['Liberia', 'Cañas Dulces', 'Mayorga', 'Nacascolo', 'Curubandé'] },
+                        'nicoya': { nombre: 'Nicoya', distritos: ['Nicoya', 'Mansión', 'San Antonio', 'Quebrada Honda', 'Sámara', 'Nosara', 'Belén de Nosarita'] },
+                        'santa-cruz': { nombre: 'Santa Cruz', distritos: ['Santa Cruz', 'Bolsón', 'Veintisiete de Abril', 'Tempate', 'Cartagena', 'Cuajiniquil', 'Diriá', 'Cabo Velas', 'Tamarindo'] },
+                        'bagaces': { nombre: 'Bagaces', distritos: ['Bagaces', 'Fortuna', 'Mogote', 'Río Naranjo'] },
+                        'carrillo': { nombre: 'Carrillo', distritos: ['Filadelfia', 'Palmira', 'Sardinal', 'Belén'] },
+                        'cañas': { nombre: 'Cañas', distritos: ['Cañas', 'Palmira', 'San Miguel', 'Bebedero', 'Porozal'] },
+                        'abangares': { nombre: 'Abangares', distritos: ['Las Juntas', 'Sierra', 'San Juan', 'Colorado'] },
+                        'tilaran': { nombre: 'Tilarán', distritos: ['Tilarán', 'Quebrada Grande', 'Tronadora', 'Santa Rosa', 'Líbano', 'Tierras Morenas', 'Arenal'] },
+                        'nandayure': { nombre: 'Nandayure', distritos: ['Carmona', 'Santa Rita', 'Zapotal', 'San Pablo', 'Porvenir', 'Bejuco'] },
+                        'la-cruz': { nombre: 'La Cruz', distritos: ['La Cruz', 'Santa Cecilia', 'Garita', 'Santa Elena'] },
+                        'hojancha': { nombre: 'Hojancha', distritos: ['Hojancha', 'Monte Romo', 'Puerto Carrillo', 'Huacas'] }
+                    }
+                },
+                'puntarenas': {
+                    nombre: 'Puntarenas',
+                    cantones: {
+                        'puntarenas': { nombre: 'Puntarenas', distritos: ['Puntarenas', 'Pitahaya', 'Chomes', 'Lepanto', 'Paquera', 'Manzanillo', 'Guacimal', 'Barranca', 'Monte Verde', 'Isla del Coco', 'Cóbano', 'Chacarita', 'Chira', 'Acapulco', 'El Roble', 'Arancibia'] },
+                        'esparza': { nombre: 'Esparza', distritos: ['Espíritu Santo', 'San Juan Grande', 'Macacona', 'San Rafael', 'San Jerónimo'] },
+                        'buenos-aires': { nombre: 'Buenos Aires', distritos: ['Buenos Aires', 'Volcán', 'Potrero Grande', 'Boruca', 'Pilas', 'Colinas', 'Changena', 'Biolley', 'Brunka'] },
+                        'montes-de-oro': { nombre: 'Montes de Oro', distritos: ['Miramar', 'La Unión', 'San Isidro'] },
+                        'osa': { nombre: 'Osa', distritos: ['Puerto Cortés', 'Palmar', 'Sierpe', 'Bahía Ballena', 'Piedras Blancas', 'Bahía Drake'] },
+                        'quepos': { nombre: 'Quepos', distritos: ['Quepos', 'Savegre', 'Naranjito'] },
+                        'golfito': { nombre: 'Golfito', distritos: ['Golfito', 'Puerto Jiménez', 'Guaycará', 'Pavón'] },
+                        'coto-brus': { nombre: 'Coto Brus', distritos: ['San Vito', 'Sabalito', 'Aguabuena', 'Limoncito', 'Pittier', 'Gutiérrez Braun'] },
+                        'parrita': { nombre: 'Parrita', distritos: ['Parrita'] },
+                        'corredores': { nombre: 'Corredores', distritos: ['Corredor', 'La Cuesta', 'Canoas', 'Laurel'] },
+                        'garabito': { nombre: 'Garabito', distritos: ['Jacó', 'Tárcoles'] }
+                    }
+                },
+                'limon': {
+                    nombre: 'Limón',
+                    cantones: {
+                        'limon': { nombre: 'Limón', distritos: ['Limón', 'Valle La Estrella', 'Río Blanco', 'Matama'] },
+                        'pococi': { nombre: 'Pococí', distritos: ['Guápiles', 'Jiménez', 'Rita', 'Roxana', 'Cariari', 'Colorado', 'La Colonia'] },
+                        'siquirres': { nombre: 'Siquirres', distritos: ['Siquirres', 'Pacuarito', 'Florida', 'Germania', 'Cairo', 'Alegría'] },
+                        'talamanca': { nombre: 'Talamanca', distritos: ['Bratsi', 'Sixaola', 'Cahuita', 'Telire'] },
+                        'matina': { nombre: 'Matina', distritos: ['Matina', 'Carrandi', 'Batán'] },
+                        'guacimo': { nombre: 'Guácimo', distritos: ['Guácimo', 'Mercedes', 'Pocora', 'Río Jiménez', 'Duacarí'] }
+                    }
+                }
+            };
+
+            // Función para cargar cantones según la provincia seleccionada
+            window.cargarCantones = function() {
+                const provinciaSelect = document.getElementById('provincia');
+                const cantonSelect = document.getElementById('canton');
+                const distritoSelect = document.getElementById('distrito');
+                
+                if (!provinciaSelect || !cantonSelect || !distritoSelect) return;
+                
+                const provinciaSeleccionada = provinciaSelect.value;
+                
+                // Limpiar cantones y distritos
+                cantonSelect.innerHTML = '<option value="">Seleccionar cantón</option>';
+                distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
+                
+                if (provinciaSeleccionada && datosCostaRica[provinciaSeleccionada]) {
+                    const cantones = datosCostaRica[provinciaSeleccionada].cantones;
+                    
+                    Object.keys(cantones).forEach(cantonKey => {
+                        const canton = cantones[cantonKey];
+                        const option = document.createElement('option');
+                        option.value = cantonKey;
+                        option.textContent = canton.nombre;
+                        cantonSelect.appendChild(option);
+                    });
+                }
+            };
+
+            // Función para cargar distritos según el cantón seleccionado
+            window.cargarDistritos = function() {
+                const provinciaSelect = document.getElementById('provincia');
+                const cantonSelect = document.getElementById('canton');
+                const distritoSelect = document.getElementById('distrito');
+                
+                if (!provinciaSelect || !cantonSelect || !distritoSelect) return;
+                
+                const provinciaSeleccionada = provinciaSelect.value;
+                const cantonSeleccionado = cantonSelect.value;
+                
+                // Limpiar distritos
+                distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
+                
+                if (provinciaSeleccionada && cantonSeleccionado && 
+                    datosCostaRica[provinciaSeleccionada] && 
+                    datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado]) {
+                    
+                    const distritos = datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado].distritos;
+                    
+                    distritos.forEach(distrito => {
+                        const option = document.createElement('option');
+                        option.value = distrito.toLowerCase().replace(/\s+/g, '-');
+                        option.textContent = distrito;
+                        distritoSelect.appendChild(option);
+                    });
+                }
+            };
+
+            // Función para mostrar productos en el modal de pago
+            window.mostrarProductosEnPago = function() {
+                console.log('=== MOSTRANDO PRODUCTOS EN PAGO ===');
+                
+                const productosContainer = document.getElementById('productos-seleccionados');
+                const montoTotal = document.getElementById('monto-total-pago');
+                
+                console.log('Elementos encontrados:', {
+                    productosContainer: !!productosContainer,
+                    montoTotal: !!montoTotal
+                });
+                
+                if (!productosContainer || !montoTotal) {
+                    console.error('No se encontraron los elementos del modal de pago');
+                    return;
+                }
+                
+                // Obtener carrito desde localStorage
+                let carrito = [];
+                try {
+                    const carritoGuardado = localStorage.getItem('luArtCarrito');
+                    if (carritoGuardado) {
+                        carrito = JSON.parse(carritoGuardado);
+                    }
+                } catch (e) {
+                    console.error('Error cargando carrito:', e);
+                }
+                
+                console.log('Carrito cargado para mostrar:', carrito);
+                
+                if (carrito.length === 0) {
+                    productosContainer.innerHTML = '<p class="text-muted mb-0">No hay productos seleccionados</p>';
+                    montoTotal.textContent = '₡0';
+                    console.log('Carrito vacío, mostrando mensaje');
+                    return;
+                }
+                
+                let total = 0;
+                let productosHTML = '';
+                
+                carrito.forEach(item => {
+                    const subtotal = item.precio * item.cantidad;
+                    total += subtotal;
+                    productosHTML += `
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>${item.nombre} - ${item.cantidad} x ₡${item.precio.toLocaleString()}</span>
+                            <strong>₡${subtotal.toLocaleString()}</strong>
+                        </div>
+                    `;
+                });
+                
+                productosContainer.innerHTML = productosHTML;
+                montoTotal.textContent = `₡${total.toLocaleString()}`;
+                
+                console.log('Productos mostrados correctamente, total:', total);
+            };
+            
+            // Función para enviar pedido por WhatsApp
+            window.enviarPedidoWhatsApp = function() {
+                console.log('=== ENVIANDO PEDIDO POR WHATSAPP ===');
+                
+                // Obtener datos del formulario
+                const provincia = document.getElementById('provincia').value;
+                const canton = document.getElementById('canton').value;
+                const distrito = document.getElementById('distrito').value;
+                const direccionExacta = document.getElementById('direccion-exacta').value;
+                const indicaciones = document.getElementById('indicaciones').value;
+                const facturaElectronica = document.getElementById('factura-electronica').checked;
+                
+                console.log('Datos:', {provincia, canton, distrito, direccionExacta, indicaciones, facturaElectronica});
+                
+                // Validar campos requeridos
+                if (!provincia || !canton || !distrito || !direccionExacta) {
+                    alert('Por favor complete todos los campos requeridos');
+                    return;
+                }
+                
+                // Obtener carrito
+                let carrito = [];
+                try {
+                    const carritoGuardado = localStorage.getItem('luArtCarrito');
+                    if (carritoGuardado) {
+                        carrito = JSON.parse(carritoGuardado);
+                    }
+                } catch (e) {
+                    console.error('Error cargando carrito:', e);
+                }
+                
+                console.log('Carrito:', carrito);
+                
+                if (carrito.length === 0) {
+                    alert('No hay productos en el carrito');
+                    return;
+                }
+                
+                // Construir mensaje
+                let mensaje = '* PEDIDO LU ART *\n\n';
+                mensaje += '* Productos seleccionados:*\n';
+                
+                let total = 0;
+                carrito.forEach(item => {
+                    const subtotal = item.precio * item.cantidad;
+                    total += subtotal;
+                    mensaje += `• ${item.nombre} - ${item.cantidad} x ₡${item.precio.toLocaleString()} = ₡${subtotal.toLocaleString()}\n`;
+                });
+                
+                mensaje += `\n *Monto total a pagar: ₡${total.toLocaleString()}*\n\n`;
+                mensaje += '* Dirección de envío:*\n';
+                mensaje += `Provincia: ${provincia}\n`;
+                mensaje += `Cantón: ${canton}\n`;
+                mensaje += `Distrito: ${distrito}\n`;
+                mensaje += `Dirección exacta: ${direccionExacta}\n`;
+                
+                if (indicaciones) {
+                    mensaje += `Indicaciones adicionales: ${indicaciones}\n`;
+                }
+                
+                if (facturaElectronica) {
+                    mensaje += `\n *Requiere factura electrónica: SÍ*\n`;
+                }
+                
+                mensaje += '\n\n *Gracias por elegir Lu Art!*';
+                
+                // Construir URL de WhatsApp
+                const numeroWhatsApp = '50670605427';
+                const mensajeCodificado = encodeURIComponent(mensaje);
+                const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+                
+                console.log('Mensaje:', mensaje);
+                console.log('URL:', urlWhatsApp);
+                
+                // Abrir WhatsApp
+                window.open(urlWhatsApp, '_blank');
+                
+                // Limpiar carrito
+                localStorage.removeItem('luArtCarrito');
+                
+                // Cerrar modal
+                const modalPago = bootstrap.Modal.getInstance(document.getElementById('modalPago'));
+                if (modalPago) {
+                    modalPago.hide();
+                }
+                
+                // Recargar página
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            };
+            
+            // Configurar event listeners cuando el DOM esté listo
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('=== DOMContentLoaded EN SCRIPT FINAL ===');
+                
+                // Event listener para el modal de pago
+                const modalPago = document.getElementById('modalPago');
+                if (modalPago) {
+                    console.log('Modal de pago encontrado, agregando event listener');
+                    modalPago.addEventListener('show.bs.modal', function() {
+                        console.log('Modal de pago abriéndose, mostrando productos');
+                        window.mostrarProductosEnPago();
+                    });
+                } else {
+                    console.error('No se encontró el modal de pago');
+                }
+                
+                // Event listeners para provincia, cantón y distrito
+                const provinciaSelect = document.getElementById('provincia');
+                const cantonSelect = document.getElementById('canton');
+                const distritoSelect = document.getElementById('distrito');
+                
+                if (provinciaSelect) {
+                    provinciaSelect.addEventListener('change', window.cargarCantones);
+                    console.log('Event listener agregado a provincia');
+                }
+                
+                if (cantonSelect) {
+                    cantonSelect.addEventListener('change', window.cargarDistritos);
+                    console.log('Event listener agregado a cantón');
+                }
+                
+                console.log('Event listeners configurados para formulario de dirección');
+            });
+            
+            // Verificar si las funciones están definidas
+            setTimeout(() => {
+                console.log('=== VERIFICACIÓN DESPUÉS DE 1 SEGUNDO ===');
+                console.log('mostrarProductosEnPago:', typeof window.mostrarProductosEnPago !== 'undefined');
+                console.log('enviarPedidoWhatsApp:', typeof window.enviarPedidoWhatsApp !== 'undefined');
+                console.log('probarWhatsAppSimple:', typeof window.probarWhatsAppSimple !== 'undefined');
+                console.log('cargarCantones:', typeof window.cargarCantones !== 'undefined');
+                console.log('cargarDistritos:', typeof window.cargarDistritos !== 'undefined');
+                console.log('debugCarrito:', typeof window.debugCarrito !== 'undefined');
+                console.log('agregarProductosPrueba:', typeof window.agregarProductosPrueba !== 'undefined');
+                console.log('renderCarrito:', typeof window.renderCarrito !== 'undefined');
+                console.log('actualizarContadorCarrito:', typeof window.actualizarContadorCarrito !== 'undefined');
+                console.log('cerrarCarrito:', typeof window.cerrarCarrito !== 'undefined');
+                console.log('cerrarModalPago:', typeof window.cerrarModalPago !== 'undefined');
+                console.log('abrirModalPago:', typeof window.abrirModalPago !== 'undefined');
+                console.log('Todas las funciones del script final están disponibles');
+            }, 1000);
+        </script>
     </html>

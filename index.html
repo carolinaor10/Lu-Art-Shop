@@ -186,7 +186,7 @@
                                     <img src="./assets/img/pottery-8026823_1280.jpg" alt="Tienda" class="img-fluid">
                                 </div>
                             </a>
-                            <a href="tienda.html" class="btn btn-primary btn-xl text-uppercase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;" data-translate="shop.buy_button">Comprar</a>
+                            <a href="tienda.html" class="btn btn-primary btn-xl text-uppercase" style="background-color: #e2a844 !important; border-color: #e2a844 !important; color: white !important;" data-translate="shop.buy_button">Comprar</a>
                         </div>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
                                     <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart">
                                         <i class="fas fa-trash me-2"></i>Vaciar Carrito
                                     </button>
-                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;" type="button" onclick="abrirModalPago()" data-translate="cart.confirm_purchase">
+                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #e2a844 !important; border-color: #e2a844 !important; color: white !important;" type="button" onclick="abrirModalPago()" data-translate="cart.confirm_purchase">
                                         Confirmar compra
                                     </button>
                                 </div>
@@ -363,12 +363,6 @@
                                         <p class="text-muted mb-3">
                                             Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.
                                         </p>
-                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="agregarProductosPrueba()">
-                                            🛒 Agregar Productos Prueba
-                                        </button>
-                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="debugCarrito()">
-                                            🔍 Debug Carrito
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -833,13 +827,21 @@
                 const carritoBody = document.getElementById('carrito-body');
                 const totalElement = document.getElementById('total');
                 
+                console.log('Elementos encontrados:', {
+                    carritoBody: carritoBody ? 'SÍ' : 'NO',
+                    totalElement: totalElement ? 'SÍ' : 'NO'
+                });
+                
                 if (!carritoBody || !totalElement) {
                     console.error('Elementos del carrito no encontrados');
+                    console.log('carritoBody:', carritoBody);
+                    console.log('totalElement:', totalElement);
                     return;
                 }
                 
                 const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
                 console.log('Carrito a renderizar:', carrito);
+                console.log('Cantidad de productos:', carrito.length);
                 
                 if (carrito.length > 0) {
                     let html = '';
@@ -1727,6 +1729,16 @@
             // Configurar event listeners cuando el DOM esté listo
             document.addEventListener('DOMContentLoaded', function() {
                 console.log('=== DOMContentLoaded EN SCRIPT FINAL ===');
+                
+                // Event listener para el modal del carrito
+                const modalCarrito = document.getElementById('carritoModal');
+                if (modalCarrito) {
+                    console.log('Modal del carrito encontrado, agregando event listener');
+                    modalCarrito.addEventListener('show.bs.modal', function() {
+                        console.log('Modal del carrito abriéndose - renderizando carrito');
+                        window.renderCarrito();
+                    });
+                }
                 
                 // Event listener para el modal de pago
                 const modalPago = document.getElementById('modalPago');

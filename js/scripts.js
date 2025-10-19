@@ -99,6 +99,11 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
       const stock = Number(this.dataset.stock) || 999; // Stock por defecto
   
       console.log('Agregando producto al carrito:', { id, nombre, precio, stock });
+      console.log('=== DIAGNÓSTICO DETALLADO ===');
+      console.log('Stock del producto:', stock);
+      console.log('Tipo de stock:', typeof stock);
+      console.log('Stock === 0:', stock === 0);
+      console.log('Stock > 0:', stock > 0);
   
       // Obtener carrito actual
       let carrito = [];
@@ -115,26 +120,63 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
       // Verificar si el producto ya existe
       const productoExistente = carrito.find(item => item.id === id);
       
+      // Solo bloquear si el stock está en 0
+      if (stock === 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Producto agotado',
+          text: `${nombre} está fuera de stock`,
+          timer: 2000
+        });
+        return;
+      }
+      
       if (productoExistente) {
+        console.log('Producto existente en carrito:', {
+          cantidadActual: productoExistente.cantidad,
+          stockDisponible: stock,
+          puedeAgregar: productoExistente.cantidad < stock
+        });
+        
+        // Verificar si no excede el stock disponible
+        // Permitir agregar hasta el límite del stock
         if (productoExistente.cantidad < stock) {
           productoExistente.cantidad++;
+          console.log('Cantidad incrementada a:', productoExistente.cantidad);
         } else {
+          console.log('=== STOCK MÁXIMO ALCANZADO ===');
+          console.log('Cantidad actual en carrito:', productoExistente.cantidad);
+          console.log('Stock disponible:', stock);
+          console.log('Condición falló:', productoExistente.cantidad < stock);
+          console.log('Mensaje que se mostrará:', `Solo hay ${stock} ${stock === 1 ? 'unidad' : 'unidades'} disponible${stock === 1 ? '' : 's'} de ${nombre}`);
+          
           Swal.fire({
             icon: 'warning',
             title: 'Stock máximo alcanzado',
-            text: `Solo hay ${stock} unidades disponibles de ${nombre}`,
-            timer: 2000
+            text: `Ya tienes la cantidad máxima disponible (${stock} ${stock === 1 ? 'unidad' : 'unidades'}) de ${nombre}`,
+            timer: 3000
           });
           return;
         }
       } else {
-        carrito.push({ 
-          id: id, 
-          nombre: nombre, 
-          precio: precio, 
-          cantidad: 1, 
-          stockOriginal: stock 
-        });
+        // Solo agregar si hay stock disponible
+        if (stock > 0) {
+          carrito.push({ 
+            id: id, 
+            nombre: nombre, 
+            precio: precio, 
+            cantidad: 1, 
+            stockOriginal: stock 
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Producto agotado',
+            text: `${nombre} está fuera de stock`,
+            timer: 2000
+          });
+          return;
+        }
       }
   
       // Guardar carrito actualizado
@@ -275,20 +317,40 @@ function cambiarCantidad(index, cambio, nuevaCantidad = null) {
     }
     
     if (index >= 0 && index < carrito.length) {
+        const producto = carrito[index];
+        const stockDisponible = producto.stockOriginal || 999; // Usar stock original o 999 por defecto
+        
+        let nuevaCantidadCalculada;
         if (nuevaCantidad !== null) {
-            carrito[index].cantidad = parseInt(nuevaCantidad) || 1;
+            nuevaCantidadCalculada = parseInt(nuevaCantidad) || 1;
         } else {
-            carrito[index].cantidad += cambio;
-            if (carrito[index].cantidad < 1) {
-                carrito[index].cantidad = 1;
-            }
+            nuevaCantidadCalculada = producto.cantidad + cambio;
         }
+        
+        // Validar que no exceda el stock disponible
+        if (nuevaCantidadCalculada > stockDisponible) {
+            console.log('No se puede exceder el stock disponible:', stockDisponible);
+            Swal.fire({
+                icon: 'warning',
+                title: 'Stock máximo alcanzado',
+                text: `Solo hay ${stockDisponible} ${stockDisponible === 1 ? 'unidad' : 'unidades'} disponible${stockDisponible === 1 ? '' : 's'} de ${producto.nombre}`,
+                timer: 2000
+            });
+            return;
+        }
+        
+        // Validar que no sea menor a 1
+        if (nuevaCantidadCalculada < 1) {
+            nuevaCantidadCalculada = 1;
+        }
+        
+        producto.cantidad = nuevaCantidadCalculada;
         
         localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
         renderCarrito();
         actualizarContadorCarrito();
         
-        console.log('Cantidad actualizada:', carrito[index]);
+        console.log('Cantidad actualizada:', producto);
     }
 }
 
@@ -328,7 +390,7 @@ function eliminarDelCarrito(index) {
 
 // Botón de abrir carrito (solo para páginas con overlay, no para Bootstrap modals)
 const abrirCarritoBtn = document.getElementById("abrir-carrito");
-const carritoOverlay = document.getElementById('carrito-container');
+    const carritoOverlay = document.getElementById('carrito-container');
 
 // Solo agregar event listener si existe carrito-container (páginas con overlay)
 if (abrirCarritoBtn && carritoOverlay) {
@@ -336,8 +398,8 @@ if (abrirCarritoBtn && carritoOverlay) {
     abrirCarritoBtn.addEventListener("click", function (e) {
         e.preventDefault();
         console.log('Mostrando overlay del carrito');
-        carritoOverlay.style.display = 'flex';
-    });
+    carritoOverlay.style.display = 'flex';
+});
 } else if (abrirCarritoBtn && !carritoOverlay) {
     console.log('Botón abrir-carrito encontrado pero sin overlay - usando Bootstrap modal');
 }
@@ -398,7 +460,7 @@ const modalCarrito = document.getElementById("modalCarrito");
 if (abrirCarritoElement && modalCarrito) {
     console.log('Agregando event listener adicional para cerrar modalCarrito');
     abrirCarritoElement.addEventListener("click", function () {
-        // Cierra el modal del carrito si está abierto
+    // Cierra el modal del carrito si está abierto
         var modalInstance = bootstrap.Modal.getInstance(modalCarrito);
         if (modalInstance) {
             modalInstance.hide();

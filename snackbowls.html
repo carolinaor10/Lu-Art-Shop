@@ -164,7 +164,7 @@
     </div>
 
     <!-- Carrito Modal -->
-    <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
                 <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
@@ -177,7 +177,7 @@
                 <div class="modal-body" style="padding: 1rem 2rem;">
                     <div class="table-responsive">
                         <table class="table table-bordered" style="background: white; border-radius: 10px; overflow: hidden;">
-                            <thead style="background: #f8f9fa;">
+                            <thead>
                                 <tr>
                                     <th data-translate="cart.product">Producto</th>
                                     <th data-translate="cart.price">Precio</th>
@@ -194,10 +194,10 @@
                     <div class="text-center w-100">
                         <h3 id="total" class="text-dark mb-3" data-translate="cart.total_label">Total: ₡0</h3>
                         <div class="d-flex gap-2 justify-content-center">
-                            <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;">
+                            <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart">
                                 <i class="fas fa-trash me-2"></i>Vaciar Carrito
                             </button>
-                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase" style="background-color: #0d6efd !important; border-color: #0d6efd !important; color: white !important;">
+                            <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #e2a844 !important; border-color: #e2a844 !important; color: white !important;" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
                                 Confirmar compra
                             </button>
                         </div>
@@ -207,45 +207,100 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmación de Pago -->
-    <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalPagoLabel" data-translate="payment.title">Confirmar Pago</h5>
+    <!-- Modal de Pago -->
+    <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px;">
+                <div class="modal-header" style="border: none; padding: 2rem 2rem 1rem;">
+                    <div class="text-center w-100">
+                        <h2 class="section-heading text-uppercase text-dark" data-translate="payment.title">Confirmar Compra</h2>
+                        <h3 class="section-subheading text-muted" data-translate="payment.subtitle">Lu Art</h3>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label" data-translate="payment.name">Nombre completo</label>
-                        <input type="text" class="form-control" id="nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="telefono" class="form-label" data-translate="payment.phone">Teléfono</label>
-                        <input type="tel" class="form-control" id="telefono" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label" data-translate="payment.address">Dirección de entrega</label>
-                        <textarea class="form-control" id="direccion" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cedula" class="form-label" data-translate="payment.id">Cédula</label>
-                        <input type="text" class="form-control" id="cedula" required>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="facturaElectronica">
-                            <label class="form-check-label" for="facturaElectronica" data-translate="payment.electronic_invoice">Factura electrónica</label>
+                <div class="modal-body" style="padding: 1rem 2rem;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="text-center mb-4">
+                                <h3 class="text-dark mb-3">CONFIRMAR COMPRA</h3>
+                                <p class="text-muted mb-4">
+                                    Por favor, realizar el pago por Sinpe Móvil al <strong>(+506)70605427</strong> o por transferencia bancaria a la cuenta CR...
+                                </p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="text-dark mb-3">Productos seleccionados:</h5>
+                                <div id="productos-seleccionados" class="border p-3 rounded mb-3" style="background-color: #f8f9fa;">
+                                    <!-- Los productos se mostrarán aquí dinámicamente -->
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="text-dark">Monto total a pagar: <span id="monto-total-pago">₡0</span></h5>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="text-dark mb-3">DIRECCIÓN DE ENVÍO</h5>
+                                <form id="formPago">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="provincia" class="form-label">Provincia</label>
+                                            <select class="form-select" id="provincia" required>
+                                                <option value="">Seleccionar provincia</option>
+                                                <option value="san-jose">San José</option>
+                                                <option value="cartago">Cartago</option>
+                                                <option value="heredia">Heredia</option>
+                                                <option value="alajuela">Alajuela</option>
+                                                <option value="puntarenas">Puntarenas</option>
+                                                <option value="limon">Limón</option>
+                                                <option value="guanacaste">Guanacaste</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="canton" class="form-label">Cantón</label>
+                                            <select class="form-select" id="canton" required>
+                                                <option value="">Seleccionar cantón</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="distrito" class="form-label">Distrito</label>
+                                            <select class="form-select" id="distrito" required>
+                                                <option value="">Seleccionar distrito</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="direccion-exacta" class="form-label">Dirección exacta</label>
+                                        <input type="text" class="form-control" id="direccion-exacta" placeholder="Ej: Casa 123, Barrio Los Ángeles" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="indicaciones" class="form-label">Indicaciones adicionales</label>
+                                        <textarea class="form-control" id="indicaciones" rows="2" placeholder="Referencias, instrucciones especiales, etc."></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="factura-electronica">
+                                    <label class="form-check-label" for="factura-electronica">
+                                        <strong>MARCAR SI REQUIERE FACTURA ELECTRÓNICA</strong>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <p class="text-muted mb-3">
+                                    Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label" data-translate="payment.email">Email (para factura electrónica)</label>
-                        <input type="email" class="form-control" id="email">
-                    </div>
-                    <div class="text-center">
-                        <a href="#" class="btn btn-success btn-lg" id="whatsapp-btn" data-translate="payment.send_whatsapp">
-                            <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
-                        </a>
+                </div>
+                <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
+                    <div class="text-center w-100">
+                        <button id="enviar-whatsapp-footer-btn" class="btn btn-success btn-xl text-uppercase" onclick="enviarPedidoWhatsApp()">
+                            <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
+                        </button>
                     </div>
                 </div>
             </div>

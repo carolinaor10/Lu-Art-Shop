@@ -243,7 +243,7 @@
                                 <h2 class="section-heading text-uppercase text-dark" data-translate="cart.title">Carrito</h2>
                                 <h3 class="section-subheading text-muted" data-translate="cart.subtitle">Lu Art</h3>
                             </div>
-                            <button type="button" class="btn-close" onclick="cerrarCarrito()" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="padding: 1rem 2rem;">
                             <div class="table-responsive">
@@ -268,7 +268,7 @@
                                     <button id="vaciar-carrito-btn" class="btn btn-secondary btn-xl text-uppercase" style="background-color: #6c757d !important; border-color: #6c757d !important; color: white !important;" type="button" onclick="vaciarCarrito()" data-translate="cart.clear_cart">
                                         <i class="fas fa-trash me-2"></i>Vaciar Carrito
                                     </button>
-                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #e2a844 !important; border-color: #e2a844 !important; color: white !important;" type="button" onclick="abrirModalPago()" data-translate="cart.confirm_purchase">
+                                    <button id="confirmar-compra-btn" class="btn btn-primary btn-xl text-uppercase" style="background-color: #e2a844 !important; border-color: #e2a844 !important; color: white !important;" type="button" data-bs-toggle="modal" data-bs-target="#modalPago" data-translate="cart.confirm_purchase">
                                         Confirmar compra
                                     </button>
                                 </div>
@@ -287,7 +287,7 @@
                                 <h2 class="section-heading text-uppercase text-dark" data-translate="payment.title">Confirmar Compra</h2>
                                 <h3 class="section-subheading text-muted" data-translate="payment.subtitle">Lu Art</h3>
                             </div>
-                            <button type="button" class="btn-close" onclick="cerrarModalPago()" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="padding: 1rem 2rem;">
                             <div class="row">
@@ -708,32 +708,7 @@
                 alert('Carrito vaciado');
             };
             
-            // Función para actualizar contador del carrito
-            window.actualizarContadorCarrito = function() {
-                console.log('=== ACTUALIZANDO CONTADOR CARRITO ===');
-                
-                let carrito = [];
-                try {
-                    const carritoGuardado = localStorage.getItem('luArtCarrito');
-                    if (carritoGuardado) {
-                        carrito = JSON.parse(carritoGuardado);
-                    }
-                } catch (e) {
-                    console.error('Error cargando carrito:', e);
-                }
-                
-                const contadorNavbar = document.getElementById('navbar-contador-carrito');
-                if (contadorNavbar) {
-                    if (carrito.length > 0) {
-                        contadorNavbar.textContent = carrito.length;
-                        contadorNavbar.style.display = 'inline';
-                    } else {
-                        contadorNavbar.style.display = 'none';
-                    }
-                }
-                
-                console.log('Contador actualizado:', carrito.length);
-            };
+            // Función actualizarContadorCarrito ya está definida en scripts.js, no duplicar
             
             // Función para cambiar cantidad de productos
             window.cambiarCantidad = function(index, cambio, nuevaCantidad = null) {
@@ -820,99 +795,13 @@
                 alert('Productos de prueba agregados al carrito!');
             };
             
-            // Función para renderizar el carrito en la tabla
-            window.renderCarrito = function() {
-                console.log('=== RENDERIZANDO CARRITO ===');
-                
-                const carritoBody = document.getElementById('carrito-body');
-                const totalElement = document.getElementById('total');
-                
-                console.log('Elementos encontrados:', {
-                    carritoBody: carritoBody ? 'SÍ' : 'NO',
-                    totalElement: totalElement ? 'SÍ' : 'NO'
-                });
-                
-                if (!carritoBody || !totalElement) {
-                    console.error('Elementos del carrito no encontrados');
-                    console.log('carritoBody:', carritoBody);
-                    console.log('totalElement:', totalElement);
-                    return;
-                }
-                
-                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
-                console.log('Carrito a renderizar:', carrito);
-                console.log('Cantidad de productos:', carrito.length);
-                
-                if (carrito.length > 0) {
-                    let html = '';
-                    let total = 0;
-                    
-                    carrito.forEach((item, index) => {
-                        const subtotal = item.precio * item.cantidad;
-                        total += subtotal;
-                        html += `
-                            <tr>
-                                <td>${item.nombre}</td>
-                                <td>₡${item.precio.toLocaleString()}</td>
-                                <td>
-                                    <div class="input-group input-group-sm" style="width: 100px;">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
-                                        <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" onchange="cambiarCantidad(${index}, 0, this.value)">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
-                                    </div>
-                                </td>
-                                <td>₡${subtotal.toLocaleString()}</td>
-                                <td>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${index})">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                    
-                    carritoBody.innerHTML = html;
-                    totalElement.textContent = `Total: ₡${total.toLocaleString()}`;
-                    console.log('Carrito renderizado correctamente');
-                } else {
-                    carritoBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay productos en el carrito</td></tr>';
-                    totalElement.textContent = 'Total: ₡0';
-                    console.log('Carrito vacío renderizado');
-                }
-            };
+            // Función renderCarrito ya está definida en scripts.js, no duplicar
 
-            // Función para cambiar cantidad de productos
-            window.cambiarCantidad = function(index, cambio, nuevaCantidad = null) {
-                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
-                
-                if (nuevaCantidad !== null) {
-                    carrito[index].cantidad = parseInt(nuevaCantidad) || 1;
-                } else {
-                    carrito[index].cantidad += cambio;
-                    if (carrito[index].cantidad < 1) carrito[index].cantidad = 1;
-                }
-                
-                localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
-                window.renderCarrito();
-                window.actualizarContadorCarrito();
-            };
+            // Función cambiarCantidad ya está definida arriba, no duplicar
 
-            // Función para eliminar producto del carrito
-            window.eliminarDelCarrito = function(index) {
-                const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
-                carrito.splice(index, 1);
-                localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
-                window.renderCarrito();
-                window.actualizarContadorCarrito();
-            };
+            // Función eliminarDelCarrito ya está definida arriba, no duplicar
 
-            // Función para vaciar carrito
-            window.vaciarCarrito = function() {
-                localStorage.removeItem('luArtCarrito');
-                window.renderCarrito();
-                window.actualizarContadorCarrito();
-                alert('Carrito vaciado');
-            };
+            // Función vaciarCarrito ya está definida arriba, no duplicar
             
             // Funciones de cierre ya definidas arriba - no duplicar
             
@@ -1296,75 +1185,9 @@
                 console.log('Función agregarProductosPrueba creada como respaldo');
             }
             
-            // Funciones esenciales del carrito como respaldo
-            if (typeof window.actualizarContadorCarrito === 'undefined') {
-                window.actualizarContadorCarrito = function() {
-                    console.log('=== ACTUALIZANDO CONTADOR (RESPALDO) ===');
-                    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
-                    const contador = document.getElementById('navbar-contador-carrito');
-                    if (contador) {
-                        contador.textContent = carrito.length;
-                        contador.style.display = carrito.length > 0 ? 'inline' : 'none';
-                    }
-                    console.log('Contador actualizado:', carrito.length);
-                };
-                console.log('Función actualizarContadorCarrito creada como respaldo');
-            }
+            // Función actualizarContadorCarrito ya está definida en scripts.js, no crear respaldo
             
-            if (typeof window.renderCarrito === 'undefined') {
-                window.renderCarrito = function() {
-                    console.log('=== RENDERIZANDO CARRITO (RESPALDO) ===');
-                    
-                    const carritoBody = document.getElementById('carrito-body');
-                    const totalElement = document.getElementById('total');
-                    
-                    if (!carritoBody || !totalElement) {
-                        console.error('Elementos del carrito no encontrados');
-                        return;
-                    }
-                    
-                    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
-                    console.log('Carrito a renderizar:', carrito);
-                    
-                    if (carrito.length > 0) {
-                        let html = '';
-                        let total = 0;
-                        
-                        carrito.forEach((item, index) => {
-                            const subtotal = item.precio * item.cantidad;
-                            total += subtotal;
-                            html += `
-                                <tr>
-                                    <td>${item.nombre}</td>
-                                    <td>₡${item.precio.toLocaleString()}</td>
-                                    <td>
-                                        <div class="input-group input-group-sm" style="width: 100px;">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
-                                            <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" onchange="cambiarCantidad(${index}, 0, this.value)">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
-                                        </div>
-                                    </td>
-                                    <td>₡${subtotal.toLocaleString()}</td>
-                                    <td>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${index})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                        
-                        carritoBody.innerHTML = html;
-                        totalElement.textContent = `Total: ₡${total.toLocaleString()}`;
-                        console.log('Carrito renderizado correctamente');
-                    } else {
-                        carritoBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay productos en el carrito</td></tr>';
-                        totalElement.textContent = 'Total: ₡0';
-                        console.log('Carrito vacío renderizado');
-                    }
-                };
-                console.log('Función renderCarrito creada como respaldo');
-            }
+            // Función renderCarrito ya está definida arriba, no crear respaldo
             
             // Función para cerrar el modal del carrito como respaldo
             if (typeof window.cerrarCarrito === 'undefined') {

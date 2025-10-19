@@ -58,14 +58,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const comments = document.querySelectorAll('.comment');
     let counter = 0;
 
+    // Solo ejecutar si hay comentarios en la página
+    if (comments.length === 0) {
+        return;
+    }
+
     function showNextComment() {
+        // Verificar que hay comentarios disponibles
+        if (comments.length === 0) {
+            return;
+        }
+
         // Ocultar todos los comentarios
         comments.forEach(comment => {
             comment.classList.remove('active');
         });
 
         // Mostrar el siguiente comentario
+        if (comments[counter]) {
         comments[counter].classList.add('active');
+        }
 
         // Incrementar el contador
         counter = (counter + 1) % comments.length;
@@ -81,24 +93,86 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add to cart
 document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', function () {
+      const id = this.dataset.id || Date.now().toString();
       const nombre = this.dataset.nombre || 'Producto';
-      const precio = Number(this.dataset.precio); // <- directo
+      const precio = Number(this.dataset.precio) || 0;
+      const stock = Number(this.dataset.stock) || 999; // Stock por defecto
   
-      // fallback por si viniera mal
-      const precioFinal = Number.isFinite(precio) ? precio : 0;
+      console.log('Agregando producto al carrito:', { id, nombre, precio, stock });
+  
+      // Obtener carrito actual
+      let carrito = [];
+      try {
+        const carritoGuardado = localStorage.getItem('luArtCarrito');
+        if (carritoGuardado) {
+          carrito = JSON.parse(carritoGuardado);
+        }
+      } catch (e) {
+        console.error('Error cargando carrito:', e);
+        carrito = [];
+      }
+  
+      // Verificar si el producto ya existe
+      const productoExistente = carrito.find(item => item.id === id);
+      
+      if (productoExistente) {
+        if (productoExistente.cantidad < stock) {
+          productoExistente.cantidad++;
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Stock máximo alcanzado',
+            text: `Solo hay ${stock} unidades disponibles de ${nombre}`,
+            timer: 2000
+          });
+          return;
+        }
+      } else {
+        carrito.push({ 
+          id: id, 
+          nombre: nombre, 
+          precio: precio, 
+          cantidad: 1, 
+          stockOriginal: stock 
+        });
+      }
+  
+      // Guardar carrito actualizado
+      localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+      
+      // Actualizar contador del carrito y renderizar
+      actualizarContadorCarrito();
+      renderCarrito();
   
       Swal.fire({
         icon: 'success',
         title: '¡Producto agregado!',
-        html: `<strong>${nombre}</strong><br>Precio: ₡${precioFinal.toLocaleString()}`,
+        html: `<strong>${nombre}</strong><br>Precio: ₡${precio.toLocaleString()}`,
         showConfirmButton: false,
         timer: 2000
       });
+      
+      console.log('Producto agregado exitosamente. Carrito actual:', carrito);
     });
   });
 
   function actualizarMontoTotal(totalCompra) {
-    document.getElementById("monto-total").textContent = `₡${totalCompra.toFixed(2)}`;
+    const montoElement = document.getElementById("monto-total");
+    if (montoElement) {
+        montoElement.textContent = `₡${totalCompra.toFixed(2)}`;
+    }
+}
+
+// Función para actualizar contador del carrito
+function actualizarContadorCarrito() {
+    console.log('=== ACTUALIZANDO CONTADOR CARRITO ===');
+    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+    const contador = document.getElementById('navbar-contador-carrito');
+    if (contador) {
+        contador.textContent = carrito.length;
+        contador.style.display = carrito.length > 0 ? 'inline' : 'none';
+    }
+    console.log('Contador actualizado:', carrito.length);
 }
 
 // Función para calcular el total del carrito
@@ -113,29 +187,180 @@ function calcularTotalCarrito() {
     return total;
 }
 
-const totalCompra = calcularTotalCarrito(); // tu función que obtiene el total
-actualizarMontoTotal(totalCompra);
-// Botón de abrir carrito (solo muestra el overlay del carrito)
-document.getElementById("abrir-carrito").addEventListener("click", function (e) {
-    e.preventDefault();
+// Función para renderizar el carrito en la tabla
+function renderCarrito() {
+    console.log('=== RENDERIZANDO CARRITO ===');
+    
+    const carritoBody = document.getElementById('carrito-body');
+    const totalElement = document.getElementById('total');
+    
+    console.log('Elementos encontrados:', {
+        carritoBody: !!carritoBody,
+        totalElement: !!totalElement
+    });
+    
+    if (!carritoBody) {
+        console.error('Elemento carrito-body no encontrado');
+        return;
+    }
+    
+    const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
+    console.log('Carrito a renderizar:', carrito);
+    
+    if (carrito.length > 0) {
+        let html = '';
+        let total = 0;
+        
+        carrito.forEach((item, index) => {
+            const subtotal = item.precio * item.cantidad;
+            total += subtotal;
+            html += `
+                <tr>
+                    <td>${item.nombre}</td>
+                    <td>₡${item.precio.toLocaleString()}</td>
+                    <td>
+                        <div class="input-group input-group-sm" style="width: 100px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
+                            <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" onchange="cambiarCantidad(${index}, 0, this.value)">
+                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td>₡${subtotal.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        carritoBody.innerHTML = html;
+        
+        // Actualizar total si existe el elemento
+        if (totalElement) {
+            totalElement.textContent = `Total: ₡${total.toLocaleString()}`;
+            console.log('Total actualizado:', total);
+        } else {
+            console.error('Elemento total no encontrado para actualizar');
+        }
+        
+        console.log('Carrito renderizado correctamente');
+    } else {
+        carritoBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay productos en el carrito</td></tr>';
+        
+        if (totalElement) {
+            totalElement.textContent = 'Total: ₡0';
+            console.log('Total reseteado a 0');
+        } else {
+            console.error('Elemento total no encontrado para resetear');
+        }
+        
+        console.log('Carrito vacío renderizado');
+    }
+}
 
-    // Solo mostrar overlay del carrito, no abrir modal de pago
-    const carritoOverlay = document.getElementById('carrito-container');
-    carritoOverlay.style.display = 'flex';
-});
+// Función para cambiar cantidad de productos
+function cambiarCantidad(index, cambio, nuevaCantidad = null) {
+    console.log('=== CAMBIANDO CANTIDAD ===', {index, cambio, nuevaCantidad});
+    
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('luArtCarrito');
+        if (carritoGuardado) {
+            carrito = JSON.parse(carritoGuardado);
+        }
+    } catch (e) {
+        console.error('Error cargando carrito:', e);
+    }
+    
+    if (index >= 0 && index < carrito.length) {
+        if (nuevaCantidad !== null) {
+            carrito[index].cantidad = parseInt(nuevaCantidad) || 1;
+        } else {
+            carrito[index].cantidad += cambio;
+            if (carrito[index].cantidad < 1) {
+                carrito[index].cantidad = 1;
+            }
+        }
+        
+        localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+        renderCarrito();
+        actualizarContadorCarrito();
+        
+        console.log('Cantidad actualizada:', carrito[index]);
+    }
+}
+
+// Función para eliminar producto del carrito
+function eliminarDelCarrito(index) {
+    console.log('=== ELIMINANDO PRODUCTO ===', index);
+    
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('luArtCarrito');
+        if (carritoGuardado) {
+            carrito = JSON.parse(carritoGuardado);
+        }
+    } catch (e) {
+        console.error('Error cargando carrito:', e);
+    }
+    
+    if (index >= 0 && index < carrito.length) {
+        const productoEliminado = carrito.splice(index, 1)[0];
+        localStorage.setItem('luArtCarrito', JSON.stringify(carrito));
+        renderCarrito();
+        actualizarContadorCarrito();
+        
+        console.log('Producto eliminado:', productoEliminado);
+        
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto eliminado',
+                text: `"${productoEliminado.nombre}" eliminado del carrito`,
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    }
+}
+
+// Botón de abrir carrito (solo para páginas con overlay, no para Bootstrap modals)
+const abrirCarritoBtn = document.getElementById("abrir-carrito");
+const carritoOverlay = document.getElementById('carrito-container');
+
+// Solo agregar event listener si existe carrito-container (páginas con overlay)
+if (abrirCarritoBtn && carritoOverlay) {
+    console.log('Agregando event listener para overlay del carrito');
+    abrirCarritoBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        console.log('Mostrando overlay del carrito');
+        carritoOverlay.style.display = 'flex';
+    });
+} else if (abrirCarritoBtn && !carritoOverlay) {
+    console.log('Botón abrir-carrito encontrado pero sin overlay - usando Bootstrap modal');
+}
 
 // Botón de confirmar compra (abre modal de pago)
-document.getElementById("confirmar-compra-btn").addEventListener("click", function () {
+const confirmarCompraBtn = document.getElementById("confirmar-compra-btn");
+if (confirmarCompraBtn) {
+    confirmarCompraBtn.addEventListener("click", function () {
     // Actualizar monto total antes de abrir el modal
     const totalCompra = calcularTotalCarrito(); // función que ya tienes
     actualizarMontoTotal(totalCompra);
 
     // Opcional: si quieres mostrar los nombres de los productos en el modal
+        const productosCarritoElement = document.getElementById("productos-carrito");
+        if (productosCarritoElement) {
+            const carrito = JSON.parse(localStorage.getItem('luArtCarrito') || '[]');
     const productosLista = carrito.map(item => `${item.cantidad} x ${item.nombre}`).join(', ');
-    document.getElementById("productos-carrito").textContent = productosLista;
+            productosCarritoElement.textContent = productosLista;
+        }
 
     // Bootstrap se encargará de abrir el modal porque ya tienes data-bs-toggle y data-bs-target
 });
+}
 
 
 
@@ -166,17 +391,426 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById("abrir-carrito").addEventListener("click", function () {
-    // Cierra el modal del carrito si está abierto
-    var modalCarrito = document.getElementById("modalCarrito");
-    if (modalCarrito) {
+// Event listener adicional para cerrar modal específico (solo si existe modalCarrito)
+const abrirCarritoElement = document.getElementById("abrir-carrito");
+const modalCarrito = document.getElementById("modalCarrito");
+
+if (abrirCarritoElement && modalCarrito) {
+    console.log('Agregando event listener adicional para cerrar modalCarrito');
+    abrirCarritoElement.addEventListener("click", function () {
+        // Cierra el modal del carrito si está abierto
         var modalInstance = bootstrap.Modal.getInstance(modalCarrito);
         if (modalInstance) {
             modalInstance.hide();
         }
+    });
+} else if (abrirCarritoElement && !modalCarrito) {
+    console.log('Botón abrir-carrito encontrado pero sin modalCarrito - usando Bootstrap modal normal');
+}
+
+function mostrarMontoEnModal(total) {
+    const montoElement = document.getElementById("monto-total");
+    if (montoElement) {
+        montoElement.textContent = total.toFixed(2);
+    }
+}
+
+// Función para mostrar productos en el modal de pago
+function mostrarProductosEnPago() {
+    console.log('=== MOSTRANDO PRODUCTOS EN PAGO ===');
+    
+    const productosContainer = document.getElementById('productos-seleccionados');
+    const montoTotal = document.getElementById('monto-total-pago');
+    
+    console.log('Elementos encontrados:', {
+        productosContainer: !!productosContainer,
+        montoTotal: !!montoTotal
+    });
+    
+    if (!productosContainer || !montoTotal) {
+        console.error('No se encontraron los elementos del modal de pago');
+        return;
+    }
+    
+    // Obtener carrito desde localStorage
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('luArtCarrito');
+        if (carritoGuardado) {
+            carrito = JSON.parse(carritoGuardado);
+        }
+    } catch (e) {
+        console.error('Error cargando carrito:', e);
+    }
+    
+    console.log('Carrito cargado para mostrar:', carrito);
+    
+    if (carrito.length === 0) {
+        productosContainer.innerHTML = '<p class="text-muted mb-0">No hay productos seleccionados</p>';
+        montoTotal.textContent = '₡0';
+        console.log('Carrito vacío, mostrando mensaje');
+        return;
+    }
+    
+    let total = 0;
+    let productosHTML = '';
+    
+    carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        productosHTML += `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span>${item.nombre} - ${item.cantidad} x ₡${item.precio.toLocaleString()}</span>
+                <strong>₡${subtotal.toLocaleString()}</strong>
+            </div>
+        `;
+    });
+    
+    productosContainer.innerHTML = productosHTML;
+    montoTotal.textContent = `₡${total.toLocaleString()}`;
+    
+    console.log('Productos mostrados correctamente, total:', total);
+}
+
+// Función para enviar pedido por WhatsApp
+function enviarPedidoWhatsApp() {
+    console.log('=== ENVIANDO PEDIDO POR WHATSAPP ===');
+    
+    // Obtener datos del formulario
+    const provincia = document.getElementById('provincia')?.value;
+    const canton = document.getElementById('canton')?.value;
+    const distrito = document.getElementById('distrito')?.value;
+    const direccionExacta = document.getElementById('direccion-exacta')?.value;
+    const indicaciones = document.getElementById('indicaciones')?.value;
+    const facturaElectronica = document.getElementById('factura-electronica')?.checked;
+    
+    // Validar campos requeridos
+    if (!provincia || !canton || !distrito || !direccionExacta) {
+        alert('Por favor complete todos los campos requeridos');
+        return;
+    }
+    
+    // Obtener carrito
+    let carrito = [];
+    try {
+        const carritoGuardado = localStorage.getItem('luArtCarrito');
+        if (carritoGuardado) {
+            carrito = JSON.parse(carritoGuardado);
+        }
+    } catch (e) {
+        console.error('Error cargando carrito:', e);
+        alert('Error al cargar el carrito');
+        return;
+    }
+    
+    if (carrito.length === 0) {
+        alert('No hay productos en el carrito');
+        return;
+    }
+    
+    // Calcular total
+    let total = 0;
+    let productosTexto = '';
+    carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        productosTexto += `• ${item.nombre} - ${item.cantidad} x ₡${item.precio.toLocaleString()} = ₡${subtotal.toLocaleString()}\n`;
+    });
+    
+    // Crear mensaje
+    const mensaje = `🛒 *PEDIDO LU ART* 🛒
+
+📦 *PRODUCTOS:*
+${productosTexto}
+
+💰 *TOTAL: ₡${total.toLocaleString()}*
+
+📍 *DIRECCIÓN DE ENVÍO:*
+• Provincia: ${provincia}
+• Cantón: ${canton}
+• Distrito: ${distrito}
+• Dirección: ${direccionExacta}
+${indicaciones ? `• Indicaciones: ${indicaciones}` : ''}
+
+${facturaElectronica ? '📄 *FACTURA ELECTRÓNICA REQUERIDA*' : ''}
+
+Por favor confirmar el pedido y enviar comprobante de pago.`;
+    
+    // Enviar por WhatsApp
+    const numeroWhatsApp = '50670605427';
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+    window.open(urlWhatsApp, '_blank');
+    
+    console.log('Mensaje enviado por WhatsApp');
+}
+
+// Función para vaciar el carrito
+function vaciarCarrito() {
+    console.log('=== VACIANDO CARRITO ===');
+    
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Se eliminarán todos los productos del carrito',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, vaciar carrito',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('luArtCarrito');
+                renderCarrito();
+                actualizarContadorCarrito();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Carrito vaciado',
+                    text: 'Todos los productos han sido eliminados',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    } else {
+        // Fallback si SweetAlert no está disponible
+        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+            localStorage.removeItem('luArtCarrito');
+            renderCarrito();
+            actualizarContadorCarrito();
+            alert('Carrito vaciado');
+        }
+    }
+}
+
+// Función para abrir modal de pago desde el carrito
+function abrirModalPago() {
+    console.log('Abriendo modal de pago desde carrito...');
+    
+    // Cerrar el modal del carrito primero
+    const modalCarrito = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+    if (modalCarrito) {
+        modalCarrito.hide();
+    }
+    
+    // Esperar un momento y luego abrir el modal de pago
+    setTimeout(function() {
+        const modalPago = new bootstrap.Modal(document.getElementById('modalPago'));
+        modalPago.show();
+        console.log('Modal de pago abierto');
+    }, 300);
+}
+
+// Event listener para mostrar productos cuando se abre el modal de pago
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar carrito
+    actualizarContadorCarrito();
+    renderCarrito();
+    
+    const modalPago = document.getElementById('modalPago');
+    if (modalPago) {
+        console.log('Modal de pago encontrado, agregando event listener');
+        modalPago.addEventListener('show.bs.modal', function() {
+            console.log('Modal de pago abriéndose, mostrando productos');
+            mostrarProductosEnPago();
+        });
+    } else {
+        console.log('Modal de pago no encontrado en esta página');
     }
 });
 
-function mostrarMontoEnModal(total) {
-    document.getElementById("monto-total").textContent = total.toFixed(2);
+// Datos de provincias, cantones y distritos de Costa Rica
+const datosCostaRica = {
+    'san-jose': {
+        nombre: 'San José',
+        cantones: {
+            'san-jose': { nombre: 'San José', distritos: ['Carmen', 'Merced', 'Hospital', 'Catedral', 'Zapote', 'San Francisco de Dos Ríos', 'Uruca', 'Mata Redonda', 'Pavas', 'Hatillo', 'San Sebastián'] },
+            'escazu': { nombre: 'Escazú', distritos: ['Escazú', 'San Antonio', 'San Rafael'] },
+            'desamparados': { nombre: 'Desamparados', distritos: ['Desamparados', 'San Miguel', 'San Juan de Dios', 'San Rafael Arriba', 'San Antonio', 'Frailes', 'Patarrá', 'San Cristóbal', 'Rosario', 'Damas', 'San Rafael Abajo', 'Gravilias', 'Los Guido'] },
+            'puriscal': { nombre: 'Puriscal', distritos: ['Santiago', 'Mercedes Sur', 'Barbacoas', 'Grifo Alto', 'San Rafael', 'Candelarita', 'Desamparaditos', 'San Antonio', 'Chires'] },
+            'tarrazu': { nombre: 'Tarrazú', distritos: ['San Marcos', 'San Lorenzo', 'San Carlos'] },
+            'aserri': { nombre: 'Aserrí', distritos: ['Aserrí', 'Tarbaca', 'Vuelta de Jorco', 'San Gabriel', 'Legua', 'Monterrey', 'Salitrillos'] },
+            'mora': { nombre: 'Mora', distritos: ['Colón', 'Guayabo', 'Tabarcia', 'Piedras Negras', 'Picagres', 'Jaris', 'Quitirrisí'] },
+            'goicoechea': { nombre: 'Goicoechea', distritos: ['Guadalupe', 'San Francisco', 'Calle Blancos', 'Mata de Plátano', 'Ipís', 'Rancho Redondo', 'Purral'] },
+            'santa-ana': { nombre: 'Santa Ana', distritos: ['Santa Ana', 'Salitral', 'Pozos', 'Uruca', 'Piedades', 'Brasil'] },
+            'alajuelita': { nombre: 'Alajuelita', distritos: ['Alajuelita', 'San Josecito', 'San Antonio', 'Concepción', 'San Felipe', 'San Isidro'] },
+            'coronado': { nombre: 'Coronado', distritos: ['San Isidro', 'San Rafael', 'Dulce Nombre de Jesús', 'Patalillo', 'Cascajal'] },
+            'acosta': { nombre: 'Acosta', distritos: ['San Ignacio', 'Guaitil', 'Palmichal', 'Cangrejal', 'Sabanillas'] },
+            'tibas': { nombre: 'Tibás', distritos: ['San Juan', 'Cinco Esquinas', 'Anselmo Llorente', 'León XIII', 'Colima'] },
+            'moravia': { nombre: 'Moravia', distritos: ['San Vicente', 'San Jerónimo', 'La Trinidad'] },
+            'montes-de-oca': { nombre: 'Montes de Oca', distritos: ['San Pedro', 'Sabanilla', 'Mercedes', 'San Rafael'] },
+            'turrubares': { nombre: 'Turrubares', distritos: ['San Pablo', 'San Pedro', 'San Juan de Mata', 'San Luis', 'Carara'] },
+            'dota': { nombre: 'Dota', distritos: ['Santa María', 'Jardín', 'Copey'] },
+            'curridabat': { nombre: 'Curridabat', distritos: ['Curridabat', 'Granadilla', 'Sánchez', 'Tirrases'] },
+            'perez-zeledon': { nombre: 'Pérez Zeledón', distritos: ['San Isidro de El General', 'General', 'Daniel Flores', 'Rivas', 'San Pedro', 'Platanares', 'Pejibaye', 'Cajón', 'Barú', 'Río Nuevo', 'Páramo', 'La Amistad'] },
+            'leon-cortes': { nombre: 'León Cortés', distritos: ['San Pablo', 'San Andrés', 'Llano Bonito', 'San Isidro', 'Santa Cruz', 'San Antonio'] }
+        }
+    },
+    'cartago': {
+        nombre: 'Cartago',
+        cantones: {
+            'cartago': { nombre: 'Cartago', distritos: ['Oriental', 'Occidental', 'Carmen', 'San Nicolás', 'Aguacaliente', 'Guadalupe', 'Corralillo', 'Tierra Blanca', 'Dulce Nombre', 'Llano Grande', 'Quebradilla'] },
+            'paraiso': { nombre: 'Paraíso', distritos: ['Paraíso', 'Santiago', 'Orosi', 'Cachí', 'Llanos de Santa Lucía'] },
+            'la-union': { nombre: 'La Unión', distritos: ['Tres Ríos', 'San Diego', 'San Juan', 'San Rafael', 'Concepción', 'Dulce Nombre', 'San Ramón', 'Río Azul'] },
+            'jimenez': { nombre: 'Jiménez', distritos: ['Juan Viñas', 'Tucurrique', 'Pejibaye'] },
+            'turrialba': { nombre: 'Turrialba', distritos: ['Turrialba', 'La Suiza', 'Peralta', 'Santa Cruz', 'Santa Teresita', 'Pavones', 'Tuis', 'Tayutic', 'Santa Rosa', 'Tres Equis', 'La Isabel', 'Chirripó'] },
+            'alvarado': { nombre: 'Alvarado', distritos: ['Pacayas', 'Cervantes', 'Capellades'] },
+            'oreamuno': { nombre: 'Oreamuno', distritos: ['San Rafael', 'Cot', 'Potrero Cerrado', 'Cipreses', 'Santa Rosa'] },
+            'el-guarco': { nombre: 'El Guarco', distritos: ['El Tejar', 'San Isidro', 'Tobosi', 'Patio de Agua'] }
+        }
+    },
+    'heredia': {
+        nombre: 'Heredia',
+        cantones: {
+            'heredia': { nombre: 'Heredia', distritos: ['Heredia', 'Mercedes', 'San Francisco', 'Ulloa', 'Varablanca'] },
+            'barva': { nombre: 'Barva', distritos: ['Barva', 'San Pedro', 'San Pablo', 'San Roque', 'Santa Lucía', 'San José de la Montaña'] },
+            'santo-domingo': { nombre: 'Santo Domingo', distritos: ['Santo Domingo', 'San Vicente', 'San Miguel', 'Paracito', 'Santo Tomás', 'Santa Rosa', 'Tures', 'Pará'] },
+            'santa-barbara': { nombre: 'Santa Bárbara', distritos: ['Santa Bárbara', 'San Pedro', 'San Juan', 'Jesús', 'Santo Domingo del Roble', 'Purabá'] },
+            'san-rafael': { nombre: 'San Rafael', distritos: ['San Rafael', 'San Josecito', 'Santiago', 'Ángeles', 'Concepción'] },
+            'san-isidro': { nombre: 'San Isidro', distritos: ['San Isidro', 'San José', 'Concepción', 'San Francisco'] },
+            'belen': { nombre: 'Belén', distritos: ['San Antonio', 'La Ribera', 'La Asunción'] },
+            'flores': { nombre: 'Flores', distritos: ['San Joaquín', 'Barrantes', 'Llorente'] },
+            'san-pablo': { nombre: 'San Pablo', distritos: ['San Pablo', 'Rincón de Sabanilla'] },
+            'sarapiqui': { nombre: 'Sarapiquí', distritos: ['Puerto Viejo', 'La Virgen', 'Horquetas', 'Llanuras del Gaspar', 'Cureña'] }
+        }
+    },
+    'alajuela': {
+        nombre: 'Alajuela',
+        cantones: {
+            'alajuela': { nombre: 'Alajuela', distritos: ['Alajuela', 'San José', 'Carrizal', 'San Antonio', 'Guácima', 'San Isidro', 'Sabanilla', 'San Rafael', 'Río Segundo', 'Desamparados', 'Turrúcares', 'Tambor', 'Garita', 'Sarapiquí'] },
+            'san-ramon': { nombre: 'San Ramón', distritos: ['San Ramón', 'Santiago', 'San Juan', 'Piedades Norte', 'Piedades Sur', 'San Rafael', 'San Isidro', 'Ángeles', 'Alfaro', 'Volio', 'Concepción', 'Zapotal', 'Peñas Blancas', 'San Lorenzo'] },
+            'grecia': { nombre: 'Grecia', distritos: ['Grecia', 'San Isidro', 'San José', 'San Roque', 'Tacares', 'Río Cuarto', 'Puente de Piedra', 'Bolívar'] },
+            'san-mateo': { nombre: 'San Mateo', distritos: ['San Mateo', 'Desmonte', 'Jesús María', 'Labrador'] },
+            'atenas': { nombre: 'Atenas', distritos: ['Atenas', 'Jesús', 'Mercedes', 'San Isidro', 'Concepción', 'San José', 'Santa Eulalia', 'Escobal'] },
+            'naranjo': { nombre: 'Naranjo', distritos: ['Naranjo', 'San Miguel', 'San José', 'Cirrí', 'San Jerónimo', 'San Juan', 'El Rosario', 'Palmitos'] },
+            'palmares': { nombre: 'Palmares', distritos: ['Palmares', 'Zaragoza', 'Buenos Aires', 'Santiago', 'Candelaria', 'Esquipulas', 'La Granja'] },
+            'poas': { nombre: 'Poás', distritos: ['San Pedro', 'San Juan', 'San Rafael', 'Carrillos', 'Sabana Redonda'] },
+            'orotina': { nombre: 'Orotina', distritos: ['Orotina', 'El Mastate', 'Hacienda Vieja', 'Coyolar', 'La Ceiba'] },
+            'san-carlos': { nombre: 'San Carlos', distritos: ['Quesada', 'Florencia', 'Buenavista', 'Peñas Blancas', 'La Fortuna', 'La Tigra', 'La Palmera', 'Venecia', 'Aguas Zarcas', 'Venado', 'Cutris', 'Monterrey', 'Pocosol', 'Pital', 'La Cureña', 'Santa Rosa', 'Buenos Aires', 'San Jerónimo', 'San Luis', 'San Rafael', 'San Isidro', 'San José', 'San Miguel', 'San Pedro', 'San Ramón', 'Santa Clara', 'Santa María', 'Santa Rosa', 'Santo Domingo', 'Sitio Mata'] },
+            'zarcero': { nombre: 'Zarcero', distritos: ['Zarcero', 'Laguna', 'Tapezco', 'Guadalupe', 'Palmira', 'Zapote', 'Brisas'] },
+            'valverde-vega': { nombre: 'Valverde Vega', distritos: ['Sarchí Norte', 'Sarchí Sur', 'Toro Amarillo', 'San Pedro', 'Rodriguez', 'San Juan'] },
+            'upala': { nombre: 'Upala', distritos: ['Upala', 'Aguas Claras', 'San José', 'Bijagua', 'Delicias', 'Dos Ríos', 'Yolillal', 'Canalete'] },
+            'guatuso': { nombre: 'Guatuso', distritos: ['San Rafael', 'Buenavista', 'Cote', 'Katira'] },
+            'rio-cuarto': { nombre: 'Río Cuarto', distritos: ['Río Cuarto', 'Santa Isabel', 'Santa Rita'] }
+        }
+    },
+    'guanacaste': {
+        nombre: 'Guanacaste',
+        cantones: {
+            'liberia': { nombre: 'Liberia', distritos: ['Liberia', 'Cañas Dulces', 'Mayorga', 'Nacascolo', 'Curubandé'] },
+            'nicoya': { nombre: 'Nicoya', distritos: ['Nicoya', 'Mansión', 'San Antonio', 'Quebrada Honda', 'Sámara', 'Nosara', 'Belén de Nosarita'] },
+            'santa-cruz': { nombre: 'Santa Cruz', distritos: ['Santa Cruz', 'Bolsón', 'Veintisiete de Abril', 'Tempate', 'Cartagena', 'Cuajiniquil', 'Diriá', 'Cabo Velas', 'Tamarindo'] },
+            'bagaces': { nombre: 'Bagaces', distritos: ['Bagaces', 'Fortuna', 'Mogote', 'Río Naranjo'] },
+            'carrillo': { nombre: 'Carrillo', distritos: ['Filadelfia', 'Palmira', 'Sardinal', 'Belén'] },
+            'canas': { nombre: 'Cañas', distritos: ['Cañas', 'Palmira', 'San Miguel', 'Bebedero', 'Porozal'] },
+            'abangares': { nombre: 'Abangares', distritos: ['Las Juntas', 'Sierra', 'San Juan', 'Colorado'] },
+            'tilaran': { nombre: 'Tilarán', distritos: ['Tilarán', 'Quebrada Grande', 'Tronadora', 'Santa Rosa', 'Líbano', 'Tierras Morenas', 'Arenal'] },
+            'nandayure': { nombre: 'Nandayure', distritos: ['Carmona', 'Santa Rita', 'Zapotal', 'San Pablo', 'Porvenir', 'Bejuco'] },
+            'la-cruz': { nombre: 'La Cruz', distritos: ['La Cruz', 'Santa Cecilia', 'Garita', 'Santa Elena'] },
+            'hojancha': { nombre: 'Hojancha', distritos: ['Hojancha', 'Monte Romo', 'Puerto Carrillo', 'Huacas'] }
+        }
+    },
+    'puntarenas': {
+        nombre: 'Puntarenas',
+        cantones: {
+            'puntarenas': { nombre: 'Puntarenas', distritos: ['Puntarenas', 'Pitahaya', 'Chomes', 'Lepanto', 'Paquera', 'Manzanillo', 'Guacimal', 'Barranca', 'Monte Verde', 'Isla del Coco', 'Cóbano', 'Chacarita', 'Chira', 'Acapulco', 'El Roble', 'Arancibia'] },
+            'esparza': { nombre: 'Esparza', distritos: ['Espíritu Santo', 'San Juan Grande', 'Macacona', 'San Rafael', 'San Jerónimo'] },
+            'buenos-aires': { nombre: 'Buenos Aires', distritos: ['Buenos Aires', 'Volcán', 'Potrero Grande', 'Boruca', 'Pilas', 'Colinas', 'Changena', 'Biolley', 'Brunka'] },
+            'montes-de-oro': { nombre: 'Montes de Oro', distritos: ['Miramar', 'La Unión', 'San Isidro'] },
+            'osa': { nombre: 'Osa', distritos: ['Puerto Cortés', 'Palmar', 'Sierpe', 'Bahía Ballena', 'Piedras Blancas', 'Bahía Drake'] },
+            'quepos': { nombre: 'Quepos', distritos: ['Quepos', 'Savegre', 'Naranjito'] },
+            'golfito': { nombre: 'Golfito', distritos: ['Golfito', 'Puerto Jiménez', 'Guaycará', 'Pavón'] },
+            'coto-brus': { nombre: 'Coto Brus', distritos: ['San Vito', 'Sabalito', 'Aguabuena', 'Limón', 'Pittier', 'Gutiérrez Braun'] },
+            'parrita': { nombre: 'Parrita', distritos: ['Parrita'] },
+            'corredores': { nombre: 'Corredores', distritos: ['Corredor', 'La Cuesta', 'Paso Canoas', 'Laurel'] },
+            'garabito': { nombre: 'Garabito', distritos: ['Jacó', 'Tárcoles'] }
+        }
+    },
+    'limon': {
+        nombre: 'Limón',
+        cantones: {
+            'limon': { nombre: 'Limón', distritos: ['Limón', 'Valle La Estrella', 'Río Blanco', 'Matama'] },
+            'pococi': { nombre: 'Pococí', distritos: ['Guápiles', 'Jiménez', 'Rita', 'Roxana', 'Cariari', 'Colorado', 'La Colonia'] },
+            'siquirres': { nombre: 'Siquirres', distritos: ['Siquirres', 'Pacuarito', 'Florida', 'Germania', 'Cairo', 'Alegría'] },
+            'talamanca': { nombre: 'Talamanca', distritos: ['Bratsi', 'Sixaola', 'Cahuita', 'Telire'] },
+            'matina': { nombre: 'Matina', distritos: ['Matina', 'Batán', 'Carrandi'] },
+            'guacimo': { nombre: 'Guácimo', distritos: ['Guácimo', 'Mercedes', 'Pocora', 'Río Jiménez', 'Duacarí'] }
+        }
+    }
+};
+
+// Función para cargar cantones según la provincia seleccionada
+function cargarCantones() {
+    const provinciaSelect = document.getElementById('provincia');
+    const cantonSelect = document.getElementById('canton');
+    const distritoSelect = document.getElementById('distrito');
+    
+    if (!provinciaSelect || !cantonSelect || !distritoSelect) return;
+    
+    const provinciaSeleccionada = provinciaSelect.value;
+    
+    // Limpiar cantones y distritos
+    cantonSelect.innerHTML = '<option value="">Seleccionar cantón</option>';
+    distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
+    
+    if (provinciaSeleccionada && datosCostaRica[provinciaSeleccionada]) {
+        const cantones = datosCostaRica[provinciaSeleccionada].cantones;
+        
+        Object.keys(cantones).forEach(cantonKey => {
+            const canton = cantones[cantonKey];
+            const option = document.createElement('option');
+            option.value = cantonKey;
+            option.textContent = canton.nombre;
+            cantonSelect.appendChild(option);
+        });
+    }
 }
+
+// Función para cargar distritos según el cantón seleccionado
+function cargarDistritos() {
+    const provinciaSelect = document.getElementById('provincia');
+    const cantonSelect = document.getElementById('canton');
+    const distritoSelect = document.getElementById('distrito');
+    
+    if (!provinciaSelect || !cantonSelect || !distritoSelect) return;
+    
+    const provinciaSeleccionada = provinciaSelect.value;
+    const cantonSeleccionado = cantonSelect.value;
+    
+    // Limpiar distritos
+    distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
+    
+    if (provinciaSeleccionada && cantonSeleccionado && 
+        datosCostaRica[provinciaSeleccionada] && 
+        datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado]) {
+        
+        const distritos = datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado].distritos;
+        
+        distritos.forEach(distrito => {
+            const option = document.createElement('option');
+            option.value = distrito.toLowerCase().replace(/\s+/g, '-');
+            option.textContent = distrito;
+            distritoSelect.appendChild(option);
+        });
+    }
+}
+
+// Configurar event listeners para el formulario de dirección
+document.addEventListener('DOMContentLoaded', function() {
+    const provinciaSelect = document.getElementById('provincia');
+    const cantonSelect = document.getElementById('canton');
+    const distritoSelect = document.getElementById('distrito');
+    
+    if (provinciaSelect) {
+        provinciaSelect.addEventListener('change', cargarCantones);
+        console.log('Event listener agregado a provincia');
+    }
+    
+    if (cantonSelect) {
+        cantonSelect.addEventListener('change', cargarDistritos);
+        console.log('Event listener agregado a cantón');
+    }
+    
+    console.log('Event listeners configurados para formulario de dirección');
+});

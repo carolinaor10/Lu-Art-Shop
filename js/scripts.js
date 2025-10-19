@@ -545,10 +545,17 @@ function enviarPedidoWhatsApp() {
     const direccionExacta = document.getElementById('direccion-exacta')?.value;
     const indicaciones = document.getElementById('indicaciones')?.value;
     const facturaElectronica = document.getElementById('factura-electronica')?.checked;
+    const emailFactura = document.getElementById('email-factura')?.value;
     
     // Validar campos requeridos
     if (!provincia || !canton || !distrito || !direccionExacta) {
         alert('Por favor complete todos los campos requeridos');
+        return;
+    }
+    
+    // Validar correo electrónico si se requiere factura
+    if (facturaElectronica && !emailFactura) {
+        alert('Por favor ingrese su correo electrónico para la factura');
         return;
     }
     
@@ -594,7 +601,7 @@ ${productosTexto}
 • Dirección: ${direccionExacta}
 ${indicaciones ? `• Indicaciones: ${indicaciones}` : ''}
 
-${facturaElectronica ? '📄 *FACTURA ELECTRÓNICA REQUERIDA*' : ''}
+${facturaElectronica ? `📄 *FACTURA ELECTRÓNICA REQUERIDA*\n• Correo electrónico: ${emailFactura}` : ''}
 
 Por favor confirmar el pedido y enviar comprobante de pago.`;
     

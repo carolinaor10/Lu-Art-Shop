@@ -130,11 +130,74 @@ if (localStorage.getItem('adminLoggedIn') !== 'true') {
 // Mostrar usuario actual
 document.getElementById('adminUser').textContent = localStorage.getItem('adminUser') || 'Admin';
 
-// Cargar productos desde localStorage
+// Cargar productos desde localStorage o admin-products
 function loadProducts() {
     const savedProducts = localStorage.getItem('luArtProducts');
+    
+    // Priorizar productos guardados en localStorage
     if (savedProducts) {
-        products = JSON.parse(savedProducts);
+        try {
+            products = JSON.parse(savedProducts);
+            console.log('Productos cargados desde localStorage:', products.length);
+            return;
+        } catch (error) {
+            console.error('Error parseando productos de localStorage:', error);
+        }
+    }
+    
+    // Si no hay productos en localStorage, usar admin-products.js
+    if (typeof productosDatabase !== 'undefined') {
+        console.log('Usando productos de admin-products.js');
+        // Convertir productosDatabase a formato products
+        const allProducts = [];
+        
+        // Paletas
+        if (productosDatabase.paletas) {
+            productosDatabase.paletas.forEach(p => {
+                allProducts.push({
+                    id: p.id,
+                    name: p.nombre,
+                    price: p.precio,
+                    stock: p.stock,
+                    category: 'paletas',
+                    image: p.imagen,
+                    description: p.descripcion
+                });
+            });
+        }
+        
+        // Tazas
+        if (productosDatabase.tazas) {
+            productosDatabase.tazas.forEach(p => {
+                allProducts.push({
+                    id: p.id,
+                    name: p.nombre,
+                    price: p.precio,
+                    stock: p.stock,
+                    category: 'tazas',
+                    image: p.imagen,
+                    description: p.descripcion
+                });
+            });
+        }
+        
+        // Snack Bowls
+        if (productosDatabase.snackbowls) {
+            productosDatabase.snackbowls.forEach(p => {
+                allProducts.push({
+                    id: p.id,
+                    name: p.nombre,
+                    price: p.precio,
+                    stock: p.stock,
+                    category: 'snackbowls',
+                    image: p.imagen,
+                    description: p.descripcion
+                });
+            });
+        }
+        
+        products = allProducts;
+        saveProducts();
     } else {
         // Productos por defecto
         products = [
@@ -259,6 +322,9 @@ function saveProducts() {
         localStorage.setItem('luArtProducts', JSON.stringify(products));
         console.log('Productos guardados exitosamente:', products.length);
         console.log('Datos guardados:', products);
+        
+        // Sincronizar con las páginas públicas
+        updateHTMLPages();
     } catch (error) {
         console.error('Error guardando productos:', error);
         Swal.fire({
@@ -272,8 +338,10 @@ function saveProducts() {
 
 // Actualizar páginas HTML con los datos del admin
 function updateHTMLPages() {
-    // Esta función se ejecutará para sincronizar los datos del admin con las páginas públicas
+    // Actualizar datos en localStorage para que las páginas públicas los usen
+    // Las páginas públicas usarán localStorage.getItem('luArtProducts') para obtener los productos
     console.log('Productos actualizados:', products);
+    console.log('Los productos ahora están disponibles para las páginas públicas');
 }
 
 // Mostrar sección específica
@@ -309,14 +377,21 @@ function updateDashboard() {
     const lowStockProducts = products.filter(p => p.stock > 0 && p.stock <= 3).length;
     const soldOutProducts = products.filter(p => p.stock === 0).length;
     
-    document.getElementById('totalProducts').textContent = totalProducts;
-    document.getElementById('availableProducts').textContent = availableProducts;
-    document.getElementById('lowStockProducts').textContent = lowStockProducts;
-    document.getElementById('soldOutProducts').textContent = soldOutProducts;
+    const totalProductsEl = document.getElementById('totalProducts');
+    const availableProductsEl = document.getElementById('availableProducts');
+    const lowStockProductsEl = document.getElementById('lowStockProducts');
+    const soldOutProductsEl = document.getElementById('soldOutProducts');
+    
+    if (totalProductsEl) totalProductsEl.textContent = totalProducts;
+    if (availableProductsEl) availableProductsEl.textContent = availableProducts;
+    if (lowStockProductsEl) lowStockProductsEl.textContent = lowStockProducts;
+    if (soldOutProductsEl) soldOutProductsEl.textContent = soldOutProducts;
     
     // Generar resumen de inventario
     const inventorySummary = document.getElementById('inventorySummary');
-    inventorySummary.innerHTML = `
+    if (inventorySummary) {
+        const progressWidth = totalProducts > 0 ? (availableProducts/totalProducts)*100 : 0;
+        inventorySummary.innerHTML = `
         <div class="row">
             <div class="col-md-6">
                 <h6>Categorías:</h6>
@@ -329,28 +404,51 @@ function updateDashboard() {
             <div class="col-md-6">
                 <h6>Estado del Stock:</h6>
                 <div class="progress mb-2">
-                    <div class="progress-bar bg-success" style="width: ${(availableProducts/totalProducts)*100}%"></div>
+                    <div class="progress-bar bg-success" style="width: ${progressWidth}%"></div>
                 </div>
                 <small class="text-muted">${availableProducts} de ${totalProducts} productos disponibles</small>
             </div>
         </div>
     `;
+    }
 }
+
+// Force cache bust
+console.log('Admin.js version: 2.3 loaded at', new Date().toISOString());
 
 // Renderizar productos
 function renderProducts() {
-    const productsList = document.getElementById('productsList');
-    const searchTerm = document.getElementById('searchProducts').value.toLowerCase();
-    const filterCategory = document.getElementById('filterCategory').value;
-    const filterStock = document.getElementById('filterStock').value;
+    console.log('=== RENDERIZANDO PRODUCTOS ===');
+    console.log('Versión: 3.3.1');
+    
+    const productsList = document.getElementById('productos-tbody');
+    const searchProducts = document.getElementById('filtro-productos');
+    const filterCategory = document.getElementById('filterCategory');
+    const filterStock = document.getElementById('filterStock');
+    
+    if (!productsList) {
+        console.error('Elemento productos-tbody no encontrado');
+        return;
+    }
+    
+    console.log('Elemento productos-tbody encontrado:', productsList);
+    
+    const searchTerm = searchProducts ? searchProducts.value.toLowerCase() : '';
+    const categoryFilter = filterCategory ? filterCategory.value : '';
+    const stockFilter = filterStock ? filterStock.value : '';
+    
+    console.log('Total productos:', products.length);
+    console.log('Término de búsqueda:', searchTerm);
+    console.log('Filtro de categoría:', categoryFilter);
+    console.log('Filtro de stock:', stockFilter);
     
     let filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm);
-        const matchesCategory = !filterCategory || product.category === filterCategory;
+        const matchesCategory = !categoryFilter || product.category === categoryFilter;
         let matchesStock = true;
         
-        if (filterStock) {
-            switch(filterStock) {
+        if (stockFilter) {
+            switch(stockFilter) {
                 case 'high': matchesStock = product.stock > 10; break;
                 case 'medium': matchesStock = product.stock > 3 && product.stock <= 10; break;
                 case 'low': matchesStock = product.stock > 0 && product.stock <= 3; break;
@@ -361,59 +459,81 @@ function renderProducts() {
         return matchesSearch && matchesCategory && matchesStock;
     });
     
+    console.log('Productos filtrados:', filteredProducts.length);
+    console.log('Productos filtrados detalle:', filteredProducts.map(p => p.name));
+    
     if (filteredProducts.length === 0) {
-        productsList.innerHTML = `
+        if (productsList) {
+            productsList.innerHTML = `
             <div class="text-center py-5">
                 <i class="fas fa-search fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">No se encontraron productos</h5>
                 <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
             </div>
         `;
+        }
         return;
     }
     
-    productsList.innerHTML = filteredProducts.map(product => {
+    if (productsList) {
+        console.log('Limpiando lista de productos...');
+        // Limpiar la lista primero
+        productsList.innerHTML = '';
+        
+        console.log('Generando HTML para', filteredProducts.length, 'productos');
+        // Generar nuevas filas
+        const productHTML = filteredProducts.map(product => {
         const stockClass = getStockClass(product.stock);
         const stockText = getStockText(product.stock);
         
         return `
-            <div class="product-card">
-                <div class="row align-items-center">
-                    <div class="col-md-2">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" 
-                             onerror="this.src='assets/img/logo/LU ART COLOR.png'">
-                    </div>
-                    <div class="col-md-4">
-                        <h5 class="mb-1">${product.name}</h5>
-                        <p class="text-muted mb-1">${getCategoryName(product.category)}</p>
-                        <p class="mb-0">${product.description || 'Sin descripción'}</p>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h6 class="mb-1">₡${product.price.toLocaleString()}</h6>
-                        <span class="stock-badge ${stockClass}">${stockText}</span>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <div class="mb-2">
-                            <label class="form-label small">Stock:</label>
-                            <input type="number" class="form-control form-control-sm" 
-                                   value="${product.stock}" min="0" 
-                                   onchange="updateStock(${product.id}, this.value)">
-                        </div>
-                    </div>
-                    <div class="col-md-2 text-end">
-                        <button class="btn btn-primary btn-admin btn-edit" 
-                                onclick="editProduct(${product.id})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-admin btn-delete" 
-                                onclick="deleteProduct(${product.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>
+                    <img src="${product.image}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" onerror="this.src='assets/img/logo/LU ART COLOR.png'">
+                </td>
+                <td>
+                    <h6 class="mb-0">${product.name}</h6>
+                    <small class="text-muted">${getCategoryName(product.category)}</small>
+                </td>
+                <td>
+                    <span class="text-muted">${product.description || 'Sin descripción'}</span>
+                </td>
+                <td class="text-center">
+                    <h6 class="mb-1">₡${product.price.toLocaleString()}</h6>
+                </td>
+                <td class="text-center">
+                    <span class="stock-badge ${stockClass}">${stockText}</span>
+                    <br>
+                    <small class="text-muted">Stock: ${product.stock}</small>
+                </td>
+                <td class="text-center">
+                    <input type="number" class="form-control form-control-sm" 
+                           value="${product.stock}" min="0" 
+                           data-product-id="${product.id}"
+                           onchange="console.log('Campo cambió - ID:', ${product.id}, 'Valor:', this.value); updateStock(${product.id}, this.value)"
+                           style="max-width: 80px; margin: 0 auto;">
+                </td>
+                <td class="text-end">
+                    <button class="btn btn-primary btn-sm me-1" 
+                            onclick="editProduct(${product.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" 
+                            onclick="deleteProduct(${product.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
         `;
     }).join('');
+    
+    // Asignar el HTML generado
+    console.log('Asignando HTML a la lista, longitud:', productHTML.length);
+    console.log('Primeros 200 caracteres del HTML:', productHTML.substring(0, 200));
+    productsList.innerHTML = productHTML;
+    console.log('Lista actualizada, productos en DOM:', productsList.querySelectorAll('tr').length);
+    console.log('Verificando stock en primera fila:', productsList.querySelector('input[type="number"]')?.value);
+    }
 }
 
 // Obtener clase CSS para el stock
@@ -444,11 +564,19 @@ function getCategoryName(category) {
 
 // Actualizar stock
 function updateStock(productId, newStock) {
-    const product = products.find(p => p.id === productId);
+    console.log('Actualizando stock - ID:', productId, 'Nuevo stock:', newStock);
+    console.log('Productos disponibles:', products.length);
+    
+    const product = products.find(p => p.id == productId);
+    console.log('Producto encontrado:', product);
+    
     if (product) {
         product.stock = parseInt(newStock);
+        console.log('Stock actualizado, producto actual:', product);
+        
         saveProducts();
         updateDashboard();
+        renderProducts();
         
         Swal.fire({
             icon: 'success',
@@ -456,6 +584,14 @@ function updateStock(productId, newStock) {
             text: `El stock de ${product.name} se actualizó a ${newStock}`,
             timer: 1500,
             showConfirmButton: false
+        });
+    } else {
+        console.error('Producto no encontrado con ID:', productId);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Producto no encontrado',
+            timer: 2000
         });
     }
 }
@@ -713,7 +849,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Configurar filtros de búsqueda
-    document.getElementById('searchProducts').addEventListener('input', renderProducts);
-    document.getElementById('filterCategory').addEventListener('change', renderProducts);
-    document.getElementById('filterStock').addEventListener('change', renderProducts);
+    const searchProductsEl = document.getElementById('filtro-productos');
+    if (searchProductsEl) {
+        searchProductsEl.addEventListener('input', renderProducts);
+    }
+    
+    const filterCategoryEl = document.getElementById('filterCategory');
+    if (filterCategoryEl) {
+        filterCategoryEl.addEventListener('change', renderProducts);
+    }
+    
+    const filterStockEl = document.getElementById('filterStock');
+    if (filterStockEl) {
+        filterStockEl.addEventListener('change', renderProducts);
+    }
 });

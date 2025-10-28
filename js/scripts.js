@@ -90,9 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(showNextComment, 5000);
 });
 
-// Add to cart
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-    btn.addEventListener('click', function () {
+// Función para adjuntar listeners a los botones de agregar al carrito
+function attachAddToCartListeners() {
+    console.log('Adjuntando listeners a botones add-to-cart...');
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function () {
       const id = this.dataset.id || Date.now().toString();
       const nombre = this.dataset.nombre || 'Producto';
       const precio = Number(this.dataset.precio) || 0;
@@ -197,6 +199,16 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
       console.log('Producto agregado exitosamente. Carrito actual:', carrito);
     });
   });
+}
+
+// Llamar a la función inmediatamente para adjuntar los listeners iniciales
+attachAddToCartListeners();
+
+// Escuchar el evento productsUpdated para reanudar listeners cuando sync-products.js actualice los productos
+document.addEventListener('productsUpdated', function() {
+    console.log('Evento productsUpdated recibido, reanudando listeners...');
+    attachAddToCartListeners();
+});
 
   function actualizarMontoTotal(totalCompra) {
     const montoElement = document.getElementById("monto-total");
@@ -589,19 +601,19 @@ function enviarPedidoWhatsApp() {
     // Crear mensaje
     const mensaje = `🛒 *PEDIDO LU ART* 🛒
 
-📦 *PRODUCTOS:*
+ *PRODUCTOS:*
 ${productosTexto}
 
-💰 *TOTAL: ₡${total.toLocaleString()}*
+ *TOTAL: ₡${total.toLocaleString()}*
 
-📍 *DIRECCIÓN DE ENVÍO:*
+ *DIRECCIÓN DE ENVÍO:*
 • Provincia: ${provincia}
 • Cantón: ${canton}
 • Distrito: ${distrito}
 • Dirección: ${direccionExacta}
 ${indicaciones ? `• Indicaciones: ${indicaciones}` : ''}
 
-${facturaElectronica ? `📄 *FACTURA ELECTRÓNICA REQUERIDA*\n• Correo electrónico: ${emailFactura}` : ''}
+${facturaElectronica ? ` *FACTURA ELECTRÓNICA REQUERIDA*\n• Correo electrónico: ${emailFactura}` : ''}
 
 Por favor confirmar el pedido y enviar comprobante de pago.`;
     

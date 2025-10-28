@@ -1,12 +1,49 @@
 // Script de sincronización para páginas web
 // Permite que las páginas web lean los datos actualizados desde el panel de administración
 
+console.log('=== ADMIN-SYNC.JS CARGADO ===');
+
 // Función para obtener datos de productos desde el admin
 function obtenerProductosDesdeAdmin() {
     try {
-        const datosAdmin = localStorage.getItem('luArtProductosAdmin');
+        // Intentar leer de luArtProducts (formato del admin)
+        const datosAdmin = localStorage.getItem('luArtProducts');
         if (datosAdmin) {
-            return JSON.parse(datosAdmin);
+            const products = JSON.parse(datosAdmin);
+            console.log('Productos cargados desde luArtProducts:', products.length);
+            
+            // Convertir al formato esperado por el script
+            const datosAdminFormateados = {
+                paletas: products.filter(p => p.category === 'paletas').map(p => ({
+                    id: p.id,
+                    nombre: p.name,
+                    precio: p.price,
+                    stock: p.stock,
+                    categoria: 'paletas',
+                    imagen: p.image,
+                    descripcion: p.description
+                })),
+                tazas: products.filter(p => p.category === 'tazas').map(p => ({
+                    id: p.id,
+                    nombre: p.name,
+                    precio: p.price,
+                    stock: p.stock,
+                    categoria: 'tazas',
+                    imagen: p.image,
+                    descripcion: p.description
+                })),
+                snackbowls: products.filter(p => p.category === 'snackbowls').map(p => ({
+                    id: p.id,
+                    nombre: p.name,
+                    precio: p.price,
+                    stock: p.stock,
+                    categoria: 'snackbowls',
+                    imagen: p.image,
+                    descripcion: p.description
+                }))
+            };
+            
+            return datosAdminFormateados;
         }
     } catch (error) {
         console.error('Error cargando datos del admin:', error);
@@ -49,19 +86,9 @@ function actualizarBotonesProductos() {
             const boton = document.querySelector(`[data-id="${producto.id}"][data-categoria="paletas"]`);
             if (boton) {
                 console.log(`Actualizando paleta: ${producto.nombre} - Stock: ${producto.stock}`);
+                // Solo actualizar el atributo data-stock, no el HTML
                 boton.dataset.stock = producto.stock;
-                
-                if (producto.stock === 0) {
-                    boton.disabled = true;
-                    boton.innerHTML = '<i class="fas fa-times"></i> Agotado';
-                    boton.classList.add('btn-outline-danger');
-                    boton.classList.remove('btn-primary');
-                } else {
-                    boton.disabled = false;
-                    boton.innerHTML = '<i class="fas fa-shopping-cart"></i> Agregar al carrito';
-                    boton.classList.add('btn-primary');
-                    boton.classList.remove('btn-outline-danger');
-                }
+                boton.disabled = producto.stock === 0;
                 
                 console.log(`✅ Paleta actualizada: ${producto.nombre} - Stock: ${producto.stock}`);
             } else {
@@ -77,19 +104,9 @@ function actualizarBotonesProductos() {
             const boton = document.querySelector(`[data-id="${producto.id}"][data-categoria="tazas"]`);
             if (boton) {
                 console.log(`Actualizando taza: ${producto.nombre} - Stock: ${producto.stock}`);
+                // Solo actualizar el atributo data-stock, no el HTML
                 boton.dataset.stock = producto.stock;
-                
-                if (producto.stock === 0) {
-                    boton.disabled = true;
-                    boton.innerHTML = '<i class="fas fa-times"></i> Agotado';
-                    boton.classList.add('btn-outline-danger');
-                    boton.classList.remove('btn-primary');
-                } else {
-                    boton.disabled = false;
-                    boton.innerHTML = '<i class="fas fa-shopping-cart"></i> Agregar al carrito';
-                    boton.classList.add('btn-primary');
-                    boton.classList.remove('btn-outline-danger');
-                }
+                boton.disabled = producto.stock === 0;
                 
                 console.log(`✅ Taza actualizada: ${producto.nombre} - Stock: ${producto.stock}`);
             } else {
@@ -105,19 +122,9 @@ function actualizarBotonesProductos() {
             const boton = document.querySelector(`[data-id="${producto.id}"][data-categoria="snackbowls"]`);
             if (boton) {
                 console.log(`Actualizando snack bowl: ${producto.nombre} - Stock: ${producto.stock}`);
+                // Solo actualizar el atributo data-stock, no el HTML
                 boton.dataset.stock = producto.stock;
-                
-                if (producto.stock === 0) {
-                    boton.disabled = true;
-                    boton.innerHTML = '<i class="fas fa-times"></i> Agotado';
-                    boton.classList.add('btn-outline-danger');
-                    boton.classList.remove('btn-primary');
-                } else {
-                    boton.disabled = false;
-                    boton.innerHTML = '<i class="fas fa-shopping-cart"></i> Agregar al carrito';
-                    boton.classList.add('btn-primary');
-                    boton.classList.remove('btn-outline-danger');
-                }
+                boton.disabled = producto.stock === 0;
                 
                 console.log(`✅ Snack bowl actualizado: ${producto.nombre} - Stock: ${producto.stock}`);
             } else {
@@ -156,15 +163,28 @@ function mostrarNotificacionSincronizacion() {
     }
 }
 
+
 // Inicializar sincronización cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== INICIANDO SINCRONIZACIÓN CON ADMIN ===');
+    console.log('URL actual:', window.location.pathname);
+    console.log('Botones en la página:', document.querySelectorAll('.add-to-cart').length);
     
-    // Sincronizar inmediatamente
-    actualizarBotonesProductos();
-    
-    // Escuchar cambios futuros
-    escucharCambiosAdmin();
-    
-    console.log('Sistema de sincronización activado');
+    // Esperar a que sync-products.js actualice los productos
+    setTimeout(function() {
+        console.log('Sincronizando botones después de actualización de productos...');
+        console.log('Botones encontrados:', document.querySelectorAll('.add-to-cart').length);
+        
+        // Sincronizar después de que sync-products.js haya actualizado la lista
+        actualizarBotonesProductos();
+        
+        // Escuchar cambios futuros
+        escucharCambiosAdmin();
+        
+        console.log('Sistema de sincronización activado');
+    }, 1000);
 });
+
+// Log inmediatamente (antes de DOMContentLoaded)
+console.log('Admin-sync.js ejecutado antes de DOMContentLoaded - Versión: 2.0');
+console.log('Timestamp:', new Date().toISOString());

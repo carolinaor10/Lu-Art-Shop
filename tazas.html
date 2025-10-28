@@ -11,8 +11,10 @@
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts removed - using sans-serif only -->
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/responsive.css" rel="stylesheet" />
+        <link href="css/responsive-improvements.css" rel="stylesheet" />
     <link href="css/technologies.css" rel="stylesheet" />
     <link href="css/sold-out.css" rel="stylesheet" />
 
@@ -81,7 +83,7 @@
             </div>
 
             <div class="row" id="productList">
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <!-- Portfolio item 1-->
                     <div class="portfolio-item" data-id="1">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
@@ -106,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <!-- Portfolio item 2-->
                     <div class="portfolio-item" data-id="2">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
@@ -133,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <!-- Portfolio item 3-->
                     <div class="portfolio-item" data-id="3">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
@@ -162,7 +164,7 @@
                     </div>
                 </div>
                 <!-- Producto 4 -->
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <div class="portfolio-item" data-id="4">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
@@ -188,7 +190,7 @@
                 </div>
 
                 <!-- Producto 5 -->
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <div class="portfolio-item" data-id="5">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
@@ -214,7 +216,7 @@
                 </div>
 
                 <!-- Producto 6 -->
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <div class="portfolio-item" data-id="6">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
@@ -241,7 +243,7 @@
                     </div>
                 </div>
                 <!-- Producto 7 -->
-                <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
                     <div class="portfolio-item" data-id="3">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
                             <div class="portfolio-hover">
@@ -269,7 +271,7 @@
                 </div>
 
 <!-- Producto 8 -->
-<div class="col-lg-4 col-sm-6 mb-4">
+<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
     <div class="portfolio-item">
         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
             <div class="portfolio-hover">
@@ -297,7 +299,7 @@
 </div>
 
 <!-- Producto 9 -->
-<div class="col-lg-4 col-sm-6 mb-4">
+<div class="col-lg-4 col-md-6 col-sm-6 mb-4">
     <div class="portfolio-item">
         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
             <div class="portfolio-hover">
@@ -409,23 +411,23 @@
                             </div>
                             
                             <div class="mb-4">
-                                <h5 class="text-dark mb-3">Productos seleccionados:</h5>
+                                        <h5 class="text-dark mb-3" data-translate="payment.selected_products">Productos seleccionados:</h5>
                                 <div id="productos-seleccionados" class="border p-3 rounded mb-3" style="background-color: #f8f9fa;">
                                     <!-- Los productos se mostrarán aquí dinámicamente -->
                                 </div>
                                 <div class="text-end">
-                                    <h5 class="text-dark">Monto total a pagar: <span id="monto-total-pago">₡0</span></h5>
+                                            <h5 class="text-dark" data-translate="payment.total_amount">Monto total a pagar: <span id="monto-total-pago">₡0</span></h5>
                                 </div>
                             </div>
                             
                             <div class="mb-4">
-                                <h5 class="text-dark mb-3">DIRECCIÓN DE ENVÍO</h5>
+                                        <h5 class="text-dark mb-3" data-translate="payment.shipping_address">DIRECCIÓN DE ENVÍO</h5>
                                 <form id="formPago">
                                     <div class="row">
                                         <div class="col-md-4 mb-3">
-                                            <label for="provincia" class="form-label">Provincia</label>
+                                                    <label for="provincia" class="form-label" data-translate="payment.province">Provincia</label>
                                             <select class="form-select" id="provincia" required>
-                                                <option value="">Seleccionar provincia</option>
+                                                        <option value="" data-translate="payment.select_province">Seleccionar provincia</option>
                                                 <option value="san-jose">San José</option>
                                                 <option value="cartago">Cartago</option>
                                                 <option value="heredia">Heredia</option>
@@ -436,25 +438,25 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="canton" class="form-label">Cantón</label>
+                                                    <label for="canton" class="form-label" data-translate="payment.canton">Cantón</label>
                                             <select class="form-select" id="canton" required>
-                                                <option value="">Seleccionar cantón</option>
+                                                        <option value="" data-translate="payment.select_canton">Seleccionar cantón</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="distrito" class="form-label">Distrito</label>
+                                                    <label for="distrito" class="form-label" data-translate="payment.district">Distrito</label>
                                             <select class="form-select" id="distrito" required>
-                                                <option value="">Seleccionar distrito</option>
+                                                        <option value="" data-translate="payment.select_district">Seleccionar distrito</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="direccion-exacta" class="form-label">Dirección exacta</label>
-                                        <input type="text" class="form-control" id="direccion-exacta" placeholder="Ej: Casa 123, Barrio Los Ángeles" required>
+                                                <label for="direccion-exacta" class="form-label" data-translate="payment.exact_address">Dirección exacta</label>
+                                                <input type="text" class="form-control" id="direccion-exacta" placeholder="Ej: Casa 123, Barrio Los Ángeles" data-translate-placeholder="payment.address_placeholder" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="indicaciones" class="form-label">Indicaciones adicionales</label>
-                                        <textarea class="form-control" id="indicaciones" rows="2" placeholder="Referencias, instrucciones especiales, etc."></textarea>
+                                                <label for="indicaciones" class="form-label" data-translate="payment.additional_instructions">Indicaciones adicionales</label>
+                                                <textarea class="form-control" id="indicaciones" rows="2" placeholder="Referencias, instrucciones especiales, etc." data-translate-placeholder="payment.instructions_placeholder"></textarea>
                                     </div>
                                 </form>
                             </div>
@@ -462,29 +464,29 @@
                             <div class="mb-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="factura-electronica">
-                                    <label class="form-check-label" for="factura-electronica">
+                                    <label class="form-check-label" for="factura-electronica" data-translate="invoice.checkbox_text">
                                         <strong>MARCAR SI REQUIERE FACTURA ELECTRÓNICA</strong>
                                     </label>
                                 </div>
                                 <div id="email-field" class="mt-3" style="display: none;">
-                                    <label for="email-factura" class="form-label">Correo electrónico para factura:</label>
-                                    <input type="email" class="form-control" id="email-factura" placeholder="ejemplo@correo.com">
+                                    <label for="email-factura" class="form-label" data-translate="invoice.email_label">Correo electrónico para factura:</label>
+                                    <input type="email" class="form-control" id="email-factura" placeholder="ejemplo@correo.com" data-translate-placeholder="invoice.email_placeholder">
                                 </div>
                             </div>
                             
                             <div class="text-center">
-                                <p class="text-muted mb-3">
-                                    Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.
-                                </p>
+                                        <p class="text-muted mb-3" data-translate="payment.whatsapp_instructions">
+                                            Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.
+                                        </p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="border: none; padding: 1rem 2rem 2rem; background: white;">
                     <div class="text-center w-100">
-                        <button id="enviar-whatsapp-footer-btn" class="btn btn-success btn-xl text-uppercase" onclick="enviarPedidoWhatsApp()">
-                            <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
-                        </button>
+                                <button id="enviar-whatsapp-footer-btn" class="btn btn-success btn-xl text-uppercase" onclick="enviarPedidoWhatsApp()" data-translate="payment.send_whatsapp">
+                                    <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
+                                </button>
                     </div>
                 </div>
             </div>
@@ -800,7 +802,8 @@
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="js/scripts.js?v=20241220"></script>
+            <script src="js/sync-products.js?v=20241223"></script>
+            <script src="js/scripts.js?v=20241223"></script>
             <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
             <script async src="//www.instagram.com/embed.js"></script>
@@ -1022,6 +1025,23 @@
                     'address.additional_instructions': 'Indicaciones adicionales',
                     'address.instructions_placeholder': 'Referencias, instrucciones especiales, etc.',
                     'invoice.checkbox_text': 'MARCAR SI REQUIERE FACTURA ELECTRÓNICA',
+                    'invoice.email_label': 'Correo electrónico para factura:',
+                    'invoice.email_placeholder': 'ejemplo@correo.com',
+                    'payment.selected_products': 'Productos seleccionados:',
+                    'payment.total_amount': 'Monto total a pagar:',
+                    'payment.shipping_address': 'DIRECCIÓN DE ENVÍO',
+                    'payment.province': 'Provincia',
+                    'payment.select_province': 'Seleccionar provincia',
+                    'payment.canton': 'Cantón',
+                    'payment.select_canton': 'Seleccionar cantón',
+                    'payment.district': 'Distrito',
+                    'payment.select_district': 'Seleccionar distrito',
+                    'payment.exact_address': 'Dirección exacta',
+                    'payment.address_placeholder': 'Ej: Casa 123, Barrio Los Ángeles',
+                    'payment.additional_instructions': 'Indicaciones adicionales',
+                    'payment.instructions_placeholder': 'Referencias, instrucciones especiales, etc.',
+                    'payment.whatsapp_instructions': 'Por último, dar click al botón de WhatsApp para compartir el comprobante de pago y dirección de envío y, así, confirmar su compra y proceder.',
+                    'payment.send_whatsapp': 'Enviar por WhatsApp',
                     'cart.no_products': 'No hay productos en el carrito',
                     'cart.no_cart_available': 'Carrito no disponible',
                     'cart.go_to_products': 'Ve a una página de productos para ver tu carrito.',
@@ -1101,6 +1121,23 @@
                     'address.additional_instructions': 'Additional instructions',
                     'address.instructions_placeholder': 'References, special instructions, etc.',
                     'invoice.checkbox_text': 'MARK IF ELECTRONIC INVOICE REQUIRED',
+                    'invoice.email_label': 'Email for invoice:',
+                    'invoice.email_placeholder': 'example@email.com',
+                    'payment.selected_products': 'Selected products:',
+                    'payment.total_amount': 'Total amount to pay:',
+                    'payment.shipping_address': 'SHIPPING ADDRESS',
+                    'payment.province': 'Province',
+                    'payment.select_province': 'Select province',
+                    'payment.canton': 'Canton',
+                    'payment.select_canton': 'Select canton',
+                    'payment.district': 'District',
+                    'payment.select_district': 'Select district',
+                    'payment.exact_address': 'Exact address',
+                    'payment.address_placeholder': 'Ex: House 123, Los Angeles Neighborhood',
+                    'payment.additional_instructions': 'Additional instructions',
+                    'payment.instructions_placeholder': 'References, special instructions, etc.',
+                    'payment.whatsapp_instructions': 'Finally, click the WhatsApp button to share the payment receipt and shipping address and thus confirm your purchase and proceed.',
+                    'payment.send_whatsapp': 'Send via WhatsApp',
                     'contact.title': 'Contact',
                     'whatsapp.greeting': 'Hello, I want to confirm my purchase:',
                     'whatsapp.total': 'Total:',
@@ -1275,7 +1312,7 @@
             </script>
 
             <!-- Scripts -->
-            <script src="js/scripts.js?v=20241220"></script>
+            <script src="js/scripts.js?v=20241223"></script>
             
             <!-- Función de emergencia para limpiar todo - DEFINIDA DIRECTAMENTE -->
             <script>
@@ -1314,8 +1351,8 @@
                 console.log('Función limpiarTodo definida en tazas.html:', typeof window.limpiarTodo !== 'undefined');
             </script>
 
-            <script src="js/scripts.js?v=20241220"></script>
-            <script src="js/admin-sync.js"></script>
+            <script src="js/scripts.js?v=20241223"></script>
+            <script src="js/admin-sync.js?v=20241222"></script>
 
         </body>
     </html>

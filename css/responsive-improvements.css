@@ -1,0 +1,560 @@
+/* ========================================
+   ADDITIONAL RESPONSIVE IMPROVEMENTS
+   ======================================== */
+
+/* ========================================
+   MODAL IMPROVEMENTS
+   ======================================== */
+
+/* Modal responsive improvements */
+@media (max-width: 768px) {
+    .modal-dialog-centered {
+        margin: 0.5rem;
+    }
+    
+    .modal-dialog {
+        max-width: calc(100% - 1rem);
+    }
+    
+    .modal-content {
+        border-radius: 10px;
+    }
+    
+    .modal-header {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem 1rem;
+        border-top: 1px solid #dee2e6;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.25rem;
+        max-width: calc(100% - 0.5rem);
+    }
+    
+    .modal-content {
+        border-radius: 8px;
+    }
+    
+    .modal-header {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .modal-body {
+        padding: 0.75rem;
+        max-height: 75vh;
+    }
+    
+    .modal-footer {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* ========================================
+   NAVIGATION IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 991px) {
+    .navbar-nav .nav-item {
+        margin: 0.25rem 0;
+    }
+    
+    .navbar-nav .btn {
+        margin: 0.25rem 0;
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .navbar-collapse {
+        padding: 1rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+        max-height: 30px;
+    }
+    
+    .navbar-toggler {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8rem;
+    }
+    
+    .navbar-nav .btn {
+        max-width: 150px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   PRODUCT CARDS IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .portfolio-item {
+        margin-bottom: 1.5rem;
+    }
+    
+    .portfolio-caption {
+        padding: 1rem;
+    }
+    
+    .portfolio-caption-heading {
+        font-size: 1.1rem;
+    }
+    
+    .portfolio-caption-subheading {
+        font-size: 1rem;
+    }
+    
+    .btn-xl {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .portfolio-item {
+        margin-bottom: 1rem;
+    }
+    
+    .portfolio-caption {
+        padding: 0.75rem;
+    }
+    
+    .portfolio-caption-heading {
+        font-size: 1rem;
+    }
+    
+    .portfolio-caption-subheading {
+        font-size: 0.9rem;
+    }
+    
+    .btn-xl {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   FORM IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .form-control,
+    .form-select {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-check-label {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-control,
+    .form-select {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.7rem;
+    }
+    
+    .form-label {
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .form-check-label {
+        font-size: 0.85rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn-lg {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ========================================
+   CART IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .cart-item-image {
+        margin-bottom: 1rem;
+        align-self: center;
+    }
+    
+    .cart-item-details {
+        margin-bottom: 1rem;
+    }
+    
+    .cart-item-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .cart-item {
+        padding: 0.75rem;
+    }
+    
+    .cart-item-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cart-item-title {
+        font-size: 0.9rem;
+    }
+    
+    .cart-item-price {
+        font-size: 0.9rem;
+    }
+    
+    .quantity-controls {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .quantity-controls .btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   ADMIN PANEL IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 991px) {
+    .admin-nav {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .admin-nav .nav {
+        flex-wrap: nowrap;
+    }
+    
+    .admin-nav .nav-link {
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header {
+        padding: 1rem 0;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .admin-header p {
+        font-size: 0.9rem;
+    }
+    
+    .admin-nav {
+        padding: 0.5rem 0;
+    }
+    
+    .admin-nav .nav-link {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        margin: 0 0.2rem;
+    }
+    
+    .stats-card {
+        padding: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 1.8rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-header {
+        padding: 0.75rem 0;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .admin-header p {
+        font-size: 0.8rem;
+    }
+    
+    .admin-nav .nav-link {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        margin: 0 0.1rem;
+    }
+    
+    .stats-card {
+        padding: 0.75rem;
+    }
+    
+    .stats-number {
+        font-size: 1.5rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.8rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+    
+    .modal-dialog {
+        margin: 0.25rem;
+        max-width: calc(100% - 0.5rem);
+    }
+}
+
+/* ========================================
+   GALLERY IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .gallery-item {
+        margin-bottom: 1rem;
+    }
+    
+    .gallery-item img {
+        height: 200px;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 576px) {
+    .gallery-item img {
+        height: 180px;
+    }
+}
+
+/* ========================================
+   FOOTER IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 2rem 0;
+    }
+    
+    .footer h5 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer p,
+    .footer li {
+        font-size: 0.9rem;
+    }
+    
+    .footer .row > div {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer {
+        padding: 1.5rem 0;
+    }
+    
+    .footer h5 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer p,
+    .footer li {
+        font-size: 0.85rem;
+    }
+    
+    .footer .row > div {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ========================================
+   UTILITY IMPROVEMENTS
+   ======================================== */
+
+/* Better spacing on mobile */
+@media (max-width: 768px) {
+    .mb-md-4 {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .mt-md-4 {
+        margin-top: 1.5rem !important;
+    }
+    
+    .p-md-4 {
+        padding: 1.5rem !important;
+    }
+    
+    .py-md-4 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .mb-sm-3 {
+        margin-bottom: 1rem !important;
+    }
+    
+    .mt-sm-3 {
+        margin-top: 1rem !important;
+    }
+    
+    .p-sm-3 {
+        padding: 1rem !important;
+    }
+    
+    .py-sm-3 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ======================================== */
+
+/* Better focus states for mobile */
+@media (max-width: 768px) {
+    .btn:focus,
+    .form-control:focus,
+    .form-select:focus {
+        outline: 2px solid #667eea;
+        outline-offset: 2px;
+    }
+    
+    .nav-link:focus {
+        outline: 2px solid #667eea;
+        outline-offset: 2px;
+    }
+}
+
+/* ========================================
+   PERFORMANCE IMPROVEMENTS
+   ======================================== */
+
+/* Reduce animations on mobile for better performance */
+@media (max-width: 768px) {
+    .portfolio-hover {
+        transition: none;
+    }
+    
+    .category-image {
+        transition: none;
+    }
+    
+    .btn {
+        transition: none;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .navbar,
+    .footer,
+    .btn,
+    .modal,
+    .admin-nav,
+    .admin-header {
+        display: none !important;
+    }
+    
+    .page-section {
+        padding: 0 !important;
+        margin: 0 !important;
+        break-inside: avoid;
+    }
+    
+    .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    .portfolio-item {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+    
+    .category-image {
+        break-inside: avoid;
+    }
+}

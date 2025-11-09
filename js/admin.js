@@ -132,17 +132,22 @@ document.getElementById('adminUser').textContent = localStorage.getItem('adminUs
 
 // Cargar productos desde localStorage o admin-products
 function loadProducts() {
+    console.log('=== CARGANDO PRODUCTOS ===');
     const savedProducts = localStorage.getItem('luArtProducts');
     
     // Priorizar productos guardados en localStorage
     if (savedProducts) {
         try {
             products = JSON.parse(savedProducts);
-            console.log('Productos cargados desde localStorage:', products.length);
+            console.log('✅ Productos cargados desde localStorage:', products.length);
+            console.log('Primer producto:', products[0]);
+            console.log('Estructura completa:', JSON.stringify(products, null, 2));
             return;
         } catch (error) {
-            console.error('Error parseando productos de localStorage:', error);
+            console.error('❌ Error parseando productos de localStorage:', error);
         }
+    } else {
+        console.log('⚠️ No hay productos en localStorage');
     }
     
     // Si no hay productos en localStorage, usar admin-products.js
@@ -372,20 +377,120 @@ function showSection(sectionName) {
 
 // Actualizar dashboard
 function updateDashboard() {
+    console.log('=== ACTUALIZANDO DASHBOARD ===');
+    console.log('Productos totales:', products.length);
+    
     const totalProducts = products.length;
     const availableProducts = products.filter(p => p.stock > 0).length;
     const lowStockProducts = products.filter(p => p.stock > 0 && p.stock <= 3).length;
     const soldOutProducts = products.filter(p => p.stock === 0).length;
+    
+    console.log('Valores calculados:', {
+        totalProducts,
+        availableProducts,
+        lowStockProducts,
+        soldOutProducts
+    });
     
     const totalProductsEl = document.getElementById('totalProducts');
     const availableProductsEl = document.getElementById('availableProducts');
     const lowStockProductsEl = document.getElementById('lowStockProducts');
     const soldOutProductsEl = document.getElementById('soldOutProducts');
     
-    if (totalProductsEl) totalProductsEl.textContent = totalProducts;
-    if (availableProductsEl) availableProductsEl.textContent = availableProducts;
-    if (lowStockProductsEl) lowStockProductsEl.textContent = lowStockProducts;
-    if (soldOutProductsEl) soldOutProductsEl.textContent = soldOutProducts;
+    console.log('Elementos encontrados:', {
+        totalProductsEl: !!totalProductsEl,
+        availableProductsEl: !!availableProductsEl,
+        lowStockProductsEl: !!lowStockProductsEl,
+        soldOutProductsEl: !!soldOutProductsEl
+    });
+    
+    if (totalProductsEl) {
+        totalProductsEl.textContent = totalProducts;
+        console.log('Total productos actualizado a:', totalProducts);
+    }
+    if (availableProductsEl) {
+        availableProductsEl.textContent = availableProducts;
+        console.log('Productos disponibles actualizado a:', availableProducts);
+    }
+    if (lowStockProductsEl) {
+        lowStockProductsEl.textContent = lowStockProducts;
+        console.log('Stock bajo actualizado a:', lowStockProducts);
+    }
+    if (soldOutProductsEl) {
+        soldOutProductsEl.textContent = soldOutProducts;
+        console.log('Productos agotados actualizado a:', soldOutProducts);
+    }
+    
+    console.log('=== DASHBOARD ACTUALIZADO ===');
+    
+    // Actualizar contadores de categorías
+    const tazasCount = products.filter(p => p.category === 'tazas').length;
+    const paletasCount = products.filter(p => p.category === 'paletas').length;
+    const snackbowlsCount = products.filter(p => p.category === 'snackbowls').length;
+    
+    console.log('Contadores de categorías:', {
+        tazas: tazasCount,
+        paletas: paletasCount,
+        snackbowls: snackbowlsCount
+    });
+    
+    const tazasCountEl = document.getElementById('tazas-count');
+    const paletasCountEl = document.getElementById('paletas-count');
+    const snackbowlsCountEl = document.getElementById('snackbowls-count');
+    
+    if (tazasCountEl) {
+        tazasCountEl.textContent = tazasCount;
+        console.log('Tazas actualizado a:', tazasCount);
+    }
+    if (paletasCountEl) {
+        paletasCountEl.textContent = paletasCount;
+        console.log('Paletas actualizado a:', paletasCount);
+    }
+    if (snackbowlsCountEl) {
+        snackbowlsCountEl.textContent = snackbowlsCount;
+        console.log('Snack bowls actualizado a:', snackbowlsCount);
+    }
+    
+    // Actualizar valor total del inventario
+    const totalInventoryValue = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+    const inventoryValueEl = document.getElementById('totalInventoryValue');
+    if (inventoryValueEl) {
+        inventoryValueEl.textContent = `₡${totalInventoryValue.toLocaleString()}`;
+        console.log('Valor total del inventario actualizado a:', totalInventoryValue);
+    }
+    
+    // Actualizar productos que requieren atención
+    const attentionProductsEl = document.getElementById('attentionProducts');
+    if (attentionProductsEl) {
+        const attentionProducts = products.filter(p => p.stock <= 3);
+        console.log('Productos que requieren atención:', attentionProducts.length);
+        
+        if (attentionProducts.length === 0) {
+            attentionProductsEl.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> 
+                    Todos los productos tienen stock adecuado
+                </div>
+            `;
+        } else {
+            let html = '<div class="list-group">';
+            attentionProducts.forEach(p => {
+                const badgeClass = p.stock === 0 ? 'danger' : 'warning';
+                const icon = p.stock === 0 ? 'exclamation-circle' : 'exclamation-triangle';
+                html += `
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">${p.name}</h6>
+                            <span class="badge bg-${badgeClass}">Stock: ${p.stock}</span>
+                        </div>
+                        <p class="mb-1"><small>Categoría: ${p.category}</small></p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            attentionProductsEl.innerHTML = html;
+        }
+    }
     
     // Generar resumen de inventario
     const inventorySummary = document.getElementById('inventorySummary');
@@ -396,9 +501,9 @@ function updateDashboard() {
             <div class="col-md-6">
                 <h6>Categorías:</h6>
                 <ul class="list-unstyled">
-                    <li><i class="fas fa-coffee text-primary"></i> Tazas: ${products.filter(p => p.category === 'tazas').length}</li>
-                    <li><i class="fas fa-palette text-success"></i> Paletas: ${products.filter(p => p.category === 'paletas').length}</li>
-                    <li><i class="fas fa-bowl-food text-warning"></i> Snack Bowls: ${products.filter(p => p.category === 'snackbowls').length}</li>
+                    <li><i class="fas fa-coffee text-primary"></i> Tazas: ${tazasCount}</li>
+                    <li><i class="fas fa-palette text-success"></i> Paletas: ${paletasCount}</li>
+                    <li><i class="fas fa-bowl-food text-warning"></i> Snack Bowls: ${snackbowlsCount}</li>
                 </ul>
             </div>
             <div class="col-md-6">
@@ -407,6 +512,8 @@ function updateDashboard() {
                     <div class="progress-bar bg-success" style="width: ${progressWidth}%"></div>
                 </div>
                 <small class="text-muted">${availableProducts} de ${totalProducts} productos disponibles</small>
+                <br><small class="text-warning">Stock bajo: ${lowStockProducts}</small>
+                <br><small class="text-danger">Agotados: ${soldOutProducts}</small>
             </div>
         </div>
     `;
@@ -505,6 +612,9 @@ function renderProducts() {
                     <span class="stock-badge ${stockClass}">${stockText}</span>
                     <br>
                     <small class="text-muted">Stock: ${product.stock}</small>
+                </td>
+                <td class="text-center">
+                    <h6 class="mb-1 text-success">₡${(product.price * product.stock).toLocaleString()}</h6>
                 </td>
                 <td class="text-center">
                     <input type="number" class="form-control form-control-sm" 
@@ -786,7 +896,10 @@ function clearAllData() {
 
 // Inicializar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== DOMContentLoaded - INICIANDO ADMIN ===');
     loadProducts();
+    console.log('Productos cargados, llamando updateDashboard');
+    updateDashboard();
     
     // Configurar formulario de agregar producto
     document.getElementById('addProductForm').addEventListener('submit', function(e) {

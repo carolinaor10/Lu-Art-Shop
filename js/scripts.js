@@ -420,6 +420,11 @@ if (abrirCarritoBtn && carritoOverlay) {
 const confirmarCompraBtn = document.getElementById("confirmar-compra-btn");
 if (confirmarCompraBtn) {
     confirmarCompraBtn.addEventListener("click", function () {
+    // Guardar timestamp cuando se hace clic en "Confirmar compra"
+    const timestamp = Date.now();
+    localStorage.setItem('luArtCarritoTimestamp', timestamp.toString());
+    console.log('Timestamp guardado para expiración del carrito:', timestamp);
+    
     // Actualizar monto total antes de abrir el modal
     const totalCompra = calcularTotalCarrito(); // función que ya tienes
     actualizarMontoTotal(totalCompra);
@@ -490,21 +495,128 @@ function mostrarMontoEnModal(total) {
 }
 
 // Función para mostrar productos en el modal de pago
-function mostrarProductosEnPago() {
+// Hacer disponible globalmente para que todas las páginas puedan usarla
+window.mostrarProductosEnPago = function() {
     console.log('=== MOSTRANDO PRODUCTOS EN PAGO ===');
     
-    const productosContainer = document.getElementById('productos-seleccionados');
-    const montoTotal = document.getElementById('monto-total-pago');
-    
-    console.log('Elementos encontrados:', {
-        productosContainer: !!productosContainer,
-        montoTotal: !!montoTotal
-    });
-    
-    if (!productosContainer || !montoTotal) {
-        console.error('No se encontraron los elementos del modal de pago');
-        return;
+    // Función auxiliar para buscar elementos con múltiples intentos
+    function buscarElementos(intento = 0) {
+        const maxIntentos = 5;
+        const delay = 100; // 100ms entre intentos
+        
+        // Buscar elementos dentro del modal específicamente
+        const modalPago = document.getElementById('modalPago');
+        let productosContainer = null;
+        let montoTotal = null;
+        
+        if (modalPago) {
+            // Buscar dentro del modal
+            productosContainer = modalPago.querySelector('#productos-seleccionados');
+            // Buscar el span dentro del h5 que contiene el monto total
+            montoTotal = modalPago.querySelector('#monto-total-pago');
+            // Si no se encuentra con el ID, buscar el H5 que contiene "Monto total a pagar"
+            if (!montoTotal) {
+                const h5Monto = Array.from(modalPago.querySelectorAll('h5')).find(h5 => 
+                    h5.textContent.includes('Monto total') || h5.textContent.includes('total a pagar')
+                );
+                if (h5Monto) {
+                    // Buscar el span dentro del H5
+                    montoTotal = h5Monto.querySelector('span#monto-total-pago');
+                    // Si no existe el span, buscar cualquier span dentro del H5
+                    if (!montoTotal) {
+                        montoTotal = h5Monto.querySelector('span');
+                    }
+                    // Si aún no existe, crear un span dentro del H5
+                    if (!montoTotal) {
+                        montoTotal = document.createElement('span');
+                        montoTotal.id = 'monto-total-pago';
+                        // El H5 probablemente tiene el formato "Monto total a pagar: ₡0"
+                        // Necesitamos insertar el span después del texto
+                        const textoH5 = h5Monto.textContent;
+                        const partes = textoH5.split(':');
+                        if (partes.length > 1) {
+                            h5Monto.innerHTML = partes[0] + ': <span id="monto-total-pago">₡0</span>';
+                            montoTotal = h5Monto.querySelector('#monto-total-pago');
+                        } else {
+                            h5Monto.appendChild(montoTotal);
+                            montoTotal.textContent = '₡0';
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Si no se encuentran dentro del modal, buscar globalmente
+        if (!productosContainer) {
+            productosContainer = document.getElementById('productos-seleccionados');
+        }
+        if (!montoTotal) {
+            montoTotal = document.getElementById('monto-total-pago');
+            // Si aún no se encuentra, buscar por el texto del H5
+            if (!montoTotal) {
+                const h5Monto = Array.from(document.querySelectorAll('h5')).find(h5 => 
+                    h5.textContent.includes('Monto total') || h5.textContent.includes('total a pagar')
+                );
+                if (h5Monto) {
+                    montoTotal = h5Monto.querySelector('span#monto-total-pago') || h5Monto.querySelector('span');
+                    // Si no existe, crear el span
+                    if (!montoTotal) {
+                        montoTotal = document.createElement('span');
+                        montoTotal.id = 'monto-total-pago';
+                        const textoH5 = h5Monto.textContent;
+                        const partes = textoH5.split(':');
+                        if (partes.length > 1) {
+                            h5Monto.innerHTML = partes[0] + ': <span id="monto-total-pago">₡0</span>';
+                            montoTotal = h5Monto.querySelector('#monto-total-pago');
+                        } else {
+                            h5Monto.appendChild(montoTotal);
+                            montoTotal.textContent = '₡0';
+                        }
+                    }
+                }
+            }
+        }
+        
+        console.log(`Intento ${intento + 1}: Elementos encontrados:`, {
+            productosContainer: !!productosContainer,
+            montoTotal: !!montoTotal,
+            modalPago: !!modalPago
+        });
+        
+        // Debug adicional si no se encuentra montoTotal
+        if (!montoTotal && modalPago) {
+            const allSpans = modalPago.querySelectorAll('span');
+            const allH5s = modalPago.querySelectorAll('h5');
+            console.log('Debug - Spans encontrados en modal:', allSpans.length);
+            console.log('Debug - H5s encontrados en modal:', allH5s.length);
+            if (allH5s.length > 0) {
+                console.log('Debug - Contenido de H5s:', Array.from(allH5s).map(h5 => h5.textContent));
+            }
+        }
+        
+        if (productosContainer && montoTotal) {
+            mostrarProductosEnPagoContenido(productosContainer, montoTotal);
+            return true;
+        }
+        
+        // Si no se encontraron y aún hay intentos disponibles, reintentar
+        if (intento < maxIntentos - 1) {
+            setTimeout(function() {
+                buscarElementos(intento + 1);
+            }, delay);
+            return false;
+        } else {
+            console.error('No se pudieron encontrar los elementos del modal de pago después de', maxIntentos, 'intentos');
+            return false;
+        }
     }
+    
+    // Iniciar búsqueda
+    buscarElementos();
+};
+
+// Función auxiliar para mostrar el contenido del modal de pago
+function mostrarProductosEnPagoContenido(productosContainer, montoTotal) {
     
     // Obtener carrito desde localStorage
     let carrito = [];
@@ -622,7 +734,48 @@ Por favor confirmar el pedido y enviar comprobante de pago.`;
     const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
     window.open(urlWhatsApp, '_blank');
     
+    // Limpiar timestamp cuando se completa la compra
+    localStorage.removeItem('luArtCarritoTimestamp');
+    
     console.log('Mensaje enviado por WhatsApp');
+}
+
+// Función para verificar si el carrito ha expirado (25 minutos)
+function verificarExpiracionCarrito() {
+    const timestampGuardado = localStorage.getItem('luArtCarritoTimestamp');
+    
+    // Si no hay timestamp, no hay expiración activa
+    if (!timestampGuardado) {
+        return false;
+    }
+    
+    const timestamp = parseInt(timestampGuardado);
+    const ahora = Date.now();
+    const tiempoTranscurrido = ahora - timestamp;
+    const tiempoLimite = 25 * 60 * 1000; // 25 minutos en milisegundos
+    
+    if (tiempoTranscurrido >= tiempoLimite) {
+        console.log('Carrito expirado después de 25 minutos, vaciando...');
+        localStorage.removeItem('luArtCarrito');
+        localStorage.removeItem('luArtCarritoTimestamp');
+        renderCarrito();
+        actualizarContadorCarrito();
+        
+        // Mostrar notificación si SweetAlert está disponible
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Carrito expirado',
+                text: 'Tu carrito ha sido vaciado automáticamente después de 25 minutos de inactividad',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+        
+        return true;
+    }
+    
+    return false;
 }
 
 // Función para vaciar el carrito
@@ -642,6 +795,7 @@ function vaciarCarrito() {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('luArtCarrito');
+                localStorage.removeItem('luArtCarritoTimestamp'); // Limpiar también el timestamp
                 renderCarrito();
                 actualizarContadorCarrito();
                 
@@ -658,6 +812,7 @@ function vaciarCarrito() {
         // Fallback si SweetAlert no está disponible
         if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
             localStorage.removeItem('luArtCarrito');
+            localStorage.removeItem('luArtCarritoTimestamp'); // Limpiar también el timestamp
             renderCarrito();
             actualizarContadorCarrito();
             alert('Carrito vaciado');
@@ -685,16 +840,30 @@ function abrirModalPago() {
 
 // Event listener para mostrar productos cuando se abre el modal de pago
 document.addEventListener('DOMContentLoaded', function() {
+    // Verificar expiración del carrito al cargar la página
+    verificarExpiracionCarrito();
+    
     // Inicializar carrito
     actualizarContadorCarrito();
     renderCarrito();
     
+    // Verificar expiración cada minuto
+    setInterval(function() {
+        verificarExpiracionCarrito();
+    }, 60000); // Verificar cada 60 segundos (1 minuto)
+    
     const modalPago = document.getElementById('modalPago');
     if (modalPago) {
         console.log('Modal de pago encontrado, agregando event listener');
-        modalPago.addEventListener('show.bs.modal', function() {
-            console.log('Modal de pago abriéndose, mostrando productos');
-            mostrarProductosEnPago();
+        // Usar 'shown.bs.modal' en lugar de 'show.bs.modal' para asegurar que el modal esté completamente renderizado
+        // Agregar el listener - la función ya está disponible globalmente
+        modalPago.addEventListener('shown.bs.modal', function() {
+            console.log('Modal de pago completamente visible, mostrando productos (scripts.js)');
+            if (typeof window.mostrarProductosEnPago === 'function') {
+                window.mostrarProductosEnPago();
+            } else {
+                console.error('Función mostrarProductosEnPago no está disponible');
+            }
         });
     } else {
         console.log('Modal de pago no encontrado en esta página');

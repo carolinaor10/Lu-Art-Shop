@@ -352,7 +352,7 @@
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="js/scripts.js"></script>
+            <script src="js/scripts.js?v=20250109-6"></script>
             <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 
             <!-- <script async src="//www.instagram.com/embed.js"></script> -->
@@ -806,7 +806,9 @@
             }
             
             // Datos de provincias, cantones y distritos de Costa Rica
-            const datosCostaRica = {
+            // Usar los datos de scripts.js si ya existen, si no, declararlos aquí
+            if (typeof datosCostaRica === 'undefined') {
+                window.datosCostaRica = {
                 'san-jose': {
                     nombre: 'San José',
                     cantones: {
@@ -924,6 +926,10 @@
                     }
                 }
             };
+            } else {
+                // Si ya existe en scripts.js, usar esa referencia
+                window.datosCostaRica = datosCostaRica;
+            }
 
             // Función para cargar cantones según la provincia seleccionada
             window.cargarCantones = function() {
@@ -939,8 +945,9 @@
                 cantonSelect.innerHTML = '<option value="">Seleccionar cantón</option>';
                 distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
                 
-                if (provinciaSeleccionada && datosCostaRica[provinciaSeleccionada]) {
-                    const cantones = datosCostaRica[provinciaSeleccionada].cantones;
+                const datosCR = window.datosCostaRica || datosCostaRica;
+                if (provinciaSeleccionada && datosCR && datosCR[provinciaSeleccionada]) {
+                    const cantones = datosCR[provinciaSeleccionada].cantones;
                     
                     Object.keys(cantones).forEach(cantonKey => {
                         const canton = cantones[cantonKey];
@@ -966,11 +973,12 @@
                 // Limpiar distritos
                 distritoSelect.innerHTML = '<option value="">Seleccionar distrito</option>';
                 
+                const datosCR = window.datosCostaRica || datosCostaRica;
                 if (provinciaSeleccionada && cantonSeleccionado && 
-                    datosCostaRica[provinciaSeleccionada] && 
-                    datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado]) {
+                    datosCR && datosCR[provinciaSeleccionada] && 
+                    datosCR[provinciaSeleccionada].cantones[cantonSeleccionado]) {
                     
-                    const distritos = datosCostaRica[provinciaSeleccionada].cantones[cantonSeleccionado].distritos;
+                    const distritos = datosCR[provinciaSeleccionada].cantones[cantonSeleccionado].distritos;
                     
                     distritos.forEach(distrito => {
                         const option = document.createElement('option');
@@ -985,18 +993,113 @@
             window.mostrarProductosEnPago = function() {
                 console.log('=== MOSTRANDO PRODUCTOS EN PAGO ===');
                 
-                const productosContainer = document.getElementById('productos-seleccionados');
-                const montoTotal = document.getElementById('monto-total-pago');
-                
-                console.log('Elementos encontrados:', {
-                    productosContainer: !!productosContainer,
-                    montoTotal: !!montoTotal
-                });
-                
-                if (!productosContainer || !montoTotal) {
-                    console.error('No se encontraron los elementos del modal de pago');
-                    return;
+                // Función auxiliar para buscar elementos con múltiples intentos
+                function buscarElementos(intento = 0) {
+                    const maxIntentos = 5;
+                    const delay = 100; // 100ms entre intentos
+                    
+                    // Buscar elementos dentro del modal específicamente
+                    const modalPago = document.getElementById('modalPago');
+                    let productosContainer = null;
+                    let montoTotal = null;
+                    
+                    if (modalPago) {
+                        // Buscar dentro del modal
+                        productosContainer = modalPago.querySelector('#productos-seleccionados');
+                        // Buscar el span dentro del h5 que contiene el monto total
+                        montoTotal = modalPago.querySelector('#monto-total-pago');
+                        // Si no se encuentra con el ID, buscar el H5 que contiene "Monto total a pagar"
+                        if (!montoTotal) {
+                            const h5Monto = Array.from(modalPago.querySelectorAll('h5')).find(h5 => 
+                                h5.textContent.includes('Monto total') || h5.textContent.includes('total a pagar')
+                            );
+                            if (h5Monto) {
+                                // Buscar el span dentro del H5
+                                montoTotal = h5Monto.querySelector('span#monto-total-pago');
+                                // Si no existe el span, buscar cualquier span dentro del H5
+                                if (!montoTotal) {
+                                    montoTotal = h5Monto.querySelector('span');
+                                }
+                                // Si aún no existe, crear un span dentro del H5
+                                if (!montoTotal) {
+                                    montoTotal = document.createElement('span');
+                                    montoTotal.id = 'monto-total-pago';
+                                    // El H5 probablemente tiene el formato "Monto total a pagar: ₡0"
+                                    // Necesitamos insertar el span después del texto
+                                    const textoH5 = h5Monto.textContent;
+                                    const partes = textoH5.split(':');
+                                    if (partes.length > 1) {
+                                        h5Monto.innerHTML = partes[0] + ': <span id="monto-total-pago">₡0</span>';
+                                        montoTotal = h5Monto.querySelector('#monto-total-pago');
+                                    } else {
+                                        h5Monto.appendChild(montoTotal);
+                                        montoTotal.textContent = '₡0';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Si no se encuentran dentro del modal, buscar globalmente
+                    if (!productosContainer) {
+                        productosContainer = document.getElementById('productos-seleccionados');
+                    }
+                    if (!montoTotal) {
+                        montoTotal = document.getElementById('monto-total-pago');
+                        // Si aún no se encuentra, buscar por el texto del H5
+                        if (!montoTotal) {
+                            const h5Monto = Array.from(document.querySelectorAll('h5')).find(h5 => 
+                                h5.textContent.includes('Monto total') || h5.textContent.includes('total a pagar')
+                            );
+                            if (h5Monto) {
+                                montoTotal = h5Monto.querySelector('span#monto-total-pago') || h5Monto.querySelector('span');
+                                // Si no existe, crear el span
+                                if (!montoTotal) {
+                                    montoTotal = document.createElement('span');
+                                    montoTotal.id = 'monto-total-pago';
+                                    const textoH5 = h5Monto.textContent;
+                                    const partes = textoH5.split(':');
+                                    if (partes.length > 1) {
+                                        h5Monto.innerHTML = partes[0] + ': <span id="monto-total-pago">₡0</span>';
+                                        montoTotal = h5Monto.querySelector('#monto-total-pago');
+                                    } else {
+                                        h5Monto.appendChild(montoTotal);
+                                        montoTotal.textContent = '₡0';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    console.log(`Intento ${intento + 1}: Elementos encontrados:`, {
+                        productosContainer: !!productosContainer,
+                        montoTotal: !!montoTotal,
+                        modalPago: !!modalPago
+                    });
+                    
+                    if (productosContainer && montoTotal) {
+                        mostrarProductosEnPagoContenido(productosContainer, montoTotal);
+                        return true;
+                    }
+                    
+                    // Si no se encontraron y aún hay intentos disponibles, reintentar
+                    if (intento < maxIntentos - 1) {
+                        setTimeout(function() {
+                            buscarElementos(intento + 1);
+                        }, delay);
+                        return false;
+                    } else {
+                        console.error('No se pudieron encontrar los elementos del modal de pago después de', maxIntentos, 'intentos');
+                        return false;
+                    }
                 }
+                
+                // Iniciar búsqueda
+                buscarElementos();
+            }
+            
+            // Función auxiliar para mostrar el contenido del modal de pago
+            function mostrarProductosEnPagoContenido(productosContainer, montoTotal) {
                 
                 // Obtener carrito desde localStorage
                 let carrito = [];
@@ -1033,7 +1136,14 @@
                 });
                 
                 productosContainer.innerHTML = productosHTML;
-                montoTotal.textContent = `₡${total.toLocaleString()}`;
+                
+                // Actualizar el monto total - verificar que el elemento existe
+                if (montoTotal) {
+                    montoTotal.textContent = `₡${total.toLocaleString()}`;
+                    console.log('Monto total actualizado:', total);
+                } else {
+                    console.error('No se pudo actualizar el monto total - elemento no encontrado');
+                }
                 
                 console.log('Productos mostrados correctamente, total:', total);
             };
@@ -1115,8 +1225,9 @@
                 // Abrir WhatsApp
                 window.open(urlWhatsApp, '_blank');
                 
-                // Limpiar carrito
+                // Limpiar carrito y timestamp
                 localStorage.removeItem('luArtCarrito');
+                localStorage.removeItem('luArtCarritoTimestamp');
                 
                 // Cerrar modal
                 const modalPago = bootstrap.Modal.getInstance(document.getElementById('modalPago'));
@@ -1130,9 +1241,73 @@
                 }, 1000);
             };
             
+            // Función para verificar si el carrito ha expirado (25 minutos)
+            window.verificarExpiracionCarrito = function() {
+                const timestampGuardado = localStorage.getItem('luArtCarritoTimestamp');
+                
+                // Si no hay timestamp, no hay expiración activa
+                if (!timestampGuardado) {
+                    return false;
+                }
+                
+                const timestamp = parseInt(timestampGuardado);
+                const ahora = Date.now();
+                const tiempoTranscurrido = ahora - timestamp;
+                const tiempoLimite = 25 * 60 * 1000; // 25 minutos en milisegundos
+                
+                if (tiempoTranscurrido >= tiempoLimite) {
+                    console.log('Carrito expirado después de 25 minutos, vaciando...');
+                    localStorage.removeItem('luArtCarrito');
+                    localStorage.removeItem('luArtCarritoTimestamp');
+                    if (typeof window.renderCarrito === 'function') {
+                        window.renderCarrito();
+                    }
+                    if (typeof window.actualizarContadorCarrito === 'function') {
+                        window.actualizarContadorCarrito();
+                    }
+                    
+                    // Mostrar notificación si SweetAlert está disponible
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Carrito expirado',
+                            text: 'Tu carrito ha sido vaciado automáticamente después de 25 minutos de inactividad',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    }
+                    
+                    return true;
+                }
+                
+                return false;
+            };
+            
             // Configurar event listeners cuando el DOM esté listo
             document.addEventListener('DOMContentLoaded', function() {
                 console.log('=== DOMContentLoaded EN SCRIPT FINAL ===');
+                
+                // Verificar expiración del carrito al cargar la página
+                if (typeof window.verificarExpiracionCarrito === 'function') {
+                    window.verificarExpiracionCarrito();
+                }
+                
+                // Verificar expiración cada minuto
+                setInterval(function() {
+                    if (typeof window.verificarExpiracionCarrito === 'function') {
+                        window.verificarExpiracionCarrito();
+                    }
+                }, 60000); // Verificar cada 60 segundos (1 minuto)
+                
+                // Event listener para el botón de confirmar compra (guardar timestamp)
+                const confirmarCompraBtn = document.getElementById('confirmar-compra-btn');
+                if (confirmarCompraBtn) {
+                    confirmarCompraBtn.addEventListener('click', function() {
+                        const timestamp = Date.now();
+                        localStorage.setItem('luArtCarritoTimestamp', timestamp.toString());
+                        console.log('Timestamp guardado para expiración del carrito:', timestamp);
+                    });
+                }
                 
                 // Event listener para el modal del carrito
                 const modalCarrito = document.getElementById('carritoModal');
@@ -1145,16 +1320,26 @@
                 }
                 
                 // Event listener para el modal de pago
-                const modalPago = document.getElementById('modalPago');
-                if (modalPago) {
-                    console.log('Modal de pago encontrado, agregando event listener');
-                    modalPago.addEventListener('show.bs.modal', function() {
-                        console.log('Modal de pago abriéndose, mostrando productos');
-                        window.mostrarProductosEnPago();
-                    });
-                } else {
-                    console.error('No se encontró el modal de pago');
-                }
+                // Esperar un momento para asegurar que la función mostrarProductosEnPago esté definida
+                setTimeout(function() {
+                    const modalPago = document.getElementById('modalPago');
+                    if (modalPago) {
+                        console.log('Modal de pago encontrado, agregando event listener en index.html');
+                        // Usar 'shown.bs.modal' en lugar de 'show.bs.modal' para asegurar que el modal esté completamente renderizado
+                        modalPago.addEventListener('shown.bs.modal', function() {
+                            console.log('Modal de pago completamente visible, mostrando productos (index.html)');
+                            if (typeof window.mostrarProductosEnPago === 'function') {
+                                window.mostrarProductosEnPago();
+                            } else if (typeof mostrarProductosEnPago === 'function') {
+                                mostrarProductosEnPago();
+                            } else {
+                                console.error('Función mostrarProductosEnPago no encontrada');
+                            }
+                        });
+                    } else {
+                        console.error('No se encontró el modal de pago');
+                    }
+                }, 100);
                 
                 // Event listeners para provincia, cantón y distrito
                 const provinciaSelect = document.getElementById('provincia');

@@ -420,10 +420,28 @@ if (abrirCarritoBtn && carritoOverlay) {
 const confirmarCompraBtn = document.getElementById("confirmar-compra-btn");
 if (confirmarCompraBtn) {
     confirmarCompraBtn.addEventListener("click", function () {
-    // Guardar timestamp cuando se hace clic en "Confirmar compra"
-    const timestamp = Date.now();
-    localStorage.setItem('luArtCarritoTimestamp', timestamp.toString());
-    console.log('Timestamp guardado para expiración del carrito:', timestamp);
+    // Guardar timestamp solo si no existe uno activo
+    const timestampGuardado = localStorage.getItem('luArtCarritoTimestamp');
+    let debeGuardarTimestamp = true;
+    
+    if (timestampGuardado) {
+        const timestamp = parseInt(timestampGuardado);
+        const ahora = Date.now();
+        const tiempoTranscurrido = ahora - timestamp;
+        const tiempoLimite = 20 * 60 * 1000; // 20 minutos en milisegundos
+        
+        // Solo guardar nuevo timestamp si el anterior ya expiró
+        if (tiempoTranscurrido < tiempoLimite) {
+            debeGuardarTimestamp = false;
+            console.log('Timer ya activo, no se reinicia. Tiempo restante:', Math.floor((tiempoLimite - tiempoTranscurrido) / 1000), 'segundos');
+        }
+    }
+    
+    if (debeGuardarTimestamp) {
+        const timestamp = Date.now();
+        localStorage.setItem('luArtCarritoTimestamp', timestamp.toString());
+        console.log('Timestamp guardado para expiración del carrito:', timestamp);
+    }
     
     // Actualizar monto total antes de abrir el modal
     const totalCompra = calcularTotalCarrito(); // función que ya tienes
@@ -740,7 +758,192 @@ Por favor confirmar el pedido y enviar comprobante de pago.`;
     console.log('Mensaje enviado por WhatsApp');
 }
 
-// Función para verificar si el carrito ha expirado (25 minutos)
+// Función para calcular el tiempo restante en segundos
+function calcularTiempoRestante() {
+    const timestampGuardado = localStorage.getItem('luArtCarritoTimestamp');
+    
+    if (!timestampGuardado) {
+        return null; // No hay timer activo
+    }
+    
+    const timestamp = parseInt(timestampGuardado);
+    const ahora = Date.now();
+    const tiempoTranscurrido = ahora - timestamp;
+    const tiempoLimite = 20 * 60 * 1000; // 20 minutos en milisegundos
+    const tiempoRestante = tiempoLimite - tiempoTranscurrido;
+    
+    if (tiempoRestante <= 0) {
+        return 0; // Tiempo expirado
+    }
+    
+    return Math.floor(tiempoRestante / 1000); // Retornar en segundos
+}
+
+// Función para formatear el tiempo en formato MM:SS
+function formatearTiempo(segundos) {
+    if (segundos <= 0) {
+        return '00:00';
+    }
+    
+    const minutos = Math.floor(segundos / 60);
+    const segundosRestantes = segundos % 60;
+    
+    return `${String(minutos).padStart(2, '0')}:${String(segundosRestantes).padStart(2, '0')}`;
+}
+
+// Función para actualizar el timer visual
+function actualizarTimerVisual() {
+    const tiempoRestante = calcularTiempoRestante();
+    
+    // Actualizar el banner del timer (visible en todas las páginas)
+    const timerBanner = document.getElementById('timer-banner');
+    const timerBannerDisplay = document.getElementById('timer-banner-display');
+    
+    // Actualizar el timer del modal (si existe)
+    const timerContainer = document.getElementById('carrito-timer-container');
+    const timerElement = document.getElementById('carrito-timer');
+    
+    if (tiempoRestante === null) {
+        // No hay timer activo, ocultar todos los elementos
+        if (timerBanner) {
+            timerBanner.classList.add('d-none');
+        }
+        if (timerContainer) {
+            timerContainer.classList.add('d-none');
+        }
+        // Restaurar el navbar a su posición original
+        const mainNav = document.getElementById('mainNav');
+        if (mainNav) {
+            mainNav.style.top = '0';
+        }
+        return;
+    }
+    
+    if (tiempoRestante <= 0) {
+        // Tiempo expirado - vaciar carrito inmediatamente
+        if (timerBanner) {
+            timerBanner.classList.remove('d-none');
+            timerBanner.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            if (timerBannerDisplay) {
+                timerBannerDisplay.textContent = '00:00';
+            }
+        }
+        if (timerContainer) {
+            timerContainer.classList.remove('d-none');
+            timerElement.textContent = '00:00';
+            timerContainer.className = 'alert alert-danger d-block';
+            timerElement.style.color = '#721c24';
+        }
+        
+        // Vaciar el carrito inmediatamente cuando llega a 0
+        console.log('Timer llegó a 0, vaciando carrito inmediatamente...');
+        localStorage.removeItem('luArtCarrito');
+        localStorage.removeItem('luArtCarritoTimestamp');
+        
+        // Actualizar UI
+        if (typeof renderCarrito === 'function') {
+            renderCarrito();
+        }
+        if (typeof actualizarContadorCarrito === 'function') {
+            actualizarContadorCarrito();
+        }
+        
+        // Ocultar los timers después de vaciar
+        setTimeout(function() {
+            if (timerBanner) {
+                timerBanner.classList.add('d-none');
+            }
+            if (timerContainer) {
+                timerContainer.classList.add('d-none');
+            }
+        }, 100);
+        
+        // Cerrar el modal de pago si está abierto
+        const modalPago = document.getElementById('modalPago');
+        if (modalPago) {
+            const modalInstance = bootstrap.Modal.getInstance(modalPago);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+        
+        // Mostrar notificación si SweetAlert está disponible
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Carrito expirado',
+                text: 'Tu carrito ha sido vaciado automáticamente después de 20 minutos',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+        
+        return;
+    }
+    
+    // Mostrar y actualizar el banner del timer
+    if (timerBanner) {
+        timerBanner.classList.remove('d-none');
+        if (timerBannerDisplay) {
+            timerBannerDisplay.textContent = formatearTiempo(tiempoRestante);
+        }
+        
+        // Ajustar el navbar para que esté debajo del banner
+        const mainNav = document.getElementById('mainNav');
+        if (mainNav) {
+            const bannerHeight = timerBanner.offsetHeight || 50;
+            mainNav.style.top = bannerHeight + 'px';
+        }
+        
+        // Cambiar el color del banner según el tiempo restante
+        if (tiempoRestante <= 10) { // Menos de 10 segundos
+            timerBanner.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            if (timerBannerDisplay) {
+                timerBannerDisplay.style.color = '#ffffff';
+            }
+        } else if (tiempoRestante <= 30) { // Menos de 30 segundos
+            timerBanner.style.background = 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)';
+            if (timerBannerDisplay) {
+                timerBannerDisplay.style.color = '#ffffff';
+            }
+        } else {
+            timerBanner.style.background = 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)';
+            if (timerBannerDisplay) {
+                timerBannerDisplay.style.color = '#721c24';
+            }
+        }
+    } else {
+        // Si no hay banner, restaurar el navbar a su posición original
+        const mainNav = document.getElementById('mainNav');
+        if (mainNav) {
+            mainNav.style.top = '0';
+        }
+    }
+    
+    // Actualizar el timer del modal (si existe)
+    if (timerContainer && timerElement) {
+        timerContainer.classList.remove('d-none');
+        timerContainer.classList.remove('d-block');
+        timerContainer.classList.add('d-block');
+        
+        // Actualizar el texto del timer
+        timerElement.textContent = formatearTiempo(tiempoRestante);
+        
+        // Cambiar el color según el tiempo restante
+        if (tiempoRestante <= 10) { // Menos de 10 segundos
+            timerContainer.className = 'alert alert-danger d-block';
+            timerElement.style.color = '#721c24';
+        } else if (tiempoRestante <= 30) { // Menos de 30 segundos
+            timerContainer.className = 'alert alert-warning d-block';
+            timerElement.style.color = '#856404';
+        } else {
+            timerContainer.className = 'alert alert-warning d-block';
+            timerElement.style.color = '#856404';
+        }
+    }
+}
+
+// Función para verificar si el carrito ha expirado (20 minutos)
 function verificarExpiracionCarrito() {
     const timestampGuardado = localStorage.getItem('luArtCarritoTimestamp');
     
@@ -752,21 +955,27 @@ function verificarExpiracionCarrito() {
     const timestamp = parseInt(timestampGuardado);
     const ahora = Date.now();
     const tiempoTranscurrido = ahora - timestamp;
-    const tiempoLimite = 25 * 60 * 1000; // 25 minutos en milisegundos
+    const tiempoLimite = 20 * 60 * 1000; // 20 minutos en milisegundos
     
     if (tiempoTranscurrido >= tiempoLimite) {
-        console.log('Carrito expirado después de 25 minutos, vaciando...');
+        console.log('Carrito expirado después de 20 minutos, vaciando...');
         localStorage.removeItem('luArtCarrito');
         localStorage.removeItem('luArtCarritoTimestamp');
         renderCarrito();
         actualizarContadorCarrito();
+        
+        // Ocultar el timer
+        const timerContainer = document.getElementById('carrito-timer-container');
+        if (timerContainer) {
+            timerContainer.classList.add('d-none');
+        }
         
         // Mostrar notificación si SweetAlert está disponible
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 icon: 'info',
                 title: 'Carrito expirado',
-                text: 'Tu carrito ha sido vaciado automáticamente después de 25 minutos de inactividad',
+                text: 'Tu carrito ha sido vaciado automáticamente después de 20 minutos de inactividad',
                 timer: 3000,
                 showConfirmButton: false
             });
@@ -847,6 +1056,11 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarContadorCarrito();
     renderCarrito();
     
+    // Actualizar timer visual cada segundo
+    setInterval(function() {
+        actualizarTimerVisual();
+    }, 1000); // Actualizar cada segundo
+    
     // Verificar expiración cada minuto
     setInterval(function() {
         verificarExpiracionCarrito();
@@ -859,6 +1073,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Agregar el listener - la función ya está disponible globalmente
         modalPago.addEventListener('shown.bs.modal', function() {
             console.log('Modal de pago completamente visible, mostrando productos (scripts.js)');
+            
+            // Actualizar el timer cuando se abre el modal
+            actualizarTimerVisual();
+            
             if (typeof window.mostrarProductosEnPago === 'function') {
                 window.mostrarProductosEnPago();
             } else {
